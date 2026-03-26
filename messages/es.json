@@ -1,0 +1,239 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "search": "Buscar",
+    "actions": "Acciones",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "name": "Nombre",
+    "email": "Correo",
+    "description": "Descripción",
+    "status": "Estado",
+    "date": "Fecha",
+    "price": "Precio",
+    "optional": "opcional"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "signup": "Crear cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "forgotPassword": "Olvidé mi contraseña",
+    "resetPassword": "Restablecer contraseña",
+    "verifyEmail": "Verificar correo",
+    "loginTitle": "Bienvenido de vuelta",
+    "loginSubtitle": "Forja tu inteligencia",
+    "signupTitle": "Crea tu cuenta",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "verifyEmailTitle": "Revisa tu correo",
+    "verifyEmailMessage": "Enviamos un enlace de verificación a {email}. Haz clic en el enlace para activar tu cuenta.",
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "agents": "Agentes",
+    "files": "Archivos",
+    "team": "Equipo",
+    "billing": "Facturación",
+    "settings": "Configuración",
+    "admin": "Admin"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "Bienvenido, {name}",
+    "totalAgents": "Total de Agentes",
+    "activeAgents": "Agentes Activos",
+    "totalChats": "Total de Conversaciones",
+    "totalMessages": "Total de Mensajes",
+    "conversationsChart": "Conversaciones por día",
+    "conversations": "Conversaciones",
+    "last30days": "Últimos 30 días",
+    "noData": "Sin datos de uso todavía",
+    "noDataHint": "Los datos aparecerán aquí tras las primeras conversaciones"
+  },
+  "agents": {
+    "title": "Agentes",
+    "create": "Nuevo Agente",
+    "empty": "Aún no hay agentes",
+    "emptyDescription": "Crea tu primer agente de IA para comenzar",
+    "name": "Nombre del agente",
+    "industry": "Industria",
+    "language": "Idioma de respuesta",
+    "systemPrompt": "Prompt del sistema",
+    "userPrompt": "Instrucciones adicionales",
+    "embedCode": "Código de incrustación",
+    "regenerateToken": "Regenerar token",
+    "whatsapp": "WhatsApp",
+    "industries": {
+      "accounting_finance": "Contabilidad y Finanzas",
+      "law": "Derecho",
+      "internal_systems": "Sistemas Internos"
+    },
+    "languages": {
+      "pt-br": "Português BR",
+      "en": "English",
+      "es": "Español"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "escalation": {
+      "title": "Contactos de Escalación",
+      "hint": "Cuando un usuario pide hablar con un humano, el agente proporciona estos contactos.",
+      "supportWhatsApp": "WhatsApp de Soporte",
+      "salesWhatsApp": "WhatsApp de Ventas",
+      "supportEmail": "Email de Soporte",
+      "salesEmail": "Email de Ventas",
+      "upgradeProfessional": "Disponible en los planes Professional y Scale"
+    }
+  },
+  "files": {
+    "title": "Archivos",
+    "upload": "Subir archivo",
+    "empty": "No hay archivos",
+    "processing": "Procesando",
+    "ready": "Listo",
+    "failed": "Fallido",
+    "pending": "Pendiente",
+    "maxSize": "Tamaño máximo: 30MB",
+    "dropzone": "Suelta archivos aquí o haz clic para seleccionar",
+    "supportedFormats": "PDF, DOCX, PPTX, XLSX"
+  },
+  "team": {
+    "title": "Equipo",
+    "invite": "Invitar miembro",
+    "inviteEmail": "Correo del invitado",
+    "role": "Rol",
+    "roles": {
+      "owner": "Propietario",
+      "admin": "Administrador",
+      "user": "Usuario"
+    },
+    "empty": "Sin miembros aún",
+    "invitePending": "Invitación pendiente"
+  },
+  "billing": {
+    "title": "Facturación",
+    "currentPlan": "Plan Actual",
+    "availablePlans": "Planes Disponibles",
+    "usage": "Uso",
+    "usageThisMonth": "Este mes",
+    "agents": "Agentes",
+    "conversations": "Conversaciones",
+    "messages": "Mensajes",
+    "conversationsPerMonth": "conversaciones/mes",
+    "messagesPerMonth": "mensajes/mes",
+    "unlimitedConversations": "Conversaciones ilimitadas",
+    "upgrade": "Mejorar plan",
+    "manageBilling": "Administrar facturación",
+    "periodEnd": "Renueva el",
+    "trialBanner": "Tu período de prueba termina en {days} día(s). Suscríbete a un plan para continuar.",
+    "pastDueBanner": "Hay un problema con tu pago. Actualiza tus datos de facturación para evitar la suspensión.",
+    "status": {
+      "active": "Activo",
+      "trialing": "En prueba",
+      "past_due": "Pago vencido",
+      "canceled": "Cancelado",
+      "unpaid": "No pagado"
+    },
+    "plans": {
+      "starter": "Starter",
+      "professional": "Professional",
+      "scale": "Scale"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "company": "Empresa",
+    "companyName": "Nombre de la empresa",
+    "companySlug": "Slug",
+    "logo": "Logo",
+    "danger": "Zona de peligro",
+    "deleteCompany": "Eliminar empresa"
+  },
+  "profile": {
+    "title": "Mi Perfil",
+    "personalInfo": "Información Personal",
+    "preferences": "Preferencias",
+    "changePassword": "Cambiar Contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "darkMode": "Modo oscuro",
+    "language": "Idioma de la interfaz",
+    "darkModeOptions": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    }
+  },
+  "admin": {
+    "title": "Administración",
+    "models": {
+      "title": "Modelos de IA",
+      "create": "Nuevo Modelo",
+      "provider": "Proveedor",
+      "modelId": "ID del modelo",
+      "displayName": "Nombre para mostrar",
+      "inputCost": "Costo entrada (por 1M tokens)",
+      "outputCost": "Costo salida (por 1M tokens)",
+      "isDefault": "Predeterminado",
+      "isActive": "Activo"
+    },
+    "plans": {
+      "title": "Planes",
+      "create": "Nuevo Plan",
+      "slug": "Slug",
+      "monthlyPrice": "Precio mensual (USD)",
+      "maxAgents": "Máx. agentes",
+      "hasWhatsApp": "Incluye WhatsApp",
+      "hasEscalationContacts": "Contactos de Escalación",
+      "maxConversations": "Conversaciones/mes",
+      "maxMessages": "Mensajes/mes",
+      "stripePriceId": "Stripe Price ID",
+      "publicPlan": "Plan público",
+      "publicPlanHint": "Visible en la página de precios",
+      "public": "Público",
+      "private": "Privado"
+    },
+    "invitations": {
+      "title": "Admins del Sistema",
+      "invite": "Invitar Admin",
+      "pending": "Pendiente",
+      "accepted": "Aceptado"
+    },
+    "companies": {
+      "title": "Empresas"
+    }
+  },
+  "onboarding": {
+    "createCompany": "Crea tu empresa",
+    "companyName": "Nombre de la empresa",
+    "companySlug": "Identificador único (slug)",
+    "selectPlan": "Elige tu plan",
+    "planDescription": "Puedes cambiar de plan en cualquier momento"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "notFound": "No encontrado",
+    "forbidden": "Acceso denegado",
+    "unauthorized": "Sesión expirada. Inicia sesión nuevamente."
+  }
+}
