@@ -15,6 +15,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PasswordRequirements } from "@/components/shared/password-requirements";
+import { passwordSchema as pwSchema } from "@/lib/validations/password";
 import { toast } from "@/hooks/use-toast";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -24,17 +26,17 @@ const profileSchema = z.object({
 });
 type ProfileForm = z.infer<typeof profileSchema>;
 
-const passwordSchema = z
+const passwordFormSchema = z
   .object({
     currentPassword: z.string().min(1),
-    newPassword: z.string().min(8),
-    confirmPassword: z.string().min(8),
+    newPassword: pwSchema,
+    confirmPassword: z.string().min(1),
   })
   .refine((d) => d.newPassword === d.confirmPassword, {
-    message: "Passwords do not match",
+    message: "password_mismatch",
     path: ["confirmPassword"],
   });
-type PasswordForm = z.infer<typeof passwordSchema>;
+type PasswordForm = z.infer<typeof passwordFormSchema>;
 
 export default function ProfilePage() {
   const t = useTranslations();
@@ -52,7 +54,8 @@ export default function ProfilePage() {
     defaultValues: { firstName: user?.firstName ?? "", lastName: user?.lastName ?? "" },
   });
 
-  const passwordForm = useForm<PasswordForm>({ resolver: zodResolver(passwordSchema) });
+  const passwordForm = useForm<PasswordForm>({ resolver: zodResolver(passwordFormSchema) });
+  const newPasswordValue = passwordForm.watch("newPassword", "");
 
   async function onProfileSubmit(data: ProfileForm) {
     setSavingProfile(true);
@@ -152,12 +155,13 @@ export default function ProfilePage() {
             <div className="space-y-2">
               <Label>{t("profile.newPassword")}</Label>
               <Input type="password" {...passwordForm.register("newPassword")} />
+              <PasswordRequirements password={newPasswordValue} />
             </div>
             <div className="space-y-2">
               <Label>{t("auth.confirmPassword")}</Label>
               <Input type="password" {...passwordForm.register("confirmPassword")} />
               {passwordForm.formState.errors.confirmPassword && (
-                <p className="text-xs text-destructive">{passwordForm.formState.errors.confirmPassword.message}</p>
+                <p className="text-xs text-destructive">{t("auth.passwordMismatch")}</p>
               )}
             </div>
             <div className="flex justify-end">

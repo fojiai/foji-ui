@@ -44,7 +44,14 @@
     "hasAccount": "¿Ya tienes una cuenta?",
     "verifyEmailTitle": "Revisa tu correo",
     "verifyEmailMessage": "Enviamos un enlace de verificación a {email}. Haz clic en el enlace para activar tu cuenta.",
-    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres"
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordRequirements": {
+      "minLength": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número"
+    }
   },
   "nav": {
     "dashboard": "Panel",

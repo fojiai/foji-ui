@@ -14,12 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PasswordRequirements } from "@/components/shared/password-requirements";
+import { passwordSchema } from "@/lib/validations/password";
 import { toast } from "@/hooks/use-toast";
 
 const schema = z
-  .object({ password: z.string().min(8), confirmPassword: z.string().min(8) })
+  .object({ password: passwordSchema, confirmPassword: z.string().min(1) })
   .refine((d) => d.password === d.confirmPassword, {
-    message: "Passwords do not match",
+    message: "password_mismatch",
     path: ["confirmPassword"],
   });
 type FormData = z.infer<typeof schema>;
@@ -31,9 +33,11 @@ export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  const passwordValue = watch("password", "");
 
   async function onSubmit(data: FormData) {
     if (!token) {
@@ -74,15 +78,13 @@ export default function ResetPasswordPage() {
             <div className="space-y-2">
               <Label>{t("auth.password")}</Label>
               <Input type="password" {...register("password")} aria-invalid={!!errors.password} />
-              {errors.password && (
-                <p className="text-xs text-destructive">{t("auth.passwordMinLength")}</p>
-              )}
+              <PasswordRequirements password={passwordValue} />
             </div>
             <div className="space-y-2">
               <Label>{t("auth.confirmPassword")}</Label>
               <Input type="password" {...register("confirmPassword")} aria-invalid={!!errors.confirmPassword} />
               {errors.confirmPassword && (
-                <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
+                <p className="text-xs text-destructive">{t("auth.passwordMismatch")}</p>
               )}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>

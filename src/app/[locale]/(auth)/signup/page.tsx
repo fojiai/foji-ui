@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PasswordRequirements } from "@/components/shared/password-requirements";
+import { passwordSchema } from "@/lib/validations/password";
 import { toast } from "@/hooks/use-toast";
 import Link from "next/link";
 
@@ -19,7 +21,7 @@ const schema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: passwordSchema,
 });
 type FormData = z.infer<typeof schema>;
 
@@ -32,8 +34,11 @@ export default function SignupPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const passwordValue = watch("password", "");
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
@@ -96,9 +101,7 @@ export default function SignupPage() {
               {...register("password")}
               aria-invalid={!!errors.password}
             />
-            {errors.password && (
-              <p className="text-xs text-destructive">{t("auth.passwordMinLength")}</p>
-            )}
+            <PasswordRequirements password={passwordValue} />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? <LoadingSpinner size="sm" /> : t("auth.signup")}
