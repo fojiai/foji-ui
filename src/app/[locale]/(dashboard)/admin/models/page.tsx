@@ -60,7 +60,7 @@ export default function ModelsPage() {
 
   function openEdit(model: AIModel) {
     setEditing(model);
-    reset({ ...model });
+    reset({ ...model, provider: model.provider as FormData["provider"] });
     setDialogOpen(true);
   }
 
