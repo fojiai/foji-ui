@@ -59,7 +59,7 @@ export default function AgentDetailPage() {
   });
 
   async function loadAgent() {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     try {
       const [a, fileList, sub] = await Promise.all([
         agentsApi.get(activeCompanyId, agentId),

@@ -7,11 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
 import Link from "next/link";
@@ -27,6 +28,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -47,52 +49,71 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-4">
-          <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
+    <>
+      {/* Branding */}
+      <div className="mb-8 flex flex-col items-center gap-3 text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 shadow-lg backdrop-blur">
+          <Image src="/logo-icon.png" alt="Foji AI" width={40} height={40} className="rounded-lg" priority />
         </div>
-        <CardTitle className="text-2xl">{t("auth.loginTitle")}</CardTitle>
-        <CardDescription>{t("auth.loginSubtitle")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">{t("auth.email")}</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              {...register("email")}
-              aria-invalid={!!errors.email}
-            />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">{t("auth.password")}</Label>
-              <Link href="/forgot-password" className="text-xs text-primary hover:underline">
-                {t("auth.forgotPassword")}
-              </Link>
+        <h1 className="text-2xl font-bold text-white">Foji AI</h1>
+        <p className="text-sm text-zinc-400">{t("auth.loginSubtitle")}</p>
+      </div>
+
+      {/* Card */}
+      <Card className="shadow-2xl border-white/10 bg-zinc-900/80 backdrop-blur">
+        <CardContent className="pt-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-zinc-300">{t("auth.email")}</Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                className="h-11 bg-white/5 border-white/10 text-white placeholder:text-zinc-500"
+                {...register("email")}
+                aria-invalid={!!errors.email}
+              />
             </div>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-            />
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? <LoadingSpinner size="sm" /> : t("auth.login")}
-          </Button>
-        </form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          {t("auth.noAccount")}{" "}
-          <Link href="/signup" className="text-primary hover:underline font-medium">
-            {t("auth.signup")}
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-zinc-300">{t("auth.password")}</Label>
+                <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+                  {t("auth.forgotPassword")}
+                </Link>
+              </div>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  className="h-11 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 pr-10"
+                  {...register("password")}
+                  aria-invalid={!!errors.password}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-0 top-0 h-11 w-10 text-zinc-400 hover:text-zinc-200"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+            <Button type="submit" className="h-11 w-full text-base font-semibold" disabled={isLoading}>
+              {isLoading ? <LoadingSpinner size="sm" /> : t("auth.login")}
+            </Button>
+          </form>
+          <p className="mt-6 text-center text-sm text-zinc-400">
+            {t("auth.noAccount")}{" "}
+            <Link href="/signup" className="text-primary hover:underline font-medium">
+              {t("auth.signup")}
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </>
   );
 }

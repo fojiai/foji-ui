@@ -60,7 +60,7 @@ export default function BillingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     Promise.all([
       plansApi.list(),
       subscriptionsApi.getSubscription(activeCompanyId).catch(() => null),

@@ -42,7 +42,7 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     apiFetch<CompanyData>(`/api/companies/${activeCompanyId}`)
       .then((data) => { setCompany(data); reset({ name: data.name, description: data.description ?? "" }); })
       .catch(() => toast({ variant: "destructive", title: t("errors.generic") }))

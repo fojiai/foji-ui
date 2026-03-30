@@ -25,7 +25,7 @@ export default function AgentsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     agentsApi
       .list(activeCompanyId)
       .then(setAgents)

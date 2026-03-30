@@ -61,7 +61,7 @@ export default function TeamPage() {
   });
 
   async function load() {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     setIsLoading(true);
     try {
       const [mem, inv] = await Promise.all([

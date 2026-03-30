@@ -25,7 +25,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!activeCompanyId) return;
+    if (!activeCompanyId) { setIsLoading(false); return; }
     Promise.all([
       agentsApi.list(activeCompanyId),
       analyticsApi.getCompanyStats(activeCompanyId).catch(() => null),
@@ -112,42 +112,42 @@ export default function DashboardPage() {
               <AreaChart data={chartData} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorConv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#FF2D2D" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#FF2D2D" stopOpacity={0} />
+                    <stop offset="5%" stopColor="oklch(0.59 0.25 27)" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="oklch(0.59 0.25 27)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   tickLine={false}
                   axisLine={false}
                   interval="preserveStartEnd"
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   tickLine={false}
                   axisLine={false}
                   allowDecimals={false}
                 />
                 <Tooltip
                   contentStyle={{
-                    background: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
+                    background: "var(--card)",
+                    border: "1px solid var(--border)",
                     borderRadius: "8px",
                     fontSize: 12,
                   }}
-                  labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                  labelStyle={{ color: "var(--foreground)", fontWeight: 600 }}
                 />
                 <Area
                   type="monotone"
                   dataKey="conversations"
                   name={t("dashboard.conversations")}
-                  stroke="#FF2D2D"
+                  stroke="oklch(0.59 0.25 27)"
                   strokeWidth={2}
                   fill="url(#colorConv)"
                   dot={false}
-                  activeDot={{ r: 4, fill: "#FF2D2D" }}
+                  activeDot={{ r: 4, fill: "oklch(0.59 0.25 27)" }}
                 />
               </AreaChart>
             </ResponsiveContainer>
