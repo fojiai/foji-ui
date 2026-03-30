@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Flame, ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { authApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -42,8 +43,8 @@ export default function ForgotPasswordPage() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-          <Flame className="h-6 w-6 text-primary" />
+        <div className="mx-auto mb-4">
+          <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
         </div>
         <CardTitle>{t("auth.forgotPassword")}</CardTitle>
         {!sent && (

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Flame, CheckCircle2, XCircle } from "lucide-react";
+import Image from "next/image";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { authApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -25,13 +26,17 @@ export default function VerifyEmailPage() {
   return (
     <Card className="w-full max-w-md text-center">
       <CardHeader>
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+        <div className="mx-auto mb-4">
           {status === "loading" ? (
-            <Flame className="h-6 w-6 text-primary" />
+            <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
           ) : status === "success" ? (
-            <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
+              <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+            </div>
           ) : (
-            <XCircle className="h-6 w-6 text-destructive" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
+              <XCircle className="h-6 w-6 text-destructive" />
+            </div>
           )}
         </div>
         <CardTitle>

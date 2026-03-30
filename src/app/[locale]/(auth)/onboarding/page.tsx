@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Flame, Check } from "lucide-react";
+import Image from "next/image";
+import { Check } from "lucide-react";
 import { authApi, plansApi, subscriptionsApi, type Plan } from "@/lib/api";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
@@ -95,8 +96,8 @@ export default function OnboardingPage() {
     <div className="w-full max-w-2xl">
       {/* Header */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-          <Flame className="h-7 w-7 text-primary" />
+        <div className="mx-auto mb-4">
+          <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
         </div>
         <h1 className="text-3xl font-bold text-white">Welcome to Foji AI</h1>
         <p className="mt-1 text-zinc-400">Let&apos;s set up your workspace</p>
