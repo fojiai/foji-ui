@@ -16,6 +16,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { agentsApi, analyticsApi, type Agent, type CompanyStats } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PageLoader } from "@/components/shared/loading-spinner";
+import { NoCompanyState } from "@/components/shared/empty-state";
 
 export default function DashboardPage() {
   const t = useTranslations();
@@ -38,6 +39,17 @@ export default function DashboardPage() {
   }, [activeCompanyId]);
 
   if (isLoading) return <PageLoader />;
+
+  if (!activeCompanyId) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">
+          {t("dashboard.welcome", { name: user?.firstName ?? "" })}
+        </h1>
+        <NoCompanyState />
+      </div>
+    );
+  }
 
   const activeCount = agents.filter((a) => a.isActive).length;
 
@@ -77,7 +89,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-tight">
           {t("dashboard.welcome", { name: user?.firstName ?? "" })}
         </h1>
         <p className="text-muted-foreground">{t("dashboard.title")}</p>

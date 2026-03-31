@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Shield, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { NoCompanyState } from "@/components/shared/empty-state";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -15,6 +19,38 @@ import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
+
+// ─── Super Admin: Redirect to Admin panel ────────────────────────────────────
+
+function SuperAdminSettingsView() {
+  const t = useTranslations();
+  const params = useParams();
+  const locale = (params?.locale as string) ?? "pt-br";
+
+  return (
+    <div className="mx-auto max-w-2xl space-y-6">
+      <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+      <Card>
+        <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+            <Shield className="h-7 w-7 text-primary" />
+          </div>
+          <p className="text-muted-foreground max-w-sm">
+            {t("superAdmin.platformSettings")}
+          </p>
+          <Button asChild>
+            <Link href={`/${locale}/admin`}>
+              {t("superAdmin.goToAdmin")}
+              <ArrowRight className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// ─── Regular Settings View (tenant-scoped) ───────────────────────────────────
 
 const schema = z.object({
   name: z.string().min(2),
@@ -30,9 +66,11 @@ interface CompanyData {
   logoUrl?: string;
 }
 
-export default function SettingsPage() {
+function RegularSettingsView() {
   const t = useTranslations();
-  const { activeCompanyId, user } = useAuth();
+  const params = useParams();
+  const locale = (params?.locale as string) ?? "pt-br";
+  const { activeCompanyId } = useAuth();
   const [company, setCompany] = useState<CompanyData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -64,11 +102,18 @@ export default function SettingsPage() {
   }
 
   if (isLoading) return <PageLoader />;
-  if (!company) return null;
+  if (!company) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+        <NoCompanyState />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">{t("settings.title")}</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Card>
@@ -129,4 +174,13 @@ export default function SettingsPage() {
       </Card>
     </div>
   );
+}
+
+// ─── Main Export ──────────────────────────────────────────────────────────────
+
+export default function SettingsPage() {
+  const { user } = useAuth();
+
+  if (user?.isSuperAdmin) return <SuperAdminSettingsView />;
+  return <RegularSettingsView />;
 }

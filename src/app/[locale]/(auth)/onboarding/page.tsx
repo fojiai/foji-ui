@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { Check, X, Loader2 } from "lucide-react";
 import { authApi, plansApi, subscriptionsApi, type Plan } from "@/lib/api";
+import { setToken } from "@/lib/auth";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,9 +27,11 @@ const companySchema = z.object({
   slug: z
     .string()
     .min(2)
-    .regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers and hyphens"),
+    .regex(/^[a-z0-9-]+$/),
 });
 type CompanyForm = z.infer<typeof companySchema>;
+
+type SlugStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
 export default function OnboardingPage() {
   const t = useTranslations();
@@ -40,17 +43,48 @@ export default function OnboardingPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [slugStatus, setSlugStatus] = useState<SlugStatus>("idle");
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<CompanyForm>({ resolver: zodResolver(companySchema) });
 
-  // Auto-generate slug from name
-  const name = watch("name");
+  const slugValue = watch("slug");
+
+  // Debounced slug availability check
+  const checkSlug = useCallback(async (slug: string) => {
+    if (!slug || slug.length < 2 || !/^[a-z0-9-]+$/.test(slug)) {
+      setSlugStatus(slug && slug.length >= 2 ? "invalid" : "idle");
+      return;
+    }
+    setSlugStatus("checking");
+    try {
+      const { available } = await authApi.checkSlug(slug);
+      setSlugStatus(available ? "available" : "taken");
+      if (!available) {
+        setError("slug", { message: t("onboarding.slugTaken") });
+      } else {
+        clearErrors("slug");
+      }
+    } catch {
+      setSlugStatus("idle");
+    }
+  }, [t, setError, clearErrors]);
+
+  useEffect(() => {
+    if (!slugValue) { setSlugStatus("idle"); return; }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => checkSlug(slugValue), 400);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [slugValue, checkSlug]);
+
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     setValue("name", val);
@@ -61,16 +95,27 @@ export default function OnboardingPage() {
   }
 
   async function onCompanySubmit(data: CompanyForm) {
+    if (slugStatus === "taken") {
+      setError("slug", { message: t("onboarding.slugTaken") });
+      return;
+    }
     setIsLoading(true);
     try {
       const company = await authApi.createCompany(data);
+      if (company.token) setToken(company.token);
       setCompanyId(company.id);
       switchCompany(company.id);
       const fetchedPlans = await plansApi.list();
       setPlans(fetchedPlans.filter((p) => p.isActive));
       setStep("plan");
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err: any) {
+      const message = err?.data?.error;
+      if (message && typeof message === "string" && message.toLowerCase().includes("slug")) {
+        setSlugStatus("taken");
+        setError("slug", { message: t("onboarding.slugTaken") });
+      } else {
+        toast({ variant: "destructive", title: t("errors.generic") });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -99,8 +144,8 @@ export default function OnboardingPage() {
         <div className="mx-auto mb-4">
           <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
         </div>
-        <h1 className="text-3xl font-bold text-white">Welcome to Foji AI</h1>
-        <p className="mt-1 text-zinc-400">Let&apos;s set up your workspace</p>
+        <h1 className="text-3xl font-bold text-white">{t("onboarding.welcome")}</h1>
+        <p className="mt-1 text-zinc-400">{t("onboarding.welcomeSubtitle")}</p>
       </div>
 
       {/* Step indicator */}
@@ -128,7 +173,7 @@ export default function OnboardingPage() {
         <Card>
           <CardHeader>
             <CardTitle>{t("onboarding.createCompany")}</CardTitle>
-            <CardDescription>This will be your workspace on Foji AI.</CardDescription>
+            <CardDescription>{t("onboarding.workspaceDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onCompanySubmit)} className="space-y-4">
@@ -143,21 +188,48 @@ export default function OnboardingPage() {
               </div>
               <div className="space-y-2">
                 <Label>{t("onboarding.companySlug")}</Label>
-                <div className="flex items-center rounded-md border border-input bg-muted">
+                <div className={cn(
+                  "flex items-center rounded-md border bg-muted",
+                  slugStatus === "taken" ? "border-destructive" : slugStatus === "available" ? "border-emerald-500" : "border-input"
+                )}>
                   <span className="px-3 py-2 text-sm text-muted-foreground">foji.ai/</span>
                   <Input
                     className="border-0 bg-transparent focus-visible:ring-0"
                     placeholder="acme-corp"
                     {...register("slug")}
-                    aria-invalid={!!errors.slug}
+                    aria-invalid={!!errors.slug || slugStatus === "taken"}
                   />
+                  <div className="px-3">
+                    {slugStatus === "checking" && (
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                    {slugStatus === "available" && (
+                      <Check className="h-4 w-4 text-emerald-500" />
+                    )}
+                    {slugStatus === "taken" && (
+                      <X className="h-4 w-4 text-destructive" />
+                    )}
+                  </div>
                 </div>
-                {errors.slug && (
-                  <p className="text-xs text-destructive">{errors.slug.message}</p>
+                {slugStatus === "taken" && (
+                  <p className="text-xs text-destructive">{t("onboarding.slugTaken")}</p>
+                )}
+                {slugStatus === "available" && (
+                  <p className="text-xs text-emerald-500">{t("onboarding.slugAvailable")}</p>
+                )}
+                {errors.slug && slugStatus !== "taken" && (
+                  <p className="text-xs text-destructive">
+                    {errors.slug.message === "Invalid" ? t("onboarding.slugInvalid") : errors.slug.message}
+                  </p>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? <LoadingSpinner size="sm" /> : "Continue"}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isLoading || slugStatus === "taken" || slugStatus === "checking"}
+              >
+                {isLoading && <LoadingSpinner size="sm" className="mr-2" />}
+                {t("onboarding.continue")}
               </Button>
             </form>
           </CardContent>
@@ -187,12 +259,14 @@ export default function OnboardingPage() {
                 <CardHeader className="text-center">
                   <CardTitle className="text-base">{plan.name}</CardTitle>
                   <p className="text-2xl font-bold">
-                    ${plan.monthlyPriceUsd}
+                    ${plan.monthlyPrice}
                     <span className="text-sm font-normal text-muted-foreground">/mo</span>
                   </p>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-sm text-muted-foreground">Up to {plan.maxAgents} agents</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("onboarding.upToAgents", { count: plan.maxAgents })}
+                  </p>
                   {plan.hasWhatsApp && (
                     <Badge variant="secondary" className="mt-2">WhatsApp</Badge>
                   )}
@@ -209,10 +283,11 @@ export default function OnboardingPage() {
           </div>
           <div className="flex gap-3">
             <Button variant="ghost" className="flex-1 text-zinc-400" onClick={() => router.push("/dashboard")}>
-              Skip for now
+              {t("onboarding.skipForNow")}
             </Button>
             <Button className="flex-1" onClick={onPlanSubmit} disabled={isLoading}>
-              {isLoading ? <LoadingSpinner size="sm" /> : selectedPlanId ? "Subscribe" : "Continue free"}
+              {isLoading && <LoadingSpinner size="sm" className="mr-2" />}
+              {selectedPlanId ? t("onboarding.subscribe") : t("onboarding.continueFree")}
             </Button>
           </div>
         </div>

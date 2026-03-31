@@ -40,7 +40,12 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await login(data.email, data.password);
-      router.push("/dashboard");
+      const claims = (await import("@/lib/auth")).getCurrentUser();
+      if (claims && claims.companies.length === 0 && !claims.isSuperAdmin) {
+        router.push("/onboarding");
+      } else {
+        router.push("/dashboard");
+      }
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
     } finally {
@@ -102,8 +107,13 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
-            <Button type="submit" className="h-11 w-full text-base font-semibold" disabled={isLoading}>
-              {isLoading ? <LoadingSpinner size="sm" /> : t("auth.login")}
+            <Button
+              type="submit"
+              className="h-11 w-full text-base font-semibold bg-white text-zinc-900 hover:bg-zinc-200 disabled:bg-zinc-300"
+              disabled={isLoading}
+            >
+              {isLoading && <LoadingSpinner size="sm" className="mr-2" />}
+              {t("auth.login")}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-zinc-400">

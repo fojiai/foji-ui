@@ -60,7 +60,8 @@
     "team": "Team",
     "billing": "Billing",
     "settings": "Settings",
-    "admin": "Admin"
+    "admin": "Admin",
+    "contact": "Contact"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -110,6 +111,53 @@
       "supportEmail": "Support Email",
       "salesEmail": "Sales Email",
       "upgradeProfessional": "Available on Professional and Scale plans"
+    },
+    "basicInfo": "Basic Info",
+    "basicInfoHint": "Give your agent a name and choose its industry and language.",
+    "namePlaceholder": "e.g. Finance Assistant",
+    "nameRequired": "Agent name is required",
+    "descriptionPlaceholder": "Brief description of what this agent does",
+    "systemPromptHint": "This is the core instruction that defines your agent's personality, knowledge scope, and behavior.",
+    "systemPromptPlaceholder": "You are a helpful assistant for our company. Answer questions based on the documents provided...",
+    "systemPromptRequired": "System prompt is required (at least 10 characters)",
+    "userPromptHint": "Extra rules appended to every conversation. Use for formatting preferences, tone, or restrictions.",
+    "userPromptPlaceholder": "Always cite sources. Keep answers under 3 paragraphs. Respond in a professional tone.",
+    "examplePrompts": "Start from a template",
+    "examples": {
+      "customerSupport": "Customer Support",
+      "customerSupportPrompt": "You are a friendly customer support agent for our company. Answer questions about our products and services based on the documents provided. If you don't know the answer, say so honestly and suggest the user contact our support team. Always be polite, concise, and helpful.",
+      "itHelpdesk": "IT Helpdesk",
+      "itHelpdeskPrompt": "You are an IT helpdesk assistant. Help employees troubleshoot technical issues, explain how to use internal systems, and guide them through common procedures based on the documentation provided. Escalate to the IT team when the issue requires hands-on intervention.",
+      "hrAssistant": "HR Assistant",
+      "hrAssistantPrompt": "You are an HR assistant. Answer employee questions about company policies, benefits, vacation rules, and internal procedures based on the documents provided. Always be empathetic and professional. For sensitive matters like complaints or legal issues, recommend speaking with the HR team directly.",
+      "onboarding": "Employee Onboarding",
+      "onboardingPrompt": "You are an onboarding assistant for new employees. Help them understand company culture, tools, processes, and policies based on the documents provided. Be welcoming and proactive — anticipate common questions and provide step-by-step guidance.",
+      "legalAdvisor": "Legal Advisor",
+      "legalAdvisorPrompt": "You are a legal information assistant. Help users understand legal concepts and procedures based on the documents provided. Always clarify that you provide general legal information, not legal advice, and recommend consulting a qualified attorney for specific cases. Cite relevant articles and laws when possible.",
+      "contractReview": "Contract Review",
+      "contractReviewPrompt": "You are a contract review assistant. Help users understand contract clauses, obligations, deadlines, and key terms based on the documents provided. Highlight potential risks and important conditions. Always recommend having a lawyer review before signing any agreement.",
+      "compliance": "Compliance",
+      "compliancePrompt": "You are a compliance assistant. Help users understand regulatory requirements, internal compliance policies, and best practices based on the documents provided. Flag potential compliance risks and recommend consulting the compliance team for complex situations.",
+      "consumerRights": "Consumer Rights",
+      "consumerRightsPrompt": "You are a consumer rights information assistant. Help users understand their rights as consumers, return policies, warranty terms, and complaint procedures based on the documents provided. Always recommend seeking legal counsel for disputes that cannot be resolved directly.",
+      "financeHelper": "Finance Helper",
+      "financeHelperPrompt": "You are a financial guidance assistant. Help users understand accounting concepts, tax procedures, and financial reports based on the documents provided. Always recommend consulting a certified accountant for specific financial decisions. Provide clear, structured explanations with examples when helpful.",
+      "taxAdvisor": "Tax Advisor",
+      "taxAdvisorPrompt": "You are a tax information assistant. Help users understand tax obligations, deadlines, deductions, and filing procedures based on the documents provided. Always clarify that you provide general tax information and recommend consulting a certified tax professional for specific situations.",
+      "invoicing": "Invoicing & Billing",
+      "invoicingPrompt": "You are an invoicing and billing assistant. Help users understand invoicing procedures, payment terms, billing cycles, and how to resolve billing discrepancies based on the documents provided. Guide them through step-by-step processes when needed.",
+      "payroll": "Payroll",
+      "payrollPrompt": "You are a payroll information assistant. Help employees and managers understand payroll schedules, deductions, benefits calculations, and overtime rules based on the documents provided. For specific payroll corrections, recommend contacting the payroll department directly."
+    },
+    "howItWorks": {
+      "title": "How agents work",
+      "step1": "Create your agent with a name, industry, and system prompt",
+      "step2": "Upload documents (PDF, DOCX, PPTX, XLSX) to give it knowledge",
+      "step3": "Embed the chat widget on your website or connect via WhatsApp"
+    },
+    "filesHint": {
+      "title": "Add knowledge after creating",
+      "description": "Once your agent is created, you can upload documents to give it context. The agent will use these to answer questions."
     }
   },
   "files": {
@@ -150,6 +198,8 @@
     "messagesPerMonth": "messages/mo",
     "unlimitedConversations": "Unlimited conversations",
     "upgrade": "Upgrade",
+    "downgrade": "Downgrade",
+    "planSwitched": "Plan switched successfully!",
     "manageBilling": "Manage billing",
     "periodEnd": "Renews on",
     "trialBanner": "Your trial ends in {days} day(s). Subscribe to a plan to continue.",
@@ -208,7 +258,8 @@
       "title": "Plans",
       "create": "New Plan",
       "slug": "Slug",
-      "monthlyPrice": "Monthly price (USD)",
+      "monthlyPrice": "Monthly price",
+      "currency": "Currency",
       "maxAgents": "Max agents",
       "hasWhatsApp": "Includes WhatsApp",
       "hasEscalationContacts": "Escalation Contacts",
@@ -228,6 +279,22 @@
     },
     "companies": {
       "title": "Companies"
+    },
+    "apiKeys": {
+      "title": "API Keys",
+      "description": "Manage AI provider credentials used by the chat engine.",
+      "addCustom": "Add Custom Key",
+      "addKey": "Add API Key",
+      "editKey": "Edit API Key",
+      "keyName": "Key Name",
+      "label": "Display Label",
+      "value": "Value",
+      "provider": "Provider",
+      "secret": "Secret",
+      "quickSetup": "Quick Setup",
+      "quickSetupHint": "Click a provider to add its credentials.",
+      "empty": "No API keys configured yet.",
+      "deleteConfirm": "Remove the credential \"{key}\"? The AI provider will stop working until reconfigured."
     }
   },
   "onboarding": {
@@ -235,12 +302,211 @@
     "companyName": "Company name",
     "companySlug": "Unique identifier (slug)",
     "selectPlan": "Choose your plan",
-    "planDescription": "You can change plans at any time"
+    "planDescription": "You can change plans at any time",
+    "workspaceDescription": "This will be your workspace on Foji AI.",
+    "slugTaken": "This slug is already taken",
+    "slugAvailable": "Available",
+    "slugChecking": "Checking...",
+    "slugInvalid": "Only lowercase letters, numbers and hyphens",
+    "continue": "Continue",
+    "skipForNow": "Skip for now",
+    "subscribe": "Subscribe",
+    "continueFree": "Continue free",
+    "upToAgents": "Up to {count} agents",
+    "welcome": "Welcome to Foji AI",
+    "welcomeSubtitle": "Let's set up your workspace"
+  },
+  "userSettings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "editName": "Edit Name",
+    "logout": "Sign out"
+  },
+  "superAdmin": {
+    "platformTeam": "Platform Team",
+    "manageSubscriptions": "Subscriptions",
+    "assignPlan": "Assign Plan",
+    "removePlan": "Remove Plan",
+    "createCustomPlan": "Create Custom Plan",
+    "noSubscription": "No subscription",
+    "viewDetails": "View Details",
+    "inviteAdmin": "Invite Admin",
+    "platformSettings": "Platform settings are managed from the Admin panel.",
+    "goToAdmin": "Go to Admin"
+  },
+  "emptyStates": {
+    "noCompanyTitle": "No workspace yet",
+    "noCompanyDescription": "Create a company to start using Foji AI.",
+    "noPlanTitle": "No active plan",
+    "noPlanDescription": "Subscribe to a plan to unlock all features.",
+    "trialExpiredTitle": "Your trial has ended",
+    "trialExpiredDescription": "Subscribe to a plan to continue using Foji AI.",
+    "subscribePlan": "Choose a plan"
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "notFound": "Not found",
     "forbidden": "Access denied",
     "unauthorized": "Session expired. Please sign in again."
+  },
+  "legal": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": "These Terms of Service govern your use of the Foji AI platform, operated by P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59. By creating an account or using our services, you agree to these terms.",
+    "acceptance": {
+      "title": "1. Acceptance of Terms",
+      "content": "By accessing or using Foji AI, you agree to be bound by these Terms of Service. If you do not agree, do not use the platform. These terms constitute a legally binding agreement between you and P2 TECH INOVA SIMPLES (I.S.)."
+    },
+    "services": {
+      "title": "2. Description of Services",
+      "content": "Foji AI is a SaaS platform that enables businesses to create AI-powered chat agents trained on their documents. Services include agent creation, document processing, chat widget embedding, WhatsApp integration, and analytics dashboards. Features vary by subscription plan."
+    },
+    "accounts": {
+      "title": "3. User Accounts",
+      "content": "You must provide accurate information when creating an account. You are responsible for maintaining the confidentiality of your credentials and for all activities under your account. You must notify us immediately of any unauthorized access. We reserve the right to suspend or terminate accounts that violate these terms."
+    },
+    "acceptableUse": {
+      "title": "4. Acceptable Use",
+      "content": "You agree not to:\n- Upload illegal, harmful, or infringing content\n- Use the platform for spam, fraud, or deceptive purposes\n- Attempt to circumvent security measures or access other users' data\n- Reverse engineer, decompile, or disassemble any part of the platform\n- Exceed your plan's usage limits through automated means\n- Use AI agents to provide regulated professional advice (legal, medical, financial) without proper disclaimers"
+    },
+    "intellectualProperty": {
+      "title": "5. Intellectual Property",
+      "content": "You retain ownership of all content you upload. By uploading content, you grant us a limited license to process, store, and use it solely to provide the services. The Foji AI platform, including its software, design, and documentation, is owned by P2 TECH INOVA SIMPLES (I.S.) and protected by intellectual property laws."
+    },
+    "liability": {
+      "title": "6. Limitation of Liability",
+      "content": "To the maximum extent permitted by law, P2 TECH INOVA SIMPLES (I.S.) shall not be liable for indirect, incidental, special, or consequential damages. Our total liability shall not exceed the amount paid by you in the 12 months preceding the claim. AI-generated responses are provided as-is and should not be relied upon as professional advice."
+    },
+    "termination": {
+      "title": "7. Termination",
+      "content": "Either party may terminate the agreement at any time. Upon termination, your access to the platform will be revoked and your data will be retained for 30 days before permanent deletion, unless required by law to retain it longer. You may request immediate data deletion by contacting our support team."
+    },
+    "dataProtection": {
+      "title": "8. Data Protection",
+      "content": "We process personal data in accordance with our Privacy Policy and applicable data protection laws, including the Brazilian General Data Protection Law (LGPD — Law 13.709/2018), the EU General Data Protection Regulation (GDPR), and the California Consumer Privacy Act (CCPA). See our Privacy Policy for full details."
+    },
+    "governing": {
+      "title": "9. Governing Law",
+      "content": "These terms are governed by the laws of the Federative Republic of Brazil. Any disputes shall be submitted to the courts of the city of the company's registered office, without prejudice to the consumer's right to file claims in their own domicile as provided by the Brazilian Consumer Defense Code (CDC — Law 8.078/1990)."
+    },
+    "changes": {
+      "title": "10. Changes to Terms",
+      "content": "We may update these terms from time to time. We will notify you of material changes via email or through the platform. Continued use after changes take effect constitutes acceptance of the updated terms."
+    },
+    "contact": {
+      "title": "11. Contact",
+      "content": "For questions about these terms, contact us through the contact form in the platform or email us at the address listed in our Privacy Policy."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": "P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59, is committed to protecting your privacy. This policy describes how we collect, use, store, and share your personal data in compliance with the Brazilian General Data Protection Law (LGPD), the EU General Data Protection Regulation (GDPR), and the California Consumer Privacy Act (CCPA).",
+    "dataCollected": {
+      "title": "1. Data We Collect",
+      "content": "We collect:\n- Account data: name, email, password (hashed), company name, CPF/CNPJ\n- Usage data: conversations, messages, agent configurations, uploaded documents\n- Technical data: IP address, browser type, device information, access logs\n- Payment data: processed by Stripe — we do not store credit card numbers\n- Cookies: essential session cookies and optional analytics cookies"
+    },
+    "legalBasis": {
+      "title": "2. Legal Basis for Processing (LGPD Art. 7 / GDPR Art. 6)",
+      "content": "We process your data based on:\n- Contract performance: to provide our services\n- Legitimate interest: to improve the platform, prevent fraud, and ensure security\n- Consent: for marketing communications and optional analytics\n- Legal obligation: for tax, accounting, and regulatory compliance\n\nYou may withdraw consent at any time without affecting the lawfulness of prior processing."
+    },
+    "dataUse": {
+      "title": "3. How We Use Your Data",
+      "content": "We use your data to:\n- Provide and maintain the Foji AI platform\n- Process AI chat requests and build document context for your agents\n- Send transactional emails (verification, billing, notifications)\n- Analyze usage patterns to improve our services\n- Comply with legal obligations and resolve disputes"
+    },
+    "dataSharing": {
+      "title": "4. Data Sharing",
+      "content": "We share data with:\n- AI providers (OpenAI, Google, AWS): chat messages for AI processing — no personal data is shared beyond conversation content\n- Stripe: payment processing\n- AWS: cloud infrastructure (hosting, storage, databases)\n- Resend: transactional email delivery\n- Vercel: frontend hosting\n\nWe do not sell your personal data to third parties."
+    },
+    "dataRetention": {
+      "title": "5. Data Retention",
+      "content": "- Account data: retained while your account is active, deleted 30 days after account closure\n- Chat history: retained for 90 days, then automatically deleted\n- Uploaded documents: retained while associated with an active agent, deleted upon agent or account deletion\n- Billing records: retained for 5 years as required by Brazilian tax law\n- Audit logs: retained for 1 year"
+    },
+    "yourRights": {
+      "title": "6. Your Rights (LGPD Art. 18 / GDPR Art. 15-22)",
+      "content": "You have the right to:\n- Access: request a copy of your personal data\n- Correction: update inaccurate or incomplete data\n- Deletion: request deletion of your data (subject to legal retention requirements)\n- Portability: receive your data in a structured, machine-readable format\n- Restriction: request that we limit processing of your data\n- Objection: object to data processing based on legitimate interest\n- Revocation of consent: withdraw consent at any time\n\nTo exercise these rights, use the contact form in the platform or email our Data Protection Officer."
+    },
+    "cookies": {
+      "title": "7. Cookies",
+      "content": "We use essential cookies for authentication and session management. We do not use third-party tracking cookies. The foji_token cookie stores your authentication session and expires after 7 days."
+    },
+    "internationalTransfers": {
+      "title": "8. International Data Transfers",
+      "content": "Your data may be processed in the United States (AWS, OpenAI, Vercel) and other countries where our service providers operate. We ensure appropriate safeguards through standard contractual clauses and data processing agreements, in compliance with LGPD Chapter V and GDPR Chapter V."
+    },
+    "children": {
+      "title": "9. Children's Privacy",
+      "content": "Foji AI is not intended for users under 18 years of age. We do not knowingly collect personal data from children. If we learn that we have collected data from a child, we will delete it promptly."
+    },
+    "changes": {
+      "title": "10. Changes to This Policy",
+      "content": "We may update this policy periodically. We will notify you of material changes via email. The latest version is always available at this URL."
+    },
+    "contact": {
+      "title": "11. Contact & Data Protection Officer",
+      "content": "For privacy inquiries or to exercise your data rights:\n- Use the Contact form in the Foji AI platform\n- Email: privacy@fojiai.com\n- Controller: P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59"
+    }
+  },
+  "refund": {
+    "title": "Refund & Cancellation Policy",
+    "lastUpdated": "Last updated: March 2026",
+    "summary": "Foji AI is a digital SaaS service. As a general rule, subscriptions are non-refundable. You may cancel at any time, and your access continues until the end of the billing period.",
+    "policy": {
+      "title": "1. General Policy",
+      "content": "Foji AI subscriptions are billed monthly in advance. Since our service is a digital product delivered immediately upon subscription, refunds are generally not provided. When you subscribe, you gain immediate access to all features included in your plan."
+    },
+    "regretPeriod": {
+      "title": "2. Right of Regret (CDC Art. 49)",
+      "content": "In compliance with the Brazilian Consumer Defense Code (CDC), first-time subscribers may exercise their right of regret within 7 calendar days of their initial subscription. To exercise this right, contact us through the platform's contact form within the 7-day period. A full refund will be processed to your original payment method within 10 business days. This right applies only to the first subscription and cannot be used for plan changes or renewals."
+    },
+    "cancellation": {
+      "title": "3. Cancellation",
+      "content": "You may cancel your subscription at any time through the Billing page in your dashboard. Upon cancellation:\n- Your access continues until the end of the current billing period\n- No further charges will be made\n- Your data will be retained for 30 days, then permanently deleted\n- You can resubscribe at any time with a new billing cycle"
+    },
+    "chargebacks": {
+      "title": "4. Chargebacks & Disputes",
+      "content": "Filing a chargeback or payment dispute with your bank instead of contacting us directly will result in immediate account suspension. If a chargeback is filed, your account and all associated company data will be suspended pending resolution. We strongly encourage you to contact us first through the platform to resolve any billing issues."
+    },
+    "exceptions": {
+      "title": "5. Exceptions",
+      "content": "We may consider refunds on a case-by-case basis for:\n- Extended service outages (more than 24 consecutive hours)\n- Billing errors on our part\n- Duplicate charges\n\nAll exception requests must be submitted within 30 days of the charge through the platform's contact form."
+    },
+    "contact": {
+      "title": "6. Contact",
+      "content": "For billing questions or refund requests, use the Contact form in the Foji AI platform. We aim to respond to all billing inquiries within 2 business days."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "formTitle": "Send us a message",
+    "formDescription": "Report a bug, request a feature, or ask a billing question.",
+    "category": "Category",
+    "categories": {
+      "bug": "Bug Report",
+      "feature": "Feature Request",
+      "billing": "Billing",
+      "other": "Other"
+    },
+    "subject": "Subject",
+    "subjectPlaceholder": "Brief description of your issue",
+    "subjectRequired": "Subject is required (at least 3 characters)",
+    "message": "Message",
+    "messagePlaceholder": "Describe your issue in detail. Include steps to reproduce if reporting a bug.",
+    "messageRequired": "Message is required (at least 10 characters)",
+    "send": "Send Message",
+    "error": "Failed to send message. Please try again.",
+    "successTitle": "Message Sent!",
+    "successDescription": "We received your message and will get back to you within 2 business days.",
+    "adminTitle": "Contact Submissions",
+    "submissions": "submissions",
+    "open": "Open",
+    "resolved": "Resolved",
+    "resolve": "Resolve",
+    "reopen": "Reopen",
+    "noOpen": "No open submissions.",
+    "noResolved": "No resolved submissions.",
+    "viewDetails": "Details",
+    "adminNotesLabel": "Admin Notes",
+    "adminNotesPlaceholder": "Internal notes about this submission..."
   }
 }

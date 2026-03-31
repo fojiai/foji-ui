@@ -347,7 +347,7 @@ export default function AdminCompanyDetailPage() {
                         />
                         <div>
                           <p className="font-medium text-sm">{p.name}</p>
-                          <p className="text-xs text-muted-foreground">{p.maxAgents} agents · ${p.monthlyPriceUsd}/mo</p>
+                          <p className="text-xs text-muted-foreground">{p.maxAgents} agents · ${p.monthlyPrice}/mo</p>
                         </div>
                       </div>
                       {p.hasWhatsApp && <Badge variant="secondary" className="text-xs">WhatsApp</Badge>}
@@ -382,7 +382,7 @@ export default function AdminCompanyDetailPage() {
                         />
                         <div>
                           <p className="font-medium text-sm">{p.name}</p>
-                          <p className="text-xs text-muted-foreground">{p.maxAgents} agents · ${p.monthlyPriceUsd}/mo</p>
+                          <p className="text-xs text-muted-foreground">{p.maxAgents} agents · ${p.monthlyPrice}/mo</p>
                         </div>
                       </div>
                       {p.customForCompanyId === company.id && (

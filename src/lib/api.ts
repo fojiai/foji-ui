@@ -103,12 +103,28 @@ export const authApi = {
       body: JSON.stringify({ token, newPassword }),
     }),
 
+  /** Check if a company slug is available. */
+  checkSlug: (slug: string) =>
+    apiFetch<{ available: boolean }>(`/api/companies/check-slug?slug=${encodeURIComponent(slug)}`),
+
   /** Creates a company for the currently authenticated user. */
   createCompany: (data: { name: string; slug: string }) =>
-    apiFetch<{ id: number; name: string; slug: string }>("/api/companies", {
+    apiFetch<{ id: number; name: string; slug: string; token: string }>("/api/companies", {
       method: "POST",
       body: JSON.stringify(data),
     }),
+};
+
+export interface UserCompanyItem {
+  companyId: number;
+  companyName: string;
+  companySlug: string;
+  role: string;
+}
+
+export const companiesApi = {
+  /** Returns all companies the current user belongs to. */
+  mine: () => apiFetch<UserCompanyItem[]>("/api/companies/mine"),
 };
 
 // ─── Agents ──────────────────────────────────────────────────────────────────
@@ -193,9 +209,11 @@ export interface Plan {
   id: number;
   name: string;
   slug: string;
-  monthlyPriceUsd: number;
+  monthlyPrice: number;
+  currency: string;
   stripePriceId: string;
   maxAgents: number;
+  maxMembers: number;
   hasWhatsApp: boolean;
   hasEscalationContacts: boolean;
   maxConversationsPerMonth: number;
@@ -379,7 +397,30 @@ export const adminApi = {
     apiFetch<{ totalCompanies: number; totalUsers: number; totalAgents: number }>(
       "/api/admin/stats"
     ),
+
+  // Platform settings (API keys)
+  getSettings: () =>
+    apiFetch<PlatformSettingResult[]>("/api/admin/settings"),
+
+  upsertSetting: (data: { key: string; value: string; label: string; category: string; isSecret: boolean }) =>
+    apiFetch<PlatformSettingResult>("/api/admin/settings", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  deleteSetting: (key: string) =>
+    apiFetch<void>(`/api/admin/settings/${encodeURIComponent(key)}`, { method: "DELETE" }),
 };
+
+export interface PlatformSettingResult {
+  id: number;
+  key: string;
+  value: string;
+  label: string;
+  category: string;
+  isSecret: boolean;
+  updatedAt: string;
+}
 
 // ─── Analytics ───────────────────────────────────────────────────────────────
 

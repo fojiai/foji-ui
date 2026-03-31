@@ -60,7 +60,8 @@
     "team": "Equipe",
     "billing": "Faturamento",
     "settings": "Configurações",
-    "admin": "Admin"
+    "admin": "Admin",
+    "contact": "Contato"
   },
   "dashboard": {
     "title": "Painel",
@@ -110,6 +111,53 @@
       "supportEmail": "E-mail de Suporte",
       "salesEmail": "E-mail de Vendas",
       "upgradeProfessional": "Disponível nos planos Professional e Scale"
+    },
+    "basicInfo": "Informações Básicas",
+    "basicInfoHint": "Dê um nome ao seu agente e escolha sua indústria e idioma.",
+    "namePlaceholder": "ex: Assistente Financeiro",
+    "nameRequired": "Nome do agente é obrigatório",
+    "descriptionPlaceholder": "Breve descrição do que este agente faz",
+    "systemPromptHint": "Esta é a instrução principal que define a personalidade, escopo de conhecimento e comportamento do seu agente.",
+    "systemPromptPlaceholder": "Você é um assistente útil para nossa empresa. Responda perguntas com base nos documentos fornecidos...",
+    "systemPromptRequired": "Prompt do sistema é obrigatório (mínimo 10 caracteres)",
+    "userPromptHint": "Regras extras adicionadas a cada conversa. Use para preferências de formato, tom ou restrições.",
+    "userPromptPlaceholder": "Sempre cite fontes. Mantenha respostas em até 3 parágrafos. Responda em tom profissional.",
+    "examplePrompts": "Começar de um modelo",
+    "examples": {
+      "customerSupport": "Suporte ao Cliente",
+      "customerSupportPrompt": "Você é um agente de suporte ao cliente amigável para nossa empresa. Responda perguntas sobre nossos produtos e serviços com base nos documentos fornecidos. Se não souber a resposta, diga honestamente e sugira que o usuário entre em contato com nossa equipe de suporte. Seja sempre educado, conciso e prestativo.",
+      "itHelpdesk": "Helpdesk de TI",
+      "itHelpdeskPrompt": "Você é um assistente de helpdesk de TI. Ajude funcionários a resolver problemas técnicos, explique como usar sistemas internos e oriente-os em procedimentos comuns com base na documentação fornecida. Escale para a equipe de TI quando o problema exigir intervenção presencial.",
+      "hrAssistant": "Assistente de RH",
+      "hrAssistantPrompt": "Você é um assistente de RH. Responda perguntas dos funcionários sobre políticas da empresa, benefícios, regras de férias e procedimentos internos com base nos documentos fornecidos. Seja sempre empático e profissional. Para assuntos sensíveis como reclamações ou questões jurídicas, recomende falar diretamente com a equipe de RH.",
+      "onboarding": "Integração de Funcionários",
+      "onboardingPrompt": "Você é um assistente de integração para novos funcionários. Ajude-os a entender a cultura da empresa, ferramentas, processos e políticas com base nos documentos fornecidos. Seja acolhedor e proativo — antecipe perguntas comuns e forneça orientação passo a passo.",
+      "legalAdvisor": "Consultor Jurídico",
+      "legalAdvisorPrompt": "Você é um assistente de informações jurídicas. Ajude os usuários a entender conceitos e procedimentos legais com base nos documentos fornecidos. Sempre esclareça que você fornece informações jurídicas gerais, não aconselhamento jurídico, e recomende consultar um advogado qualificado para casos específicos. Cite artigos e leis relevantes quando possível.",
+      "contractReview": "Revisão de Contratos",
+      "contractReviewPrompt": "Você é um assistente de revisão de contratos. Ajude os usuários a entender cláusulas, obrigações, prazos e termos-chave com base nos documentos fornecidos. Destaque riscos potenciais e condições importantes. Sempre recomende que um advogado revise antes de assinar qualquer acordo.",
+      "compliance": "Compliance",
+      "compliancePrompt": "Você é um assistente de compliance. Ajude os usuários a entender requisitos regulatórios, políticas internas de conformidade e melhores práticas com base nos documentos fornecidos. Sinalize potenciais riscos de conformidade e recomende consultar a equipe de compliance para situações complexas.",
+      "consumerRights": "Direito do Consumidor",
+      "consumerRightsPrompt": "Você é um assistente de informações sobre direitos do consumidor. Ajude os usuários a entender seus direitos, políticas de devolução, termos de garantia e procedimentos de reclamação com base nos documentos fornecidos. Sempre recomende buscar assessoria jurídica para disputas que não possam ser resolvidas diretamente.",
+      "financeHelper": "Assistente Financeiro",
+      "financeHelperPrompt": "Você é um assistente de orientação financeira. Ajude os usuários a entender conceitos contábeis, procedimentos fiscais e relatórios financeiros com base nos documentos fornecidos. Sempre recomende consultar um contador certificado para decisões financeiras específicas. Forneça explicações claras e estruturadas com exemplos quando útil.",
+      "taxAdvisor": "Consultor Fiscal",
+      "taxAdvisorPrompt": "Você é um assistente de informações fiscais. Ajude os usuários a entender obrigações tributárias, prazos, deduções e procedimentos de declaração com base nos documentos fornecidos. Sempre esclareça que você fornece informações fiscais gerais e recomende consultar um profissional certificado para situações específicas.",
+      "invoicing": "Faturamento e Cobranças",
+      "invoicingPrompt": "Você é um assistente de faturamento e cobranças. Ajude os usuários a entender procedimentos de emissão de notas, condições de pagamento, ciclos de cobrança e como resolver divergências com base nos documentos fornecidos. Oriente-os com processos passo a passo quando necessário.",
+      "payroll": "Folha de Pagamento",
+      "payrollPrompt": "Você é um assistente de informações sobre folha de pagamento. Ajude funcionários e gestores a entender cronogramas de pagamento, descontos, cálculos de benefícios e regras de horas extras com base nos documentos fornecidos. Para correções específicas na folha, recomende contatar o departamento de folha de pagamento diretamente."
+    },
+    "howItWorks": {
+      "title": "Como agentes funcionam",
+      "step1": "Crie seu agente com nome, indústria e prompt do sistema",
+      "step2": "Envie documentos (PDF, DOCX, PPTX, XLSX) para dar conhecimento",
+      "step3": "Incorpore o widget de chat no seu site ou conecte via WhatsApp"
+    },
+    "filesHint": {
+      "title": "Adicione conhecimento depois de criar",
+      "description": "Após criar o agente, você pode enviar documentos para dar contexto. O agente usará esses documentos para responder perguntas."
     }
   },
   "files": {
@@ -150,6 +198,8 @@
     "messagesPerMonth": "mensagens/mês",
     "unlimitedConversations": "Conversas ilimitadas",
     "upgrade": "Fazer upgrade",
+    "downgrade": "Fazer downgrade",
+    "planSwitched": "Plano alterado com sucesso!",
     "manageBilling": "Gerenciar faturamento",
     "periodEnd": "Vence em",
     "trialBanner": "Seu período de teste termina em {days} dia(s). Assine um plano para continuar.",
@@ -208,7 +258,8 @@
       "title": "Planos",
       "create": "Novo Plano",
       "slug": "Slug",
-      "monthlyPrice": "Preço mensal (USD)",
+      "monthlyPrice": "Preço mensal",
+      "currency": "Moeda",
       "maxAgents": "Máx. agentes",
       "hasWhatsApp": "Inclui WhatsApp",
       "hasEscalationContacts": "Contatos de Escalação",
@@ -228,6 +279,22 @@
     },
     "companies": {
       "title": "Empresas"
+    },
+    "apiKeys": {
+      "title": "Chaves de API",
+      "description": "Gerencie as credenciais dos provedores de IA usadas pelo chat.",
+      "addCustom": "Adicionar Chave",
+      "addKey": "Adicionar Chave de API",
+      "editKey": "Editar Chave de API",
+      "keyName": "Nome da Chave",
+      "label": "Label",
+      "value": "Valor",
+      "provider": "Provedor",
+      "secret": "Secreta",
+      "quickSetup": "Configuração Rápida",
+      "quickSetupHint": "Clique em um provedor para adicionar suas credenciais.",
+      "empty": "Nenhuma chave de API configurada.",
+      "deleteConfirm": "Remover a credencial \"{key}\"? O provedor de IA parará de funcionar até ser reconfigurado."
     }
   },
   "onboarding": {
@@ -235,12 +302,211 @@
     "companyName": "Nome da empresa",
     "companySlug": "Identificador único (slug)",
     "selectPlan": "Escolha seu plano",
-    "planDescription": "Você pode mudar de plano a qualquer momento"
+    "planDescription": "Você pode mudar de plano a qualquer momento",
+    "workspaceDescription": "Este será seu espaço de trabalho no Foji AI.",
+    "slugTaken": "Este slug já está em uso",
+    "slugAvailable": "Disponível",
+    "slugChecking": "Verificando...",
+    "slugInvalid": "Apenas letras minúsculas, números e hífens",
+    "continue": "Continuar",
+    "skipForNow": "Pular por enquanto",
+    "subscribe": "Assinar",
+    "continueFree": "Continuar grátis",
+    "upToAgents": "Até {count} agentes",
+    "welcome": "Bem-vindo ao Foji AI",
+    "welcomeSubtitle": "Vamos configurar seu espaço de trabalho"
+  },
+  "userSettings": {
+    "title": "Configurações",
+    "appearance": "Aparência",
+    "editName": "Editar Nome",
+    "logout": "Sair"
+  },
+  "superAdmin": {
+    "platformTeam": "Equipe da Plataforma",
+    "manageSubscriptions": "Assinaturas",
+    "assignPlan": "Atribuir Plano",
+    "removePlan": "Remover Plano",
+    "createCustomPlan": "Criar Plano Personalizado",
+    "noSubscription": "Sem assinatura",
+    "viewDetails": "Ver Detalhes",
+    "inviteAdmin": "Convidar Admin",
+    "platformSettings": "As configurações da plataforma são gerenciadas no painel Admin.",
+    "goToAdmin": "Ir para Admin"
+  },
+  "emptyStates": {
+    "noCompanyTitle": "Nenhum espaço de trabalho",
+    "noCompanyDescription": "Crie uma empresa para começar a usar o Foji AI.",
+    "noPlanTitle": "Nenhum plano ativo",
+    "noPlanDescription": "Assine um plano para desbloquear todos os recursos.",
+    "trialExpiredTitle": "Seu período de teste acabou",
+    "trialExpiredDescription": "Assine um plano para continuar usando o Foji AI.",
+    "subscribePlan": "Escolher um plano"
   },
   "errors": {
     "generic": "Algo deu errado. Tente novamente.",
     "notFound": "Não encontrado",
     "forbidden": "Acesso negado",
     "unauthorized": "Sessão expirada. Faça login novamente."
+  },
+  "legal": {
+    "title": "Termos de Serviço",
+    "lastUpdated": "Última atualização: Março 2026",
+    "intro": "Estes Termos de Serviço regulam o uso da plataforma Foji AI, operada por P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59. Ao criar uma conta ou utilizar nossos serviços, você concorda com estes termos.",
+    "acceptance": {
+      "title": "1. Aceitação dos Termos",
+      "content": "Ao acessar ou usar o Foji AI, você concorda em se vincular a estes Termos de Serviço. Se não concordar, não utilize a plataforma. Estes termos constituem um acordo juridicamente vinculante entre você e P2 TECH INOVA SIMPLES (I.S.)."
+    },
+    "services": {
+      "title": "2. Descrição dos Serviços",
+      "content": "O Foji AI é uma plataforma SaaS que permite que empresas criem agentes de chat com inteligência artificial treinados em seus documentos. Os serviços incluem criação de agentes, processamento de documentos, incorporação de widget de chat, integração com WhatsApp e painéis de análise. As funcionalidades variam de acordo com o plano de assinatura."
+    },
+    "accounts": {
+      "title": "3. Contas de Usuário",
+      "content": "Você deve fornecer informações precisas ao criar uma conta. Você é responsável por manter a confidencialidade de suas credenciais e por todas as atividades em sua conta. Você deve nos notificar imediatamente sobre qualquer acesso não autorizado. Reservamo-nos o direito de suspender ou encerrar contas que violem estes termos."
+    },
+    "acceptableUse": {
+      "title": "4. Uso Aceitável",
+      "content": "Você concorda em não:\n- Enviar conteúdo ilegal, prejudicial ou que viole direitos de terceiros\n- Usar a plataforma para spam, fraude ou fins enganosos\n- Tentar contornar medidas de segurança ou acessar dados de outros usuários\n- Fazer engenharia reversa, descompilar ou desmontar qualquer parte da plataforma\n- Exceder os limites de uso do seu plano por meios automatizados\n- Usar agentes de IA para fornecer aconselhamento profissional regulamentado (jurídico, médico, financeiro) sem os devidos avisos"
+    },
+    "intellectualProperty": {
+      "title": "5. Propriedade Intelectual",
+      "content": "Você mantém a propriedade de todo conteúdo que enviar. Ao enviar conteúdo, você nos concede uma licença limitada para processar, armazenar e usá-lo exclusivamente para fornecer os serviços. A plataforma Foji AI, incluindo seu software, design e documentação, é de propriedade de P2 TECH INOVA SIMPLES (I.S.) e protegida por leis de propriedade intelectual."
+    },
+    "liability": {
+      "title": "6. Limitação de Responsabilidade",
+      "content": "Na máxima extensão permitida por lei, P2 TECH INOVA SIMPLES (I.S.) não será responsável por danos indiretos, incidentais, especiais ou consequenciais. Nossa responsabilidade total não excederá o valor pago por você nos 12 meses anteriores à reclamação. Respostas geradas por IA são fornecidas como estão e não devem ser consideradas como aconselhamento profissional."
+    },
+    "termination": {
+      "title": "7. Rescisão",
+      "content": "Qualquer parte pode rescindir o acordo a qualquer momento. Após a rescisão, seu acesso à plataforma será revogado e seus dados serão retidos por 30 dias antes da exclusão permanente, a menos que a lei exija retenção por mais tempo. Você pode solicitar exclusão imediata dos dados entrando em contato com nossa equipe de suporte."
+    },
+    "dataProtection": {
+      "title": "8. Proteção de Dados",
+      "content": "Processamos dados pessoais de acordo com nossa Política de Privacidade e leis aplicáveis de proteção de dados, incluindo a Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018), o Regulamento Geral de Proteção de Dados da UE (GDPR) e a Lei de Privacidade do Consumidor da Califórnia (CCPA). Consulte nossa Política de Privacidade para detalhes completos."
+    },
+    "governing": {
+      "title": "9. Lei Aplicável",
+      "content": "Estes termos são regidos pelas leis da República Federativa do Brasil. Quaisquer disputas serão submetidas aos tribunais da cidade da sede da empresa, sem prejuízo do direito do consumidor de propor ações em seu próprio domicílio, conforme previsto no Código de Defesa do Consumidor (CDC — Lei 8.078/1990)."
+    },
+    "changes": {
+      "title": "10. Alterações nos Termos",
+      "content": "Podemos atualizar estes termos periodicamente. Notificaremos você sobre alterações materiais por e-mail ou através da plataforma. O uso continuado após as alterações entrarem em vigor constitui aceitação dos termos atualizados."
+    },
+    "contact": {
+      "title": "11. Contato",
+      "content": "Para dúvidas sobre estes termos, entre em contato através do formulário de contato na plataforma ou pelo e-mail listado em nossa Política de Privacidade."
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização: Março 2026",
+    "intro": "P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59, está comprometida com a proteção de sua privacidade. Esta política descreve como coletamos, usamos, armazenamos e compartilhamos seus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD), o Regulamento Geral de Proteção de Dados da UE (GDPR) e a Lei de Privacidade do Consumidor da Califórnia (CCPA).",
+    "dataCollected": {
+      "title": "1. Dados que Coletamos",
+      "content": "Coletamos:\n- Dados de conta: nome, e-mail, senha (criptografada), nome da empresa, CPF/CNPJ\n- Dados de uso: conversas, mensagens, configurações de agentes, documentos enviados\n- Dados técnicos: endereço IP, tipo de navegador, informações do dispositivo, logs de acesso\n- Dados de pagamento: processados pelo Stripe — não armazenamos números de cartão de crédito\n- Cookies: cookies essenciais de sessão e cookies opcionais de análise"
+    },
+    "legalBasis": {
+      "title": "2. Base Legal para Processamento (LGPD Art. 7 / GDPR Art. 6)",
+      "content": "Processamos seus dados com base em:\n- Execução de contrato: para fornecer nossos serviços\n- Interesse legítimo: para melhorar a plataforma, prevenir fraudes e garantir segurança\n- Consentimento: para comunicações de marketing e análises opcionais\n- Obrigação legal: para conformidade fiscal, contábil e regulatória\n\nVocê pode retirar o consentimento a qualquer momento sem afetar a legalidade do processamento anterior."
+    },
+    "dataUse": {
+      "title": "3. Como Usamos seus Dados",
+      "content": "Usamos seus dados para:\n- Fornecer e manter a plataforma Foji AI\n- Processar solicitações de chat com IA e construir contexto documental para seus agentes\n- Enviar e-mails transacionais (verificação, faturamento, notificações)\n- Analisar padrões de uso para melhorar nossos serviços\n- Cumprir obrigações legais e resolver disputas"
+    },
+    "dataSharing": {
+      "title": "4. Compartilhamento de Dados",
+      "content": "Compartilhamos dados com:\n- Provedores de IA (OpenAI, Google, AWS): mensagens de chat para processamento de IA — nenhum dado pessoal é compartilhado além do conteúdo da conversa\n- Stripe: processamento de pagamentos\n- AWS: infraestrutura em nuvem (hospedagem, armazenamento, bancos de dados)\n- Resend: entrega de e-mails transacionais\n- Vercel: hospedagem do frontend\n\nNão vendemos seus dados pessoais a terceiros."
+    },
+    "dataRetention": {
+      "title": "5. Retenção de Dados",
+      "content": "- Dados de conta: retidos enquanto sua conta estiver ativa, excluídos 30 dias após o encerramento\n- Histórico de chat: retido por 90 dias, depois excluído automaticamente\n- Documentos enviados: retidos enquanto associados a um agente ativo, excluídos ao excluir o agente ou a conta\n- Registros fiscais: retidos por 5 anos conforme exigido pela legislação tributária brasileira\n- Logs de auditoria: retidos por 1 ano"
+    },
+    "yourRights": {
+      "title": "6. Seus Direitos (LGPD Art. 18 / GDPR Art. 15-22)",
+      "content": "Você tem o direito de:\n- Acesso: solicitar uma cópia de seus dados pessoais\n- Correção: atualizar dados imprecisos ou incompletos\n- Exclusão: solicitar a exclusão de seus dados (sujeito a requisitos legais de retenção)\n- Portabilidade: receber seus dados em formato estruturado e legível por máquina\n- Restrição: solicitar que limitemos o processamento de seus dados\n- Oposição: opor-se ao processamento de dados baseado em interesse legítimo\n- Revogação de consentimento: retirar o consentimento a qualquer momento\n\nPara exercer esses direitos, use o formulário de contato na plataforma ou envie e-mail ao nosso Encarregado de Proteção de Dados."
+    },
+    "cookies": {
+      "title": "7. Cookies",
+      "content": "Utilizamos cookies essenciais para autenticação e gerenciamento de sessão. Não utilizamos cookies de rastreamento de terceiros. O cookie foji_token armazena sua sessão de autenticação e expira após 7 dias."
+    },
+    "internationalTransfers": {
+      "title": "8. Transferências Internacionais de Dados",
+      "content": "Seus dados podem ser processados nos Estados Unidos (AWS, OpenAI, Vercel) e em outros países onde nossos prestadores de serviços operam. Garantimos salvaguardas adequadas por meio de cláusulas contratuais padrão e acordos de processamento de dados, em conformidade com o Capítulo V da LGPD e o Capítulo V do GDPR."
+    },
+    "children": {
+      "title": "9. Privacidade de Menores",
+      "content": "O Foji AI não é destinado a usuários menores de 18 anos. Não coletamos intencionalmente dados pessoais de menores. Se soubermos que coletamos dados de um menor, excluiremos prontamente."
+    },
+    "changes": {
+      "title": "10. Alterações nesta Política",
+      "content": "Podemos atualizar esta política periodicamente. Notificaremos você sobre alterações materiais por e-mail. A versão mais recente estará sempre disponível nesta URL."
+    },
+    "contact": {
+      "title": "11. Contato e Encarregado de Proteção de Dados",
+      "content": "Para consultas de privacidade ou para exercer seus direitos de dados:\n- Use o formulário de Contato na plataforma Foji AI\n- E-mail: privacy@fojiai.com\n- Controlador: P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59"
+    }
+  },
+  "refund": {
+    "title": "Política de Reembolso e Cancelamento",
+    "lastUpdated": "Última atualização: Março 2026",
+    "summary": "O Foji AI é um serviço digital SaaS. Como regra geral, as assinaturas não são reembolsáveis. Você pode cancelar a qualquer momento, e seu acesso continuará até o final do período de cobrança.",
+    "policy": {
+      "title": "1. Política Geral",
+      "content": "As assinaturas do Foji AI são cobradas mensalmente de forma antecipada. Como nosso serviço é um produto digital entregue imediatamente após a assinatura, reembolsos geralmente não são fornecidos. Ao assinar, você obtém acesso imediato a todos os recursos incluídos em seu plano."
+    },
+    "regretPeriod": {
+      "title": "2. Direito de Arrependimento (CDC Art. 49)",
+      "content": "Em conformidade com o Código de Defesa do Consumidor (CDC), assinantes de primeira vez podem exercer seu direito de arrependimento dentro de 7 dias corridos a partir da assinatura inicial. Para exercer esse direito, entre em contato conosco pelo formulário de contato da plataforma dentro do período de 7 dias. O reembolso integral será processado no método de pagamento original em até 10 dias úteis. Este direito se aplica apenas à primeira assinatura e não pode ser usado para alterações de plano ou renovações."
+    },
+    "cancellation": {
+      "title": "3. Cancelamento",
+      "content": "Você pode cancelar sua assinatura a qualquer momento pela página de Faturamento no seu painel. Após o cancelamento:\n- Seu acesso continuará até o final do período de cobrança atual\n- Nenhuma cobrança adicional será feita\n- Seus dados serão retidos por 30 dias, depois excluídos permanentemente\n- Você pode reassinar a qualquer momento com um novo ciclo de cobrança"
+    },
+    "chargebacks": {
+      "title": "4. Estornos e Disputas",
+      "content": "Abrir um estorno ou disputa de pagamento com seu banco em vez de entrar em contato conosco diretamente resultará em suspensão imediata da conta. Se um estorno for aberto, sua conta e todos os dados da empresa associada serão suspensos até a resolução. Recomendamos fortemente que entre em contato conosco primeiro pela plataforma para resolver quaisquer problemas de faturamento."
+    },
+    "exceptions": {
+      "title": "5. Exceções",
+      "content": "Podemos considerar reembolsos caso a caso para:\n- Interrupções prolongadas do serviço (mais de 24 horas consecutivas)\n- Erros de cobrança de nossa parte\n- Cobranças duplicadas\n\nTodas as solicitações de exceção devem ser enviadas dentro de 30 dias da cobrança pelo formulário de contato da plataforma."
+    },
+    "contact": {
+      "title": "6. Contato",
+      "content": "Para dúvidas sobre faturamento ou solicitações de reembolso, use o formulário de Contato na plataforma Foji AI. Nosso objetivo é responder a todas as consultas de faturamento em até 2 dias úteis."
+    }
+  },
+  "contact": {
+    "title": "Contato",
+    "formTitle": "Envie-nos uma mensagem",
+    "formDescription": "Reporte um bug, solicite uma funcionalidade ou tire dúvidas sobre faturamento.",
+    "category": "Categoria",
+    "categories": {
+      "bug": "Relatar Bug",
+      "feature": "Solicitar Funcionalidade",
+      "billing": "Faturamento",
+      "other": "Outro"
+    },
+    "subject": "Assunto",
+    "subjectPlaceholder": "Breve descrição do seu problema",
+    "subjectRequired": "Assunto é obrigatório (mínimo 3 caracteres)",
+    "message": "Mensagem",
+    "messagePlaceholder": "Descreva seu problema em detalhes. Inclua passos para reproduzir se estiver reportando um bug.",
+    "messageRequired": "Mensagem é obrigatória (mínimo 10 caracteres)",
+    "send": "Enviar Mensagem",
+    "error": "Falha ao enviar mensagem. Tente novamente.",
+    "successTitle": "Mensagem Enviada!",
+    "successDescription": "Recebemos sua mensagem e responderemos em até 2 dias úteis.",
+    "adminTitle": "Mensagens Recebidas",
+    "submissions": "mensagens",
+    "open": "Abertas",
+    "resolved": "Resolvidas",
+    "resolve": "Resolver",
+    "reopen": "Reabrir",
+    "noOpen": "Nenhuma mensagem aberta.",
+    "noResolved": "Nenhuma mensagem resolvida.",
+    "viewDetails": "Detalhes",
+    "adminNotesLabel": "Notas do Admin",
+    "adminNotesPlaceholder": "Notas internas sobre esta mensagem..."
   }
 }

@@ -9,14 +9,25 @@ export interface JwtClaims {
   firstName: string;
   lastName: string;
   isSuperAdmin: boolean;
-  companies: Array<{ companyId: number; role: "owner" | "admin" | "user" }>;
+  companies: Array<{ companyId: number; role: "owner" | "admin" | "user"; name: string }>;
   exp: number;
 }
 
 export function parseToken(token: string): JwtClaims | null {
   try {
     const payload = token.split(".")[1];
-    return JSON.parse(atob(payload)) as JwtClaims;
+    const raw = JSON.parse(atob(payload));
+
+    // JWT claims encode booleans as strings and nested objects as JSON strings
+    return {
+      sub: raw.sub,
+      email: raw.email,
+      firstName: raw.given_name ?? raw.firstName ?? "",
+      lastName: raw.family_name ?? raw.lastName ?? "",
+      isSuperAdmin: raw.isSuperAdmin === true || raw.isSuperAdmin === "true",
+      companies: typeof raw.companies === "string" ? JSON.parse(raw.companies) : raw.companies ?? [],
+      exp: raw.exp,
+    };
   } catch {
     return null;
   }

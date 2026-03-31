@@ -184,7 +184,7 @@ export default function AgentDetailPage() {
             <Link href="/agents"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{agent.name}</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{agent.name}</h1>
             <Badge variant={agent.isActive ? "success" : "outline"} className="mt-0.5">
               {agent.isActive ? t("agents.status.active") : t("agents.status.inactive")}
             </Badge>

@@ -11,6 +11,9 @@ const PUBLIC_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/accept-invitation",
+  "/legal",
+  "/privacy",
+  "/refund",
 ];
 
 function isPublicPath(pathname: string): boolean {

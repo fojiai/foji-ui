@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Cpu, CreditCard, Users, BarChart2, Building2 } from "lucide-react";
+import { Cpu, CreditCard, Users, BarChart2, Building2, KeyRound } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { PageLoader } from "@/components/shared/loading-spinner";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ const ADMIN_TABS = [
   { href: "/admin/models", icon: Cpu, labelKey: "admin.models.title" },
   { href: "/admin/plans", icon: CreditCard, labelKey: "admin.plans.title" },
   { href: "/admin/invitations", icon: Users, labelKey: "admin.invitations.title" },
+  { href: "/admin/api-keys", icon: KeyRound, labelKey: "admin.apiKeys.title" },
 ];
 
 export default function AdminLayout({
@@ -42,7 +43,7 @@ export default function AdminLayout({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">{t("admin.title")}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("admin.title")}</h1>
       </div>
 
       {/* Sub-nav */}

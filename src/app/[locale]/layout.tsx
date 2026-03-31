@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { routing } from "@/i18n/routing";
 
@@ -27,7 +28,9 @@ export default async function LocaleLayout({ children, params }: Props) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <TooltipProvider delayDuration={200}>
+          {children}
+        </TooltipProvider>
         <Toaster />
       </ThemeProvider>
     </NextIntlClientProvider>

@@ -103,8 +103,13 @@ export default function SignupPage() {
             />
             <PasswordRequirements password={passwordValue} />
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? <LoadingSpinner size="sm" /> : t("auth.signup")}
+          <Button
+            type="submit"
+            className="w-full h-11 text-base font-semibold bg-white text-zinc-900 hover:bg-zinc-200 disabled:bg-zinc-300"
+            disabled={isLoading}
+          >
+            {isLoading && <LoadingSpinner size="sm" className="mr-2" />}
+            {t("auth.signup")}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">

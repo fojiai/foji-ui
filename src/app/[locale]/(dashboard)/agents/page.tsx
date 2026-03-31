@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PageLoader } from "@/components/shared/loading-spinner";
+import { NoCompanyState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 
 const INDUSTRY_LABELS: Record<string, string> = {
@@ -35,10 +36,19 @@ export default function AgentsPage() {
 
   if (isLoading) return <PageLoader />;
 
+  if (!activeCompanyId) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">{t("agents.title")}</h1>
+        <NoCompanyState />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">{t("agents.title")}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("agents.title")}</h1>
         <Button asChild>
           <Link href="agents/new">
             <Plus className="mr-1 h-4 w-4" /> {t("agents.create")}

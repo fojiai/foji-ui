@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Plus, Trash2, Crown, Shield, User } from "lucide-react";
+import { Plus, Trash2, Crown, Shield, User, CheckCircle2, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/components/providers/auth-provider";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, adminApi, type SystemAdminInvitation } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
+
+// ─── Shared types ────────────────────────────────────────────────────────────
 
 interface Member {
   userId: number;
@@ -34,6 +36,180 @@ interface Invite {
   expiresAt: string;
 }
 
+// ─── Super Admin Team View ───────────────────────────────────────────────────
+
+const adminInviteSchema = z.object({ email: z.string().email() });
+type AdminInviteForm = z.infer<typeof adminInviteSchema>;
+
+function SuperAdminTeamView() {
+  const t = useTranslations();
+  const [invitations, setInvitations] = useState<SystemAdminInvitation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<AdminInviteForm>({
+    resolver: zodResolver(adminInviteSchema),
+  });
+
+  async function load() {
+    setIsLoading(true);
+    try {
+      setInvitations(await adminApi.listInvitations());
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function onSubmit(data: AdminInviteForm) {
+    setSaving(true);
+    try {
+      await adminApi.inviteAdmin(data.email);
+      toast({ title: t("common.success") });
+      reset();
+      setDialogOpen(false);
+      await load();
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteInvitation(id: number) {
+    try {
+      await adminApi.deleteInvitation(id);
+      toast({ title: t("common.success") });
+      setInvitations((prev) => prev.filter((i) => i.id !== id));
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    }
+  }
+
+  if (isLoading) return <PageLoader />;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t("superAdmin.platformTeam")}</h1>
+          <p className="text-muted-foreground mt-1">{t("admin.invitations.title")}</p>
+        </div>
+        <Button onClick={() => { reset(); setDialogOpen(true); }}>
+          <Plus className="mr-1 h-4 w-4" /> {t("superAdmin.inviteAdmin")}
+        </Button>
+      </div>
+
+      {invitations.length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground">
+            {t("team.empty")}
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {invitations.map((inv) => {
+            const accepted = !!inv.acceptedAt;
+            const expired = !accepted && new Date(inv.expiresAt) < new Date();
+            return (
+              <Card key={inv.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="flex items-center justify-between py-4">
+                  <div className="flex items-center gap-3">
+                    {accepted ? (
+                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                    ) : (
+                      <Clock className="h-5 w-5 text-amber-500" />
+                    )}
+                    <div>
+                      <p className="font-medium">{inv.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {accepted
+                          ? `${t("admin.invitations.accepted")} · ${new Date(inv.acceptedAt!).toLocaleDateString()}`
+                          : expired
+                          ? "Expired"
+                          : `${t("admin.invitations.pending")} · Expires ${new Date(inv.expiresAt).toLocaleDateString()}`}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="gap-1">
+                      <Shield className="h-3 w-3" />
+                      Super Admin
+                    </Badge>
+                    <Badge variant={accepted ? "success" : expired ? "outline" : "warning"}>
+                      {accepted
+                        ? t("admin.invitations.accepted")
+                        : expired
+                        ? "Expired"
+                        : t("admin.invitations.pending")}
+                    </Badge>
+                    {!accepted && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>{t("common.confirm")}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Revoke invitation for {inv.email}?
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => deleteInvitation(inv.id)}>
+                              {t("common.delete")}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("superAdmin.inviteAdmin")}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label>{t("common.email")}</Label>
+              <Input
+                type="email"
+                placeholder="admin@example.com"
+                {...register("email")}
+                aria-invalid={!!errors.email}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+                {t("common.cancel")}
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {saving ? <LoadingSpinner size="sm" /> : t("superAdmin.inviteAdmin")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+// ─── Regular Team View (tenant-scoped) ───────────────────────────────────────
+
 const inviteSchema = z.object({
   email: z.string().email(),
   role: z.enum(["admin", "user"]),
@@ -46,7 +222,7 @@ const ROLE_ICON: Record<string, React.ElementType> = {
   user: User,
 };
 
-export default function TeamPage() {
+function RegularTeamView() {
   const t = useTranslations();
   const { activeCompanyId, user } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
@@ -101,17 +277,32 @@ export default function TeamPage() {
     } catch { toast({ variant: "destructive", title: t("errors.generic") }); }
   }
 
-  const isOwner = user
-    ? members.find((m) => m.userId === Number(user.sub))?.role === "owner"
-    : false;
+  // Check ownership from members list OR from JWT company role
+  const memberRole = members.find((m) => m.userId === Number(user?.sub))?.role;
+  const jwtRole = user?.companies?.find((c) => c.companyId === activeCompanyId)?.role;
+  const isOwner = memberRole === "owner" || jwtRole === "owner";
+  const isAdmin = isOwner || memberRole === "admin" || jwtRole === "admin";
 
   if (isLoading) return <PageLoader />;
+
+  if (!activeCompanyId) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">{t("team.title")}</h1>
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground">
+            {t("onboarding.createCompany")}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">{t("team.title")}</h1>
-        {isOwner && (
+        <h1 className="text-3xl font-bold tracking-tight">{t("team.title")}</h1>
+        {isAdmin && (
           <Button size="sm" onClick={() => { reset(); setDialogOpen(true); }}>
             <Plus className="mr-1 h-4 w-4" /> {t("team.invite")}
           </Button>
@@ -122,7 +313,7 @@ export default function TeamPage() {
         {members.map((member) => {
           const Icon = ROLE_ICON[member.role] ?? User;
           return (
-            <Card key={member.userId}>
+            <Card key={member.userId} className="hover:shadow-md transition-shadow">
               <CardContent className="flex items-center justify-between py-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
@@ -214,4 +405,13 @@ export default function TeamPage() {
       </Dialog>
     </div>
   );
+}
+
+// ─── Main Export ──────────────────────────────────────────────────────────────
+
+export default function TeamPage() {
+  const { user } = useAuth();
+
+  if (user?.isSuperAdmin) return <SuperAdminTeamView />;
+  return <RegularTeamView />;
 }

@@ -86,7 +86,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">{t("profile.title")}</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{t("profile.title")}</h1>
 
       <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
         <Card>

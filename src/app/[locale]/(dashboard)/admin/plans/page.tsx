@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -21,7 +22,8 @@ import { toast } from "@/hooks/use-toast";
 const schema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
-  monthlyPriceUsd: z.coerce.number().min(0),
+  monthlyPrice: z.coerce.number().min(0),
+  currency: z.string().min(1),
   stripePriceId: z.string().optional(),
   maxAgents: z.coerce.number().int().min(1),
   hasWhatsApp: z.boolean(),
@@ -43,7 +45,7 @@ export default function PlansPage() {
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPriceUsd: 0, maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true },
+    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true },
   });
 
   async function load() {
@@ -56,7 +58,7 @@ export default function PlansPage() {
 
   function openCreate() {
     setEditing(null);
-    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPriceUsd: 0, maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true });
+    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true });
     setDialogOpen(true);
   }
 
@@ -125,8 +127,8 @@ export default function PlansPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-3xl font-bold">
-                ${plan.monthlyPriceUsd}
-                <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                {plan.currency === "BRL" ? "R$" : plan.currency === "EUR" ? "\u20AC" : "$"}{plan.monthlyPrice}
+                <span className="text-sm font-normal text-muted-foreground">/{plan.currency}/mo</span>
               </p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
@@ -205,10 +207,21 @@ export default function PlansPage() {
                 <Input {...register("slug")} placeholder="starter" aria-invalid={!!errors.slug} />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>{t("admin.plans.monthlyPrice")}</Label>
-                <Input type="number" step="0.01" {...register("monthlyPriceUsd")} />
+                <Input type="number" step="0.01" {...register("monthlyPrice")} />
+              </div>
+              <div className="space-y-2">
+                <Label>{t("admin.plans.currency")}</Label>
+                <Select value={watch("currency")} onValueChange={(v) => setValue("currency", v)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="BRL">BRL (R$)</SelectItem>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>{t("admin.plans.maxAgents")}</Label>
