@@ -396,7 +396,16 @@ export default function AgentDetailPage() {
                   <div className="space-y-2">
                     <Label>{t("agents.appearance.primaryColor")}</Label>
                     <div className="flex items-center gap-2">
-                      <Input {...register("widgetPrimaryColor")} placeholder="#FF2D2D" className="font-mono" />
+                      <Input
+                        {...register("widgetPrimaryColor")}
+                        placeholder="#FF2D2D"
+                        className="font-mono"
+                        onChange={(e) => {
+                          let v = e.target.value;
+                          if (v && !v.startsWith("#")) v = "#" + v;
+                          setValue("widgetPrimaryColor", v);
+                        }}
+                      />
                       {watch("widgetPrimaryColor") && /^#[0-9a-fA-F]{6}$/.test(watch("widgetPrimaryColor") ?? "") && (
                         <div
                           className="h-9 w-9 rounded-md border border-input shrink-0"
