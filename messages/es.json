@@ -332,7 +332,10 @@
     "viewDetails": "Ver Detalles",
     "inviteAdmin": "Invitar Admin",
     "platformSettings": "La configuración de la plataforma se gestiona desde el panel de Admin.",
-    "goToAdmin": "Ir a Admin"
+    "goToAdmin": "Ir a Admin",
+    "selectCompany": "Seleccione una empresa...",
+    "noCompanySelected": "Seleccione una empresa en la barra lateral para gestionar sus agentes y panel.",
+    "noCompanySelectedTitle": "Ninguna empresa seleccionada"
   },
   "emptyStates": {
     "noCompanyTitle": "Sin espacio de trabajo",

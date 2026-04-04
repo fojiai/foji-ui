@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Bot, MessageSquare, BarChart3, Zap } from "lucide-react";
+import { Bot, MessageSquare, BarChart3, Zap, Shield } from "lucide-react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -41,6 +41,26 @@ export default function DashboardPage() {
   if (isLoading) return <PageLoader />;
 
   if (!activeCompanyId) {
+    if (user?.isSuperAdmin) {
+      return (
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("dashboard.welcome", { name: user?.firstName ?? "" })}
+          </h1>
+          <Card>
+            <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                <Shield className="h-7 w-7 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium">{t("superAdmin.noCompanySelectedTitle")}</p>
+                <p className="text-sm text-muted-foreground mt-1">{t("superAdmin.noCompanySelected")}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold tracking-tight">

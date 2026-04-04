@@ -517,7 +517,7 @@ function RegularBillingView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t("billing.title")}</h1>
-        {subscription && (
+        {subscription?.hasStripeSubscription && (
           <Button variant="outline" onClick={openPortal} disabled={portalLoading}>
             {portalLoading ? (
               <LoadingSpinner size="sm" />

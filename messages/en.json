@@ -332,7 +332,10 @@
     "viewDetails": "View Details",
     "inviteAdmin": "Invite Admin",
     "platformSettings": "Platform settings are managed from the Admin panel.",
-    "goToAdmin": "Go to Admin"
+    "goToAdmin": "Go to Admin",
+    "selectCompany": "Select a company...",
+    "noCompanySelected": "Select a company from the sidebar to manage its agents and dashboard.",
+    "noCompanySelectedTitle": "No company selected"
   },
   "emptyStates": {
     "noCompanyTitle": "No workspace yet",

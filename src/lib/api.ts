@@ -281,6 +281,7 @@ export interface Subscription {
   currentPeriodEnd?: string;
   trialEndsAt?: string;
   canceledAt?: string;
+  hasStripeSubscription: boolean;
 }
 
 export const subscriptionsApi = {

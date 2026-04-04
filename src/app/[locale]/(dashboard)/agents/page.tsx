@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Plus, Bot, Pencil } from "lucide-react";
+import { Plus, Bot, Pencil, Shield } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import { agentsApi, type Agent } from "@/lib/api";
@@ -21,7 +21,7 @@ const INDUSTRY_LABELS: Record<string, string> = {
 
 export default function AgentsPage() {
   const t = useTranslations();
-  const { activeCompanyId } = useAuth();
+  const { user, activeCompanyId } = useAuth();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,6 +37,24 @@ export default function AgentsPage() {
   if (isLoading) return <PageLoader />;
 
   if (!activeCompanyId) {
+    if (user?.isSuperAdmin) {
+      return (
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold tracking-tight">{t("agents.title")}</h1>
+          <Card>
+            <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                <Shield className="h-7 w-7 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium">{t("superAdmin.noCompanySelectedTitle")}</p>
+                <p className="text-sm text-muted-foreground mt-1">{t("superAdmin.noCompanySelected")}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold tracking-tight">{t("agents.title")}</h1>

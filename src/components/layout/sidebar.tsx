@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserSettingsModal } from "@/components/layout/user-settings-modal";
-import { companiesApi, type UserCompanyItem } from "@/lib/api";
+import { companiesApi, adminCompaniesApi, type UserCompanyItem, type AdminCompanyListItem } from "@/lib/api";
 import { useSidebarCollapse } from "@/hooks/use-sidebar-collapse";
 
 interface NavItem {
@@ -142,10 +142,16 @@ function SidebarContent({
   const isSuperAdmin = user?.isSuperAdmin ?? false;
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [companies, setCompanies] = useState<UserCompanyItem[]>([]);
+  const [adminCompanies, setAdminCompanies] = useState<AdminCompanyListItem[]>([]);
 
   useEffect(() => {
     if (user && !isSuperAdmin) {
       companiesApi.mine().then(setCompanies).catch(() => {});
+    }
+    if (user && isSuperAdmin) {
+      adminCompaniesApi.list(undefined, 1, 100)
+        .then((res) => setAdminCompanies(res.items))
+        .catch(() => {});
     }
   }, [user, isSuperAdmin]);
 
@@ -213,7 +219,7 @@ function SidebarContent({
       {/* Separator */}
       <div className="mx-4 h-px bg-gradient-to-r from-transparent via-sidebar-border to-transparent" />
 
-      {/* Company switcher */}
+      {/* Company switcher — regular users */}
       {!isSuperAdmin && !isCollapsed && (
         <div className="px-3 py-2">
           <Select
@@ -239,6 +245,30 @@ function SidebarContent({
               <SelectItem value="__create__">
                 + {t("onboarding.createCompany")}
               </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      {/* Company switcher — super admin (act as any company) */}
+      {isSuperAdmin && !isCollapsed && adminCompanies.length > 0 && (
+        <div className="px-3 py-2">
+          <Select
+            value={activeCompanyId ? String(activeCompanyId) : ""}
+            onValueChange={(v) => {
+              switchCompany(Number(v));
+              window.location.reload();
+            }}
+          >
+            <SelectTrigger className="h-9 w-full text-sm bg-sidebar-accent/50 border-sidebar-border">
+              <SelectValue placeholder={t("superAdmin.selectCompany")} />
+            </SelectTrigger>
+            <SelectContent>
+              {adminCompanies.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
