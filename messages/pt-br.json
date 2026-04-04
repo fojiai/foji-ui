@@ -82,7 +82,7 @@
     "empty": "Nenhum agente criado ainda",
     "emptyDescription": "Crie seu primeiro agente de IA para começar",
     "name": "Nome do Agente",
-    "industry": "Indústria",
+    "industry": "Área de atuação",
     "language": "Idioma de resposta",
     "systemPrompt": "Prompt do Sistema",
     "userPrompt": "Instruções Adicionais",

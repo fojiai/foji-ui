@@ -82,7 +82,7 @@
     "empty": "No agents created yet",
     "emptyDescription": "Create your first AI agent to get started",
     "name": "Agent Name",
-    "industry": "Industry",
+    "industry": "Area of expertise",
     "language": "Response language",
     "systemPrompt": "System Prompt",
     "userPrompt": "Additional Instructions",

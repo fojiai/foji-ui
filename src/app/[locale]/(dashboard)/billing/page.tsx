@@ -477,13 +477,7 @@ function RegularBillingView() {
     setCheckoutLoading(planId);
     try {
       const { checkoutUrl } = await subscriptionsApi.checkout(activeCompanyId, planId);
-      // Plan switch returns a billing page URL (no Stripe redirect needed)
-      if (checkoutUrl.includes("switched=true")) {
-        toast({ title: t("billing.planSwitched") });
-        window.location.reload();
-      } else {
-        window.location.href = checkoutUrl;
-      }
+      window.location.href = checkoutUrl;
     } catch (err: any) {
       const msg = (err?.data as any)?.error;
       if (msg) {
