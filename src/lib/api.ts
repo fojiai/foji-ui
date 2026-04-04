@@ -145,6 +145,12 @@ export interface Agent {
   salesWhatsAppNumber?: string;
   supportEmail?: string;
   salesEmail?: string;
+  welcomeMessage?: string;
+  conversationStarters?: string;
+  widgetPrimaryColor?: string;
+  widgetTitle?: string;
+  widgetPlaceholder?: string;
+  widgetPosition?: string;
 }
 
 export const agentsApi = {

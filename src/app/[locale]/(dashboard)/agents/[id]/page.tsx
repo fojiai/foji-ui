@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Copy, RefreshCw, Paperclip, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import { agentsApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription } from "@/lib/api";
@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -36,6 +36,11 @@ const schema = z.object({
   salesWhatsAppNumber: z.string().optional(),
   supportEmail: z.string().email().optional().or(z.literal("")),
   salesEmail: z.string().email().optional().or(z.literal("")),
+  welcomeMessage: z.string().max(500).optional(),
+  widgetPrimaryColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional().or(z.literal("")),
+  widgetTitle: z.string().max(100).optional(),
+  widgetPlaceholder: z.string().max(200).optional(),
+  widgetPosition: z.enum(["left", "right", ""]).optional(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -53,6 +58,8 @@ export default function AgentDetailPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [starters, setStarters] = useState<string[]>([""]);
+  const [testKey, setTestKey] = useState(0); // force iframe reload
 
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -69,6 +76,15 @@ export default function AgentDetailPage() {
       setAgent(a);
       setFiles(fileList);
       setSubscription(sub);
+
+      // Parse conversation starters
+      let parsedStarters = [""];
+      if (a.conversationStarters) {
+        try { parsedStarters = JSON.parse(a.conversationStarters); } catch { /* keep default */ }
+        if (!Array.isArray(parsedStarters) || parsedStarters.length === 0) parsedStarters = [""];
+      }
+      setStarters(parsedStarters);
+
       reset({
         name: a.name,
         description: a.description ?? "",
@@ -83,6 +99,11 @@ export default function AgentDetailPage() {
         salesWhatsAppNumber: a.salesWhatsAppNumber ?? "",
         supportEmail: a.supportEmail ?? "",
         salesEmail: a.salesEmail ?? "",
+        welcomeMessage: a.welcomeMessage ?? "",
+        widgetPrimaryColor: a.widgetPrimaryColor ?? "",
+        widgetTitle: a.widgetTitle ?? "",
+        widgetPlaceholder: a.widgetPlaceholder ?? "",
+        widgetPosition: (a.widgetPosition as "left" | "right" | "") ?? "",
       });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
@@ -97,8 +118,13 @@ export default function AgentDetailPage() {
     if (!activeCompanyId) return;
     setIsSaving(true);
     try {
-      const updated = await agentsApi.update(activeCompanyId, agentId, data);
+      const payload: any = {
+        ...data,
+        conversationStarters: JSON.stringify(starters.filter((s) => s.trim())),
+      };
+      const updated = await agentsApi.update(activeCompanyId, agentId, payload);
       setAgent(updated);
+      setTestKey((k) => k + 1); // reload test iframe
       toast({ title: t("common.success") });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
@@ -113,7 +139,7 @@ export default function AgentDetailPage() {
     try {
       const { agentToken } = await agentsApi.regenerateToken(activeCompanyId, agentId);
       setAgent((prev) => prev ? { ...prev, agentToken } : prev);
-      toast({ title: "Token regenerated" });
+      toast({ title: t("agents.detail.tokenRegenerated") });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
     } finally {
@@ -125,7 +151,7 @@ export default function AgentDetailPage() {
     if (!activeCompanyId) return;
     try {
       await agentsApi.delete(activeCompanyId, agentId);
-      toast({ title: "Agent deleted" });
+      toast({ title: t("agents.detail.agentDeleted") });
       router.push("/agents");
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
@@ -136,14 +162,14 @@ export default function AgentDetailPage() {
     if (!e.target.files?.[0]) return;
     const file = e.target.files[0];
     if (file.size > 30 * 1024 * 1024) {
-      toast({ variant: "destructive", title: "File exceeds 30MB limit" });
+      toast({ variant: "destructive", title: t("files.sizeExceeded") });
       return;
     }
     setUploadingFile(true);
     try {
       const uploaded = await filesApi.upload(agentId, file);
       setFiles((prev) => [uploaded, ...prev]);
-      toast({ title: "File uploaded — processing started" });
+      toast({ title: t("files.uploadSuccess") });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
     } finally {
@@ -162,8 +188,24 @@ export default function AgentDetailPage() {
     }
   }
 
+  function addStarter() {
+    if (starters.length < 4) setStarters([...starters, ""]);
+  }
+
+  function removeStarter(index: number) {
+    setStarters(starters.filter((_, i) => i !== index));
+  }
+
+  function updateStarter(index: number, value: string) {
+    setStarters(starters.map((s, i) => (i === index ? value : s)));
+  }
+
   const embedCode = agent
     ? `<script src="${process.env.NEXT_PUBLIC_WIDGET_URL}/widget.js" data-agent-token="${agent.agentToken}" async></script>`
+    : "";
+
+  const testUrl = agent
+    ? `${process.env.NEXT_PUBLIC_WIDGET_URL}/test.html?token=${agent.agentToken}&api=${encodeURIComponent(process.env.NEXT_PUBLIC_AI_API_URL || "")}`
     : "";
 
   const statusVariant: Record<string, any> = {
@@ -193,17 +235,18 @@ export default function AgentDetailPage() {
       </div>
 
       <Tabs defaultValue="settings">
-        <TabsList>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-          <TabsTrigger value="files">Files ({files.length})</TabsTrigger>
-          <TabsTrigger value="embed">Embed</TabsTrigger>
+        <TabsList className="w-full">
+          <TabsTrigger value="settings" className="flex-1">{t("agents.detail.settings")}</TabsTrigger>
+          <TabsTrigger value="files" className="flex-1">{t("agents.detail.files", { count: files.length })}</TabsTrigger>
+          <TabsTrigger value="embed" className="flex-1">{t("agents.detail.embed")}</TabsTrigger>
+          <TabsTrigger value="test" className="flex-1">{t("agents.detail.test")}</TabsTrigger>
         </TabsList>
 
         {/* ── Settings ─────────────────────────────────────────────────── */}
         <TabsContent value="settings" className="mt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Card>
-              <CardHeader><CardTitle className="text-base">Basic Info</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">{t("agents.basicInfo")}</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>{t("common.active")}</Label>
@@ -248,7 +291,7 @@ export default function AgentDetailPage() {
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="text-base">Prompts</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">{t("agents.detail.prompts")}</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>{t("agents.systemPrompt")}</Label>
@@ -259,11 +302,105 @@ export default function AgentDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>{t("agents.userPrompt")} <span className="text-muted-foreground">(optional)</span></Label>
+                  <Label>{t("agents.userPrompt")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
                   <textarea
                     className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     {...register("userPrompt")}
                   />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Welcome Message */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                  {t("agents.welcomeMessage.title")}
+                </CardTitle>
+                <CardDescription>{t("agents.welcomeMessage.hint")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <textarea
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  placeholder={t("agents.welcomeMessage.placeholder")}
+                  {...register("welcomeMessage")}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Conversation Starters */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">{t("agents.starters.title")}</CardTitle>
+                <CardDescription>{t("agents.starters.hint")}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {starters.map((starter, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input
+                      value={starter}
+                      onChange={(e) => updateStarter(i, e.target.value)}
+                      placeholder={t("agents.starters.placeholder")}
+                    />
+                    {starters.length > 1 && (
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeStarter(i)} className="shrink-0">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {starters.length < 4 && (
+                  <Button type="button" variant="outline" size="sm" onClick={addStarter}>
+                    <Plus className="mr-1 h-3.5 w-3.5" /> {t("agents.starters.add")}
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Widget Appearance */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Palette className="h-4 w-4 text-primary" />
+                  {t("agents.appearance.title")}
+                </CardTitle>
+                <CardDescription>{t("agents.appearance.hint")}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>{t("agents.appearance.primaryColor")}</Label>
+                    <div className="flex items-center gap-2">
+                      <Input {...register("widgetPrimaryColor")} placeholder="#FF2D2D" className="font-mono" />
+                      {watch("widgetPrimaryColor") && /^#[0-9a-fA-F]{6}$/.test(watch("widgetPrimaryColor") ?? "") && (
+                        <div
+                          className="h-9 w-9 rounded-md border border-input shrink-0"
+                          style={{ backgroundColor: watch("widgetPrimaryColor") }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{t("agents.appearance.position")}</Label>
+                    <Select value={watch("widgetPosition") || ""} onValueChange={(v) => setValue("widgetPosition", v as any)}>
+                      <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="right">{t("agents.appearance.positionRight")}</SelectItem>
+                        <SelectItem value="left">{t("agents.appearance.positionLeft")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>{t("agents.appearance.widgetTitle")}</Label>
+                    <Input {...register("widgetTitle")} placeholder={t("agents.appearance.widgetTitlePlaceholder")} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{t("agents.appearance.widgetPlaceholder")}</Label>
+                    <Input {...register("widgetPlaceholder")} placeholder={t("agents.appearance.widgetPlaceholderDefault")} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -273,8 +410,8 @@ export default function AgentDetailPage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium">Enable WhatsApp</p>
-                    <p className="text-xs text-muted-foreground">Requires Professional or Scale plan</p>
+                    <p className="text-sm font-medium">{t("agents.whatsapp.enable")}</p>
+                    <p className="text-xs text-muted-foreground">{t("agents.whatsapp.requiresPlan")}</p>
                   </div>
                   <Switch
                     checked={watch("whatsAppEnabled")}
@@ -283,7 +420,7 @@ export default function AgentDetailPage() {
                 </div>
                 {watch("whatsAppEnabled") && (
                   <div className="space-y-2">
-                    <Label>Meta Phone Number ID</Label>
+                    <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
                     <Input
                       {...register("whatsAppPhoneNumberId")}
                       placeholder="1234567890"
@@ -336,20 +473,20 @@ export default function AgentDetailPage() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="text-destructive hover:text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete Agent
+                    <Trash2 className="mr-2 h-4 w-4" /> {t("agents.detail.delete")}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete {agent.name}?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("agents.detail.deleteTitle", { name: agent.name })}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will permanently delete the agent, all its files, and conversation history. This cannot be undone.
+                      {t("agents.detail.deleteDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={handleDeleteAgent} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                      Delete
+                      {t("common.delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -368,7 +505,7 @@ export default function AgentDetailPage() {
             <CardContent className="pt-6">
               <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-input p-8 transition-colors hover:border-primary/50">
                 {uploadingFile ? (
-                  <LoadingSpinner size="md" label="Uploading…" />
+                  <LoadingSpinner size="md" label={t("files.uploading")} />
                 ) : (
                   <>
                     <Upload className="h-8 w-8 text-muted-foreground" />
@@ -421,9 +558,9 @@ export default function AgentDetailPage() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Delete file?</AlertDialogTitle>
+                            <AlertDialogTitle>{t("files.deleteTitle")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Remove <strong>{file.fileName}</strong> from this agent?
+                              {t("files.deleteDescription", { fileName: file.fileName })}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
@@ -457,26 +594,26 @@ export default function AgentDetailPage() {
                   variant="ghost"
                   size="icon"
                   className="absolute right-2 top-2"
-                  onClick={() => { navigator.clipboard.writeText(embedCode); toast({ title: "Copied!" }); }}
+                  onClick={() => { navigator.clipboard.writeText(embedCode); toast({ title: t("common.copied") }); }}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Paste this snippet just before the &lt;/body&gt; tag of your website.
+                {t("agents.detail.embedHint")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader><CardTitle className="text-base">Agent Token</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">{t("agents.detail.agentToken")}</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
                 <Input readOnly value={agent.agentToken} className="font-mono text-xs" />
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => { navigator.clipboard.writeText(agent.agentToken); toast({ title: "Copied!" }); }}
+                  onClick={() => { navigator.clipboard.writeText(agent.agentToken); toast({ title: t("common.copied") }); }}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -489,19 +626,40 @@ export default function AgentDetailPage() {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Regenerate token?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("agents.detail.regenerateTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      The current embed script will stop working immediately. You&apos;ll need to update it everywhere it&apos;s used.
+                      {t("agents.detail.regenerateDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={handleRegenerate} disabled={isRegenerating}>
-                      {isRegenerating ? <LoadingSpinner size="sm" /> : "Regenerate"}
+                      {isRegenerating ? <LoadingSpinner size="sm" /> : t("agents.detail.regenerate")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* ── Test ──────────────────────────────────────────────────────── */}
+        <TabsContent value="test" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">{t("agents.detail.testTitle")}</CardTitle>
+              <CardDescription>{t("agents.detail.testDescription")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mx-auto max-w-[400px]">
+                <iframe
+                  key={`${agent.agentToken}-${testKey}`}
+                  src={testUrl}
+                  className="w-full rounded-xl border border-input overflow-hidden"
+                  style={{ height: "560px" }}
+                  title="Agent test chat"
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

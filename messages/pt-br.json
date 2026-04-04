@@ -23,7 +23,8 @@
     "status": "Status",
     "date": "Data",
     "price": "Preço",
-    "optional": "opcional"
+    "optional": "opcional",
+    "copied": "Copiado!"
   },
   "auth": {
     "login": "Entrar",
@@ -158,6 +159,53 @@
     "filesHint": {
       "title": "Adicione conhecimento depois de criar",
       "description": "Após criar o agente, você pode enviar documentos para dar contexto. O agente usará esses documentos para responder perguntas."
+    },
+    "detail": {
+      "settings": "Configurações",
+      "files": "Arquivos ({count})",
+      "embed": "Incorporar",
+      "prompts": "Prompts",
+      "delete": "Excluir Agente",
+      "deleteTitle": "Excluir {name}?",
+      "deleteDescription": "Isso excluirá permanentemente o agente, todos os seus arquivos e histórico de conversas. Essa ação não pode ser desfeita.",
+      "agentDeleted": "Agente excluído",
+      "agentToken": "Token do Agente",
+      "regenerateTitle": "Regenerar token?",
+      "regenerateDescription": "O script de incorporação atual parará de funcionar imediatamente. Você precisará atualizá-lo em todos os lugares onde é usado.",
+      "regenerate": "Regenerar",
+      "tokenRegenerated": "Token regenerado",
+      "embedHint": "Cole este trecho logo antes da tag </body> do seu site.",
+      "test": "Testar",
+      "testTitle": "Teste seu agente",
+      "testDescription": "Converse com seu agente para ver como ele responde. Alterações em prompts e arquivos são refletidas imediatamente."
+    },
+    "whatsapp": {
+      "enable": "Ativar WhatsApp",
+      "requiresPlan": "Requer plano Professional ou Scale",
+      "phoneNumberId": "ID do Número Meta"
+    },
+    "welcomeMessage": {
+      "title": "Mensagem de Boas-vindas",
+      "hint": "Primeira mensagem que o bot envia quando um usuário abre o chat. Deixe vazio para uma saudação padrão.",
+      "placeholder": "ex: Olá! Como posso ajudar?"
+    },
+    "starters": {
+      "title": "Sugestões de Conversa",
+      "hint": "Perguntas sugeridas exibidas como botões antes do usuário digitar. Até 4.",
+      "add": "Adicionar sugestão",
+      "placeholder": "ex: Quais serviços vocês oferecem?"
+    },
+    "appearance": {
+      "title": "Aparência do Widget",
+      "hint": "Personalize como o widget de chat aparece no seu site.",
+      "primaryColor": "Cor principal",
+      "widgetTitle": "Título do cabeçalho",
+      "widgetTitlePlaceholder": "ex: Suporte",
+      "widgetPlaceholder": "Placeholder do campo de texto",
+      "widgetPlaceholderDefault": "ex: Digite uma mensagem...",
+      "position": "Posição",
+      "positionLeft": "Esquerda",
+      "positionRight": "Direita"
     }
   },
   "files": {
@@ -170,7 +218,12 @@
     "pending": "Pendente",
     "maxSize": "Tamanho máximo: 30MB",
     "dropzone": "Arraste arquivos aqui ou clique para selecionar",
-    "supportedFormats": "PDF, DOCX, PPTX, XLSX"
+    "supportedFormats": "PDF, DOCX, PPTX, XLSX",
+    "sizeExceeded": "O arquivo excede o limite de 30MB",
+    "uploadSuccess": "Arquivo enviado — processamento iniciado",
+    "uploading": "Enviando…",
+    "deleteTitle": "Excluir arquivo?",
+    "deleteDescription": "Remover {fileName} deste agente?"
   },
   "team": {
     "title": "Equipe",

@@ -23,7 +23,8 @@
     "status": "Status",
     "date": "Date",
     "price": "Price",
-    "optional": "optional"
+    "optional": "optional",
+    "copied": "Copied!"
   },
   "auth": {
     "login": "Sign in",
@@ -158,6 +159,53 @@
     "filesHint": {
       "title": "Add knowledge after creating",
       "description": "Once your agent is created, you can upload documents to give it context. The agent will use these to answer questions."
+    },
+    "detail": {
+      "settings": "Settings",
+      "files": "Files ({count})",
+      "embed": "Embed",
+      "prompts": "Prompts",
+      "delete": "Delete Agent",
+      "deleteTitle": "Delete {name}?",
+      "deleteDescription": "This will permanently delete the agent, all its files, and conversation history. This cannot be undone.",
+      "agentDeleted": "Agent deleted",
+      "agentToken": "Agent Token",
+      "regenerateTitle": "Regenerate token?",
+      "regenerateDescription": "The current embed script will stop working immediately. You'll need to update it everywhere it's used.",
+      "regenerate": "Regenerate",
+      "tokenRegenerated": "Token regenerated",
+      "embedHint": "Paste this snippet just before the </body> tag of your website.",
+      "test": "Test",
+      "testTitle": "Test your agent",
+      "testDescription": "Chat with your agent to see how it responds. Changes to prompts and files are reflected immediately."
+    },
+    "whatsapp": {
+      "enable": "Enable WhatsApp",
+      "requiresPlan": "Requires Professional or Scale plan",
+      "phoneNumberId": "Meta Phone Number ID"
+    },
+    "welcomeMessage": {
+      "title": "Welcome Message",
+      "hint": "First message the bot sends when a user opens the chat. Leave empty for a default greeting.",
+      "placeholder": "e.g. Hello! How can I help you today?"
+    },
+    "starters": {
+      "title": "Conversation Starters",
+      "hint": "Suggested questions shown as clickable chips before the user types. Up to 4.",
+      "add": "Add starter",
+      "placeholder": "e.g. What services do you offer?"
+    },
+    "appearance": {
+      "title": "Widget Appearance",
+      "hint": "Customize how the chat widget looks on your website.",
+      "primaryColor": "Primary color",
+      "widgetTitle": "Header title",
+      "widgetTitlePlaceholder": "e.g. Support",
+      "widgetPlaceholder": "Input placeholder",
+      "widgetPlaceholderDefault": "e.g. Type a message...",
+      "position": "Position",
+      "positionLeft": "Left",
+      "positionRight": "Right"
     }
   },
   "files": {
@@ -170,7 +218,12 @@
     "pending": "Pending",
     "maxSize": "Max size: 30MB",
     "dropzone": "Drop files here or click to select",
-    "supportedFormats": "PDF, DOCX, PPTX, XLSX"
+    "supportedFormats": "PDF, DOCX, PPTX, XLSX",
+    "sizeExceeded": "File exceeds the 30MB limit",
+    "uploadSuccess": "File uploaded — processing started",
+    "uploading": "Uploading…",
+    "deleteTitle": "Delete file?",
+    "deleteDescription": "Remove {fileName} from this agent?"
   },
   "team": {
     "title": "Team",
