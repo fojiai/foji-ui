@@ -298,6 +298,9 @@ export const subscriptionsApi = {
 
   getSubscription: (companyId: number) =>
     apiFetch<Subscription | null>(`/api/subscriptions?companyId=${companyId}`),
+
+  verifySession: (companyId: number, sessionId: string) =>
+    apiFetch<Subscription | null>(`/api/subscriptions/verify-session?companyId=${companyId}&sessionId=${encodeURIComponent(sessionId)}`),
 };
 
 // ─── Admin Companies ─────────────────────────────────────────────────────────

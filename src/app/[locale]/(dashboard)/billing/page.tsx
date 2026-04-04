@@ -429,10 +429,19 @@ function RegularBillingView() {
   const [checkoutLoading, setCheckoutLoading] = useState<number | null>(null);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+    const status = params.get("status");
+
     const promises: Promise<any>[] = [plansApi.list()];
     if (activeCompanyId) {
+      // If returning from Stripe checkout, verify the session to force-sync the subscription
+      const subPromise = sessionId && status === "success"
+        ? subscriptionsApi.verifySession(activeCompanyId, sessionId).catch(() => null)
+        : subscriptionsApi.getSubscription(activeCompanyId).catch(() => null);
+
       promises.push(
-        subscriptionsApi.getSubscription(activeCompanyId).catch(() => null),
+        subPromise,
         analyticsApi.getCompanyStats(activeCompanyId).catch(() => null),
         agentsApi.list(activeCompanyId).catch(() => []),
       );
