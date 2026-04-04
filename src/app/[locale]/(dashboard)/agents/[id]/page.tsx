@@ -138,8 +138,12 @@ export default function AgentDetailPage() {
     if (!activeCompanyId) return;
     setIsSaving(true);
     try {
+      // Convert empty strings to null so .NET doesn't validate "" as an invalid email/etc
+      const cleaned = Object.fromEntries(
+        Object.entries(data).map(([k, v]) => [k, v === "" ? null : v])
+      );
       const payload: any = {
-        ...data,
+        ...cleaned,
         conversationStarters: JSON.stringify(starters.filter((s) => s.trim())),
       };
       const updated = await agentsApi.update(activeCompanyId, agentId, payload);
