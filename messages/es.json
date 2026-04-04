@@ -180,9 +180,11 @@
       "testDescription": "Chatea con tu agente para ver cómo responde. Los cambios en prompts y archivos se reflejan inmediatamente."
     },
     "whatsapp": {
+      "title": "WhatsApp",
       "enable": "Activar WhatsApp",
       "requiresPlan": "Requiere plan Professional o Scale",
-      "phoneNumberId": "ID de Número Meta"
+      "phoneNumberId": "Número de WhatsApp",
+      "phoneNumberHint": "El número de teléfono registrado en tu cuenta Meta Business para la API de WhatsApp Business (ej: +5511999999999)."
     },
     "welcomeMessage": {
       "title": "Mensaje de Bienvenida",

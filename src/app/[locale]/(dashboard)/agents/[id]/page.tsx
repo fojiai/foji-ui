@@ -44,6 +44,26 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
+// API returns PascalCase enums (e.g. "AccountingFinance", "PtBr")
+// but the form/widget use snake_case/kebab-case ("accounting_finance", "pt-br")
+const INDUSTRY_MAP: Record<string, string> = {
+  AccountingFinance: "accounting_finance",
+  Law: "law",
+  InternalSystems: "internal_systems",
+};
+const LANGUAGE_MAP: Record<string, string> = {
+  PtBr: "pt-br",
+  En: "en",
+  Es: "es",
+};
+
+function normalizeIndustry(val: string): string {
+  return INDUSTRY_MAP[val] ?? val;
+}
+function normalizeLanguage(val: string): string {
+  return LANGUAGE_MAP[val] ?? val;
+}
+
 export default function AgentDetailPage() {
   const t = useTranslations();
   const params = useParams();
@@ -88,8 +108,8 @@ export default function AgentDetailPage() {
       reset({
         name: a.name,
         description: a.description ?? "",
-        industryType: a.industryType as any,
-        agentLanguage: a.agentLanguage as any,
+        industryType: normalizeIndustry(a.industryType) as any,
+        agentLanguage: normalizeLanguage(a.agentLanguage) as any,
         systemPrompt: a.systemPrompt,
         userPrompt: a.userPrompt ?? "",
         isActive: a.isActive,
@@ -405,30 +425,42 @@ export default function AgentDetailPage() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader><CardTitle className="text-base">{t("agents.whatsapp")}</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">{t("agents.whatsapp.enable")}</p>
-                    <p className="text-xs text-muted-foreground">{t("agents.whatsapp.requiresPlan")}</p>
-                  </div>
-                  <Switch
-                    checked={watch("whatsAppEnabled")}
-                    onCheckedChange={(v) => setValue("whatsAppEnabled", v)}
-                  />
-                </div>
-                {watch("whatsAppEnabled") && (
-                  <div className="space-y-2">
-                    <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
-                    <Input
-                      {...register("whatsAppPhoneNumberId")}
-                      placeholder="1234567890"
+            {subscription?.plan?.hasWhatsApp ? (
+              <Card>
+                <CardHeader><CardTitle className="text-base">{t("agents.whatsapp.title")}</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium">{t("agents.whatsapp.enable")}</p>
+                    </div>
+                    <Switch
+                      checked={watch("whatsAppEnabled")}
+                      onCheckedChange={(v) => setValue("whatsAppEnabled", v)}
                     />
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                  {watch("whatsAppEnabled") && (
+                    <div className="space-y-2">
+                      <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
+                      <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
+                      <Input
+                        {...register("whatsAppPhoneNumberId")}
+                        placeholder="+5511999999999"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="flex items-center justify-between py-4">
+                  <div>
+                    <p className="text-sm font-medium">{t("agents.whatsapp.title")}</p>
+                    <p className="text-xs text-muted-foreground">{t("agents.whatsapp.requiresPlan")}</p>
+                  </div>
+                  <Badge variant="outline">{t("billing.upgrade")}</Badge>
+                </CardContent>
+              </Card>
+            )}
 
             {subscription?.plan?.hasEscalationContacts ? (
               <Card>

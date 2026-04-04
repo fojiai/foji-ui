@@ -140,6 +140,7 @@ export interface Agent {
   userPrompt: string;
   agentToken: string;
   whatsAppEnabled: boolean;
+  fileCount?: number;
   whatsAppPhoneNumberId?: string;
   supportWhatsAppNumber?: string;
   salesWhatsAppNumber?: string;
