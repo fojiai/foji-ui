@@ -28,16 +28,28 @@ export function middleware(request: NextRequest) {
   // Always run intl middleware first
   const response = intlMiddleware(request);
 
-  // Auth guard: redirect to login if no token and not a public path
+  // Auth guard: redirect to login if no token (or expired) and not a public path
   if (!isPublicPath(pathname)) {
     const token = request.cookies.get("foji_token")?.value;
-    if (!token) {
+    let valid = false;
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        valid = typeof payload.exp === "number" && payload.exp * 1000 > Date.now();
+      } catch {
+        // malformed token — treat as invalid
+      }
+    }
+    if (!valid) {
+      // Clear the expired/invalid cookie so the client doesn't loop
       const loginUrl = new URL(
         `/${routing.defaultLocale}/login`,
         request.url
       );
       loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
+      const redirect = NextResponse.redirect(loginUrl);
+      redirect.cookies.set("foji_token", "", { path: "/", maxAge: 0 });
+      return redirect;
     }
   }
 

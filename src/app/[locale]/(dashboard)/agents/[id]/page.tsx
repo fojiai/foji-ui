@@ -696,12 +696,12 @@ export default function AgentDetailPage() {
               <CardDescription>{t("agents.detail.testDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="mx-auto max-w-[400px]">
+              <div className="mx-auto max-w-[500px]">
                 <iframe
                   key={`${agent.agentToken}-${testKey}`}
                   src={testUrl}
                   className="w-full rounded-xl border border-input overflow-hidden"
-                  style={{ height: "560px" }}
+                  style={{ height: "700px" }}
                   title="Agent test chat"
                 />
               </div>
