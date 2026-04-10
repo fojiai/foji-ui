@@ -255,7 +255,7 @@ export default function AgentDetailPage() {
     : "";
 
   const testUrl = agent
-    ? `${process.env.NEXT_PUBLIC_WIDGET_URL}/test.html?token=${agent.agentToken}&api=${encodeURIComponent(process.env.NEXT_PUBLIC_AI_API_URL || "")}`
+    ? `${process.env.NEXT_PUBLIC_WIDGET_URL}/test.html?token=${agent.agentToken}&api=${encodeURIComponent(process.env.NEXT_PUBLIC_AI_API_URL || "")}&_t=${testKey}`
     : "";
 
   const statusVariant: Record<string, any> = {
