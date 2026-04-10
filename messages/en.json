@@ -174,7 +174,7 @@
       "regenerateDescription": "The current embed script will stop working immediately. You'll need to update it everywhere it's used.",
       "regenerate": "Regenerate",
       "tokenRegenerated": "Token regenerated",
-      "embedHint": "Paste this snippet just before the </body> tag of your website.",
+      "embedHint": "Paste this snippet just before the closing body tag of your website.",
       "test": "Test",
       "testTitle": "Test your agent",
       "testDescription": "Chat with your agent to see how it responds. Changes to prompts and files are reflected immediately."

@@ -174,7 +174,7 @@
       "regenerateDescription": "O script de incorporação atual parará de funcionar imediatamente. Você precisará atualizá-lo em todos os lugares onde é usado.",
       "regenerate": "Regenerar",
       "tokenRegenerated": "Token regenerado",
-      "embedHint": "Cole este trecho logo antes da tag </body> do seu site.",
+      "embedHint": "Cole este trecho logo antes da tag de fechamento body do seu site.",
       "test": "Testar",
       "testTitle": "Teste seu agente",
       "testDescription": "Converse com seu agente para ver como ele responde. Alterações em prompts e arquivos são refletidas imediatamente."
