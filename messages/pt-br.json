@@ -225,7 +225,10 @@
     "uploadSuccess": "Arquivo enviado — processamento iniciado",
     "uploading": "Enviando…",
     "deleteTitle": "Excluir arquivo?",
-    "deleteDescription": "Remover {fileName} deste agente?"
+    "deleteDescription": "Remover {fileName} deste agente?",
+    "confirmUploadTitle": "Enviar arquivo?",
+    "confirmUploadDescription": "Enviar {fileName} ({fileSize} MB) para processamento? O arquivo será extraído e disponibilizado ao agente.",
+    "processingComplete": "Processamento de arquivos concluído"
   },
   "team": {
     "title": "Equipe",

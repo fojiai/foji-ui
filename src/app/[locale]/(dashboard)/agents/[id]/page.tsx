@@ -78,6 +78,7 @@ export default function AgentDetailPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [starters, setStarters] = useState<string[]>([""]);
   const [testKey, setTestKey] = useState(0); // force iframe reload
 
@@ -134,6 +135,24 @@ export default function AgentDetailPage() {
 
   useEffect(() => { loadAgent(); }, [activeCompanyId, agentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-poll file status when any file is still processing
+  useEffect(() => {
+    const hasProcessing = files.some((f) => f.processingStatus === "Pending" || f.processingStatus === "Processing");
+    if (!hasProcessing) return;
+    const interval = setInterval(async () => {
+      try {
+        const updated = await filesApi.list(agentId);
+        setFiles(updated);
+        const stillProcessing = updated.some((f) => f.processingStatus === "Pending" || f.processingStatus === "Processing");
+        if (!stillProcessing) {
+          clearInterval(interval);
+          toast({ title: t("files.processingComplete") });
+        }
+      } catch { /* ignore polling errors */ }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [files.map((f) => `${f.id}:${f.processingStatus}`).join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function onSubmit(data: FormData) {
     if (!activeCompanyId) return;
     setIsSaving(true);
@@ -182,13 +201,21 @@ export default function AgentDetailPage() {
     }
   }
 
-  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files?.[0]) return;
     const file = e.target.files[0];
+    e.target.value = "";
     if (file.size > 30 * 1024 * 1024) {
       toast({ variant: "destructive", title: t("files.sizeExceeded") });
       return;
     }
+    setPendingFile(file);
+  }
+
+  async function confirmUpload() {
+    if (!pendingFile) return;
+    const file = pendingFile;
+    setPendingFile(null);
     setUploadingFile(true);
     try {
       const uploaded = await filesApi.upload(agentId, file);
@@ -198,7 +225,6 @@ export default function AgentDetailPage() {
       toast({ variant: "destructive", title: t("errors.generic") });
     } finally {
       setUploadingFile(false);
-      e.target.value = "";
     }
   }
 
@@ -562,13 +588,31 @@ export default function AgentDetailPage() {
                       type="file"
                       className="sr-only"
                       accept=".pdf,.docx,.pptx,.xlsx"
-                      onChange={handleFileUpload}
+                      onChange={handleFileSelect}
                     />
                   </>
                 )}
               </label>
             </CardContent>
           </Card>
+
+          <AlertDialog open={!!pendingFile} onOpenChange={(open) => { if (!open) setPendingFile(null); }}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("files.confirmUploadTitle")}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {pendingFile && t("files.confirmUploadDescription", {
+                    fileName: pendingFile.name,
+                    fileSize: (pendingFile.size / 1024 / 1024).toFixed(2),
+                  })}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                <AlertDialogAction onClick={confirmUpload}>{t("files.upload")}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {files.length === 0 ? (
             <Card>

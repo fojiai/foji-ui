@@ -225,7 +225,10 @@
     "uploadSuccess": "File uploaded — processing started",
     "uploading": "Uploading…",
     "deleteTitle": "Delete file?",
-    "deleteDescription": "Remove {fileName} from this agent?"
+    "deleteDescription": "Remove {fileName} from this agent?",
+    "confirmUploadTitle": "Upload file?",
+    "confirmUploadDescription": "Upload {fileName} ({fileSize} MB) for processing? The file will be extracted and made available to the agent.",
+    "processingComplete": "File processing complete"
   },
   "team": {
     "title": "Team",
