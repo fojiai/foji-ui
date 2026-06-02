@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle, UserPlus, PhoneForwarded } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
-import { agentsApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription } from "@/lib/api";
+import { agentsApi, calendarApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,6 +41,13 @@ const schema = z.object({
   widgetTitle: z.string().max(100).optional(),
   widgetPlaceholder: z.string().max(200).optional(),
   widgetPosition: z.enum(["left", "right", ""]).optional(),
+  responseStyle: z.enum(["Professional", "Friendly", "Concise", ""]).optional(),
+  leadCaptureEnabled: z.boolean(),
+  leadCapturePrompt: z.string().max(500).optional(),
+  handoffEnabled: z.boolean(),
+  handoffNotifyEmail: z.string().email().optional().or(z.literal("")),
+  handoffNotifyWhatsApp: z.string().optional(),
+  handoffMessage: z.string().max(500).optional(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -70,6 +77,7 @@ export default function AgentDetailPage() {
   const router = useRouter();
   const { activeCompanyId } = useAuth();
   const agentId = Number(params.id);
+  const searchParams = useSearchParams();
 
   const [agent, setAgent] = useState<Agent | null>(null);
   const [files, setFiles] = useState<AgentFile[]>([]);
@@ -125,6 +133,13 @@ export default function AgentDetailPage() {
         widgetTitle: a.widgetTitle ?? "",
         widgetPlaceholder: a.widgetPlaceholder ?? "",
         widgetPosition: (a.widgetPosition as "left" | "right" | "") ?? "",
+        responseStyle: (a.responseStyle as "Professional" | "Friendly" | "Concise" | "") ?? "",
+        leadCaptureEnabled: a.leadCaptureEnabled ?? false,
+        leadCapturePrompt: a.leadCapturePrompt ?? "",
+        handoffEnabled: a.handoffEnabled ?? false,
+        handoffNotifyEmail: a.handoffNotifyEmail ?? "",
+        handoffNotifyWhatsApp: a.handoffNotifyWhatsApp ?? "",
+        handoffMessage: a.handoffMessage ?? "",
       });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
@@ -152,6 +167,45 @@ export default function AgentDetailPage() {
     }, 5000);
     return () => clearInterval(interval);
   }, [files.map((f) => `${f.id}:${f.processingStatus}`).join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle Google Calendar OAuth redirect result
+  useEffect(() => {
+    if (searchParams.get("calendar_connected") === "1") {
+      toast({ title: t("agents.calendar.connectedSuccess") });
+      // Reload agent to get updated calendarConnected + calendarGoogleEmail
+      loadAgent();
+      // Clean URL without triggering navigation
+      const url = new URL(window.location.href);
+      url.searchParams.delete("calendar_connected");
+      window.history.replaceState({}, "", url.toString());
+    }
+    const calError = searchParams.get("calendar_error");
+    if (calError) {
+      toast({ variant: "destructive", title: t("agents.calendar.connectError"), description: calError });
+      const url = new URL(window.location.href);
+      url.searchParams.delete("calendar_error");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function handleCalendarConnect() {
+    try {
+      const { authUrl } = await calendarApi.getAuthUrl(agentId);
+      window.location.href = authUrl;
+    } catch {
+      toast({ variant: "destructive", title: t("agents.calendar.connectError") });
+    }
+  }
+
+  async function handleCalendarDisconnect() {
+    try {
+      await calendarApi.disconnect(agentId);
+      setAgent((prev) => prev ? { ...prev, calendarConnected: false, calendarGoogleEmail: null } : prev);
+      toast({ title: t("agents.calendar.disconnectedSuccess") });
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    }
+  }
 
   async function onSubmit(data: FormData) {
     if (!activeCompanyId) return;
@@ -337,6 +391,19 @@ export default function AgentDetailPage() {
                     </Select>
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label>{t("agents.responseStyle")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("agents.responseStyleHint")}</p>
+                  <Select value={watch("responseStyle") || ""} onValueChange={(v) => setValue("responseStyle", v as any)}>
+                    <SelectTrigger><SelectValue placeholder={t("agents.responseStyleDefault")} /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">{t("agents.responseStyleDefault")}</SelectItem>
+                      <SelectItem value="Professional">{t("agents.responseStyles.professional")}</SelectItem>
+                      <SelectItem value="Friendly">{t("agents.responseStyles.friendly")}</SelectItem>
+                      <SelectItem value="Concise">{t("agents.responseStyles.concise")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardContent>
             </Card>
 
@@ -376,6 +443,80 @@ export default function AgentDetailPage() {
                   placeholder={t("agents.welcomeMessage.placeholder")}
                   {...register("welcomeMessage")}
                 />
+              </CardContent>
+            </Card>
+
+            {/* Lead Capture */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <UserPlus className="h-4 w-4 text-primary" />
+                  {t("agents.leadCapture.title")}
+                </CardTitle>
+                <CardDescription>{t("agents.leadCapture.hint")}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>{t("agents.leadCapture.enable")}</Label>
+                  <Switch
+                    checked={watch("leadCaptureEnabled")}
+                    onCheckedChange={(v) => setValue("leadCaptureEnabled", v)}
+                  />
+                </div>
+                {watch("leadCaptureEnabled") && (
+                  <div className="space-y-2">
+                    <Label>{t("agents.leadCapture.prompt")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
+                    <textarea
+                      className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      placeholder={t("agents.leadCapture.promptPlaceholder")}
+                      {...register("leadCapturePrompt")}
+                    />
+                    <p className="text-xs text-muted-foreground">{t("agents.leadCapture.promptHint")}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Human Handoff */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <PhoneForwarded className="h-4 w-4 text-primary" />
+                  {t("agents.handoff.title")}
+                </CardTitle>
+                <CardDescription>{t("agents.handoff.hint")}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>{t("agents.handoff.enable")}</Label>
+                  <Switch
+                    checked={watch("handoffEnabled")}
+                    onCheckedChange={(v) => setValue("handoffEnabled", v)}
+                  />
+                </div>
+                {watch("handoffEnabled") && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>{t("agents.handoff.notifyEmail")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
+                        <Input {...register("handoffNotifyEmail")} type="email" placeholder="support@company.com" aria-invalid={!!errors.handoffNotifyEmail} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>{t("agents.handoff.notifyWhatsApp")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
+                        <Input {...register("handoffNotifyWhatsApp")} placeholder="+5511999999999" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("agents.handoff.message")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
+                      <textarea
+                        className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        placeholder={t("agents.handoff.messagePlaceholder")}
+                        {...register("handoffMessage")}
+                      />
+                      <p className="text-xs text-muted-foreground">{t("agents.handoff.messageHint")}</p>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -534,6 +675,63 @@ export default function AgentDetailPage() {
                   <div>
                     <p className="text-sm font-medium">{t("agents.escalation.title")}</p>
                     <p className="text-xs text-muted-foreground">{t("agents.escalation.upgradeProfessional")}</p>
+                  </div>
+                  <Badge variant="outline">{t("billing.upgrade")}</Badge>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* ── Google Calendar ─────────────────────────────────────── */}
+            {subscription?.plan?.hasGoogleCalendar ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    {t("agents.calendar.title")}
+                  </CardTitle>
+                  <CardDescription>{t("agents.calendar.description")}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {agent.calendarConnected ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span className="h-2 w-2 rounded-full bg-green-500 inline-block shrink-0" />
+                        {t("agents.calendar.connectedAs", { email: agent.calendarGoogleEmail ?? "" })}
+                      </div>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
+                            {t("agents.calendar.disconnect")}
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>{t("agents.calendar.disconnectTitle")}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("agents.calendar.disconnectDescription")}</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleCalendarDisconnect}>
+                              {t("agents.calendar.disconnect")}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  ) : (
+                    <Button onClick={handleCalendarConnect} className="gap-2" type="button">
+                      <Calendar className="h-4 w-4" />
+                      {t("agents.calendar.connect")}
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="flex items-center justify-between py-4">
+                  <div>
+                    <p className="text-sm font-medium">{t("agents.calendar.title")}</p>
+                    <p className="text-xs text-muted-foreground">{t("agents.calendar.requiresPlan")}</p>
                   </div>
                   <Badge variant="outline">{t("billing.upgrade")}</Badge>
                 </CardContent>

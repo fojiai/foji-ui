@@ -152,6 +152,38 @@ export interface Agent {
   widgetTitle?: string;
   widgetPlaceholder?: string;
   widgetPosition?: string;
+  responseStyle?: string;
+  leadCaptureEnabled?: boolean;
+  leadCapturePrompt?: string | null;
+  handoffEnabled?: boolean;
+  handoffNotifyEmail?: string | null;
+  handoffNotifyWhatsApp?: string | null;
+  handoffMessage?: string | null;
+  calendarConnected?: boolean;
+  calendarGoogleEmail?: string | null;
+}
+
+export interface HandoffEvent {
+  id: number;
+  agentId: number;
+  agentName: string;
+  sessionId: string;
+  userMessage?: string;
+  source: string;
+  notificationSent: boolean;
+  createdAt: string;
+}
+
+export interface Lead {
+  id: number;
+  agentId: number;
+  agentName: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  sessionId: string;
+  source: string;
+  createdAt: string;
 }
 
 export const agentsApi = {
@@ -182,6 +214,28 @@ export const agentsApi = {
     }),
 };
 
+// ─── Handoffs ─────────────────────────────────────────────────────────────────
+
+export const handoffsApi = {
+  list: (companyId: number, agentId?: number) => {
+    const url = agentId
+      ? `/api/handoffs?companyId=${companyId}&agentId=${agentId}`
+      : `/api/handoffs?companyId=${companyId}`;
+    return apiFetch<HandoffEvent[]>(url);
+  },
+};
+
+// ─── Leads ───────────────────────────────────────────────────────────────────
+
+export const leadsApi = {
+  list: (companyId: number, agentId?: number) => {
+    const url = agentId
+      ? `/api/leads?companyId=${companyId}&agentId=${agentId}`
+      : `/api/leads?companyId=${companyId}`;
+    return apiFetch<Lead[]>(url);
+  },
+};
+
 // ─── Files ───────────────────────────────────────────────────────────────────
 
 export interface AgentFile {
@@ -210,6 +264,24 @@ export const filesApi = {
     apiFetch<void>(`/api/files/${fileId}`, { method: "DELETE" }),
 };
 
+// ─── Calendar ────────────────────────────────────────────────────────────────
+
+export interface CalendarStatus {
+  isConnected: boolean;
+  googleAccountEmail: string | null;
+}
+
+export const calendarApi = {
+  getStatus: (agentId: number) =>
+    apiFetch<CalendarStatus>(`/api/agents/${agentId}/calendar/status`),
+
+  getAuthUrl: (agentId: number) =>
+    apiFetch<{ authUrl: string }>(`/api/agents/${agentId}/calendar/auth-url`),
+
+  disconnect: (agentId: number) =>
+    apiFetch<void>(`/api/agents/${agentId}/calendar/disconnect`, { method: "DELETE" }),
+};
+
 // ─── Plans ───────────────────────────────────────────────────────────────────
 
 export interface Plan {
@@ -223,6 +295,7 @@ export interface Plan {
   maxMembers: number;
   hasWhatsApp: boolean;
   hasEscalationContacts: boolean;
+  hasGoogleCalendar: boolean;
   maxConversationsPerMonth: number;
   maxMessagesPerMonth: number;
   isActive: boolean;

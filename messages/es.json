@@ -62,7 +62,9 @@
     "billing": "Facturación",
     "settings": "Configuración",
     "admin": "Admin",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "leads": "Leads",
+    "handoffs": "Transferencias"
   },
   "dashboard": {
     "title": "Panel",
@@ -208,7 +210,67 @@
       "position": "Posición",
       "positionLeft": "Izquierda",
       "positionRight": "Derecha"
+    },
+    "responseStyle": "Estilo de Respuesta",
+    "responseStyleHint": "Define el tono de las respuestas del agente. El agente siempre adapta el idioma al del usuario.",
+    "responseStyleDefault": "Predeterminado (sin estilo definido)",
+    "responseStyles": {
+      "professional": "Profesional — formal, preciso, sin emojis",
+      "friendly": "Amigable — cálido, casual, hasta 2 emojis",
+      "concise": "Conciso — respuestas cortas, máximo 4 frases"
+    },
+    "leadCapture": {
+      "title": "Captura de Leads",
+      "hint": "Muestra un formulario antes del primer mensaje para recopilar nombre, email y teléfono del visitante.",
+      "enable": "Activar captura de leads",
+      "prompt": "Mensaje del formulario",
+      "promptPlaceholder": "ej: Para atenderte mejor, déjanos tus datos:",
+      "promptHint": "Deja en blanco para usar el mensaje predeterminado en el idioma del agente."
+    },
+    "handoff": {
+      "title": "Transferencia a Humano",
+      "hint": "Agrega un botón en el widget para que los visitantes soliciten atención humana. Recibirás una notificación por email.",
+      "enable": "Activar transferencia a humano",
+      "notifyEmail": "Email de notificación",
+      "notifyWhatsApp": "WhatsApp de notificación",
+      "message": "Mensaje de confirmación",
+      "messagePlaceholder": "ej: ¡Solicitud registrada! Nuestro equipo se pondrá en contacto pronto.",
+      "messageHint": "Mensaje mostrado al visitante tras hacer clic. Deja en blanco para usar el mensaje predeterminado."
+    },
+    "calendar": {
+      "title": "Google Calendar",
+      "description": "Permite que el agente verifique tu disponibilidad y programe citas directamente desde el chat.",
+      "connect": "Conectar Google Calendar",
+      "connectedAs": "Conectado como {email}",
+      "disconnect": "Desconectar",
+      "disconnectTitle": "¿Desconectar Google Calendar?",
+      "disconnectDescription": "El agente ya no podrá sugerir ni agendar citas. Puedes reconectar en cualquier momento.",
+      "connectedSuccess": "¡Google Calendar conectado exitosamente!",
+      "disconnectedSuccess": "Google Calendar desconectado.",
+      "requiresPlan": "Disponible en planes que incluyen Google Calendar. Actualiza para activarlo.",
+      "connectError": "No se pudo conectar Google Calendar. Por favor intenta de nuevo."
     }
+  },
+  "handoffs": {
+    "title": "Transferencias a Humano",
+    "description": "Solicitudes de atención humana recibidas a través del widget.",
+    "total": "solicitudes",
+    "filterByAgent": "Filtrar por agente",
+    "allAgents": "Todos los agentes",
+    "empty": "Todavía no hay solicitudes de atención humana",
+    "emptyHint": "Activa la transferencia a humano en la configuración del agente para recibir solicitudes.",
+    "notified": "Notificado",
+    "pending": "Pendiente"
+  },
+  "leads": {
+    "title": "Leads",
+    "description": "Contactos recopilados por el formulario de captura de leads en tus agentes.",
+    "total": "leads",
+    "filterByAgent": "Filtrar por agente",
+    "allAgents": "Todos los agentes",
+    "empty": "Todavía no hay leads capturados",
+    "emptyHint": "Activa la captura de leads en la configuración del agente para empezar a recopilar contactos.",
+    "anonymous": "Anónimo"
   },
   "files": {
     "title": "Archivos",

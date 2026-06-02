@@ -62,7 +62,9 @@
     "billing": "Billing",
     "settings": "Settings",
     "admin": "Admin",
-    "contact": "Contact"
+    "contact": "Contact",
+    "leads": "Leads",
+    "handoffs": "Handoffs"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -208,7 +210,67 @@
       "position": "Position",
       "positionLeft": "Left",
       "positionRight": "Right"
+    },
+    "responseStyle": "Response Style",
+    "responseStyleHint": "Controls the tone of the agent's replies. The agent always adapts its language to match the user.",
+    "responseStyleDefault": "Default (no style set)",
+    "responseStyles": {
+      "professional": "Professional — formal, precise, no emojis",
+      "friendly": "Friendly — warm, casual, up to 2 emojis",
+      "concise": "Concise — short answers, 4 sentences max"
+    },
+    "leadCapture": {
+      "title": "Lead Capture",
+      "hint": "Shows a form before the first message to collect the visitor's name, email, and phone.",
+      "enable": "Enable lead capture",
+      "prompt": "Form message",
+      "promptPlaceholder": "e.g. Leave your contact info so we can follow up:",
+      "promptHint": "Leave blank to use the default message in the agent's language."
+    },
+    "handoff": {
+      "title": "Human Handoff",
+      "hint": "Adds a button to the widget so visitors can request a human agent. You'll get an email notification.",
+      "enable": "Enable human handoff",
+      "notifyEmail": "Notification email",
+      "notifyWhatsApp": "Notification WhatsApp",
+      "message": "Confirmation message",
+      "messagePlaceholder": "e.g. Request registered! Our team will reach out shortly.",
+      "messageHint": "Message shown to the visitor after clicking the button. Leave blank for the default."
+    },
+    "calendar": {
+      "title": "Google Calendar",
+      "description": "Let the AI check your availability and book appointments directly from the chat.",
+      "connect": "Connect Google Calendar",
+      "connectedAs": "Connected as {email}",
+      "disconnect": "Disconnect",
+      "disconnectTitle": "Disconnect Google Calendar?",
+      "disconnectDescription": "The AI will no longer be able to suggest or book appointments. You can reconnect at any time.",
+      "connectedSuccess": "Google Calendar connected successfully!",
+      "disconnectedSuccess": "Google Calendar disconnected.",
+      "requiresPlan": "Available on plans that include Google Calendar. Upgrade to enable.",
+      "connectError": "Could not connect Google Calendar. Please try again."
     }
+  },
+  "handoffs": {
+    "title": "Human Handoffs",
+    "description": "Human handoff requests received through the widget.",
+    "total": "requests",
+    "filterByAgent": "Filter by agent",
+    "allAgents": "All agents",
+    "empty": "No human handoff requests yet",
+    "emptyHint": "Enable human handoff in your agent settings to start receiving requests.",
+    "notified": "Notified",
+    "pending": "Pending"
+  },
+  "leads": {
+    "title": "Leads",
+    "description": "Contacts collected by the lead capture form across your agents.",
+    "total": "leads",
+    "filterByAgent": "Filter by agent",
+    "allAgents": "All agents",
+    "empty": "No leads captured yet",
+    "emptyHint": "Enable lead capture in your agent settings to start collecting contacts.",
+    "anonymous": "Anonymous"
   },
   "files": {
     "title": "Files",

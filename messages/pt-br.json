@@ -62,7 +62,9 @@
     "billing": "Faturamento",
     "settings": "Configurações",
     "admin": "Admin",
-    "contact": "Contato"
+    "contact": "Contato",
+    "leads": "Leads",
+    "handoffs": "Atendimentos"
   },
   "dashboard": {
     "title": "Painel",
@@ -208,7 +210,67 @@
       "position": "Posição",
       "positionLeft": "Esquerda",
       "positionRight": "Direita"
+    },
+    "responseStyle": "Estilo de Resposta",
+    "responseStyleHint": "Define o tom das respostas do agente. O agente sempre ajusta o idioma conforme o usuário.",
+    "responseStyleDefault": "Padrão (sem estilo definido)",
+    "responseStyles": {
+      "professional": "Profissional — formal, direto, sem emojis",
+      "friendly": "Amigável — descontraído, acolhedor, até 2 emojis",
+      "concise": "Conciso — respostas curtas, máximo 4 frases"
+    },
+    "leadCapture": {
+      "title": "Captura de Leads",
+      "hint": "Exibe um formulário antes da primeira mensagem para coletar nome, e-mail e telefone do visitante.",
+      "enable": "Ativar captura de leads",
+      "prompt": "Mensagem do formulário",
+      "promptPlaceholder": "ex: Para melhor te atender, deixe seus contatos:",
+      "promptHint": "Deixe em branco para usar a mensagem padrão no idioma do agente."
+    },
+    "handoff": {
+      "title": "Transferência para Humano",
+      "hint": "Exibe um botão no widget para o visitante solicitar atendimento humano. Você receberá uma notificação por e-mail.",
+      "enable": "Ativar transferência para humano",
+      "notifyEmail": "E-mail de notificação",
+      "notifyWhatsApp": "WhatsApp de notificação",
+      "message": "Mensagem de confirmação",
+      "messagePlaceholder": "ex: Sua solicitação foi registrada! Nossa equipe entrará em contato em breve.",
+      "messageHint": "Mensagem exibida ao visitante após clicar no botão. Deixe em branco para usar a mensagem padrão."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "description": "Permita que o agente verifique sua disponibilidade e agende compromissos diretamente pelo chat.",
+      "connect": "Conectar Google Agenda",
+      "connectedAs": "Conectado como {email}",
+      "disconnect": "Desconectar",
+      "disconnectTitle": "Desconectar Google Agenda?",
+      "disconnectDescription": "O agente não conseguirá mais sugerir ou agendar compromissos. Você pode reconectar a qualquer momento.",
+      "connectedSuccess": "Google Agenda conectado com sucesso!",
+      "disconnectedSuccess": "Google Agenda desconectado.",
+      "requiresPlan": "Disponível em planos que incluem o Google Agenda. Faça upgrade para ativar.",
+      "connectError": "Não foi possível conectar o Google Agenda. Tente novamente."
     }
+  },
+  "handoffs": {
+    "title": "Atendimentos Humanos",
+    "description": "Solicitações de atendimento humano recebidas pelo widget.",
+    "total": "solicitações",
+    "filterByAgent": "Filtrar por agente",
+    "allAgents": "Todos os agentes",
+    "empty": "Nenhuma solicitação de atendimento humano ainda",
+    "emptyHint": "Ative a transferência para humano nas configurações do agente para receber solicitações.",
+    "notified": "Notificado",
+    "pending": "Pendente"
+  },
+  "leads": {
+    "title": "Leads",
+    "description": "Contatos coletados pelo formulário de captura de leads nos seus agentes.",
+    "total": "leads",
+    "filterByAgent": "Filtrar por agente",
+    "allAgents": "Todos os agentes",
+    "empty": "Nenhum lead capturado ainda",
+    "emptyHint": "Ative a captura de leads nas configurações do agente para começar a coletar contatos.",
+    "anonymous": "Anônimo"
   },
   "files": {
     "title": "Arquivos",
