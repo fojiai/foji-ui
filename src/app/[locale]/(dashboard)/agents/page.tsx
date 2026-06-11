@@ -18,6 +18,7 @@ const INDUSTRY_KEY_MAP: Record<string, string> = {
   AccountingFinance: "accounting_finance",
   Law: "law",
   InternalSystems: "internal_systems",
+  GeneralAssistant: "general_assistant",
 };
 const LANGUAGE_KEY_MAP: Record<string, string> = {
   PtBr: "pt-br",
@@ -26,6 +27,7 @@ const LANGUAGE_KEY_MAP: Record<string, string> = {
 };
 
 const INDUSTRY_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
+  general_assistant: Bot,
   accounting_finance: Briefcase,
   law: Scale,
   internal_systems: Cpu,

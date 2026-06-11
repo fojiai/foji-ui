@@ -91,11 +91,18 @@
     "userPrompt": "Additional Instructions",
     "embedCode": "Embed Code",
     "regenerateToken": "Regenerate Token",
-    "whatsapp": "WhatsApp",
+    "whatsapp": {
+      "title": "WhatsApp",
+      "enable": "Enable WhatsApp",
+      "requiresPlan": "Requires Professional or Scale plan",
+      "phoneNumberId": "WhatsApp Phone Number",
+      "phoneNumberHint": "The phone number registered in your Meta Business account for WhatsApp Business API (e.g. +5511999999999)."
+    },
     "industries": {
       "accounting_finance": "Accounting & Finance",
       "law": "Law",
-      "internal_systems": "Internal Systems"
+      "internal_systems": "Internal Systems",
+      "general_assistant": "General Assistant"
     },
     "languages": {
       "pt-br": "Português BR",
@@ -150,7 +157,9 @@
       "invoicing": "Invoicing & Billing",
       "invoicingPrompt": "You are an invoicing and billing assistant. Help users understand invoicing procedures, payment terms, billing cycles, and how to resolve billing discrepancies based on the documents provided. Guide them through step-by-step processes when needed.",
       "payroll": "Payroll",
-      "payrollPrompt": "You are a payroll information assistant. Help employees and managers understand payroll schedules, deductions, benefits calculations, and overtime rules based on the documents provided. For specific payroll corrections, recommend contacting the payroll department directly."
+      "payrollPrompt": "You are a payroll information assistant. Help employees and managers understand payroll schedules, deductions, benefits calculations, and overtime rules based on the documents provided. For specific payroll corrections, recommend contacting the payroll department directly.",
+      "generalAssistantPrompt": "You are a smart virtual assistant for {COMPANY_NAME}. Help customers and team members with a wide range of tasks: answering general questions, scheduling appointments, providing information about products and services, and offering day-to-day support. Be proactive, attentive, and adapt your tone to the conversation.",
+      "generalAssistant": "Virtual Assistant"
     },
     "howItWorks": {
       "title": "How agents work",
@@ -180,13 +189,6 @@
       "test": "Test",
       "testTitle": "Test your agent",
       "testDescription": "Chat with your agent to see how it responds. Changes to prompts and files are reflected immediately."
-    },
-    "whatsapp": {
-      "title": "WhatsApp",
-      "enable": "Enable WhatsApp",
-      "requiresPlan": "Requires Professional or Scale plan",
-      "phoneNumberId": "WhatsApp Phone Number",
-      "phoneNumberHint": "The phone number registered in your Meta Business account for WhatsApp Business API (e.g. +5511999999999)."
     },
     "welcomeMessage": {
       "title": "Welcome Message",

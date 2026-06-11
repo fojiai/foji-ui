@@ -91,11 +91,18 @@
     "userPrompt": "Instrucciones adicionales",
     "embedCode": "Código de incrustación",
     "regenerateToken": "Regenerar token",
-    "whatsapp": "WhatsApp",
+    "whatsapp": {
+      "title": "WhatsApp",
+      "enable": "Activar WhatsApp",
+      "requiresPlan": "Requiere plan Professional o Scale",
+      "phoneNumberId": "Número de WhatsApp",
+      "phoneNumberHint": "El número de teléfono registrado en tu cuenta Meta Business para la API de WhatsApp Business (ej: +5511999999999)."
+    },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",
       "law": "Derecho",
-      "internal_systems": "Sistemas Internos"
+      "internal_systems": "Sistemas Internos",
+      "general_assistant": "Asistente General"
     },
     "languages": {
       "pt-br": "Português BR",
@@ -150,7 +157,9 @@
       "invoicing": "Facturación y Cobros",
       "invoicingPrompt": "Eres un asistente de facturación y cobros. Ayuda a los usuarios a entender procedimientos de emisión de facturas, condiciones de pago, ciclos de cobro y cómo resolver discrepancias basándote en los documentos proporcionados. Guíalos con procesos paso a paso cuando sea necesario.",
       "payroll": "Nómina",
-      "payrollPrompt": "Eres un asistente de información de nómina. Ayuda a empleados y gerentes a entender cronogramas de pago, deducciones, cálculos de beneficios y reglas de horas extra basándote en los documentos proporcionados. Para correcciones específicas de nómina, recomienda contactar al departamento de nómina directamente."
+      "payrollPrompt": "Eres un asistente de información de nómina. Ayuda a empleados y gerentes a entender cronogramas de pago, deducciones, cálculos de beneficios y reglas de horas extra basándote en los documentos proporcionados. Para correcciones específicas de nómina, recomienda contactar al departamento de nómina directamente.",
+      "generalAssistantPrompt": "Eres un asistente virtual inteligente para {COMPANY_NAME}. Ayuda a clientes y colaboradores con una amplia variedad de tareas: responder preguntas generales, agendar citas, brindar información sobre productos y servicios y ofrecer soporte cotidiano. Sé proactivo, atento y adapta tu tono al contexto de la conversación.",
+      "generalAssistant": "Asistente Virtual"
     },
     "howItWorks": {
       "title": "Cómo funcionan los agentes",
@@ -180,13 +189,6 @@
       "test": "Probar",
       "testTitle": "Prueba tu agente",
       "testDescription": "Chatea con tu agente para ver cómo responde. Los cambios en prompts y archivos se reflejan inmediatamente."
-    },
-    "whatsapp": {
-      "title": "WhatsApp",
-      "enable": "Activar WhatsApp",
-      "requiresPlan": "Requiere plan Professional o Scale",
-      "phoneNumberId": "Número de WhatsApp",
-      "phoneNumberHint": "El número de teléfono registrado en tu cuenta Meta Business para la API de WhatsApp Business (ej: +5511999999999)."
     },
     "welcomeMessage": {
       "title": "Mensaje de Bienvenida",
@@ -476,44 +478,128 @@
     "title": "Términos de Servicio",
     "lastUpdated": "Última actualización: Marzo 2026",
     "intro": "Estos Términos de Servicio regulan el uso de la plataforma Foji AI, operada por P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59. Al crear una cuenta o utilizar nuestros servicios, usted acepta estos términos.",
-    "acceptance": { "title": "1. Aceptación de los Términos", "content": "Al acceder o usar Foji AI, usted acepta vincularse a estos Términos de Servicio. Si no está de acuerdo, no utilice la plataforma." },
-    "services": { "title": "2. Descripción de los Servicios", "content": "Foji AI es una plataforma SaaS que permite a empresas crear agentes de chat con inteligencia artificial entrenados en sus documentos. Los servicios incluyen creación de agentes, procesamiento de documentos, integración de widget de chat, integración con WhatsApp y paneles de análisis." },
-    "accounts": { "title": "3. Cuentas de Usuario", "content": "Debe proporcionar información precisa al crear una cuenta. Es responsable de mantener la confidencialidad de sus credenciales y de todas las actividades en su cuenta." },
-    "acceptableUse": { "title": "4. Uso Aceptable", "content": "Usted acepta no subir contenido ilegal o dañino, no usar la plataforma para spam o fraude, no intentar eludir medidas de seguridad, no hacer ingeniería inversa de la plataforma, y no usar agentes de IA para proporcionar asesoramiento profesional regulado sin los avisos correspondientes." },
-    "intellectualProperty": { "title": "5. Propiedad Intelectual", "content": "Usted mantiene la propiedad de todo el contenido que suba. Al subir contenido, nos otorga una licencia limitada para procesarlo y usarlo exclusivamente para proporcionar los servicios." },
-    "liability": { "title": "6. Limitación de Responsabilidad", "content": "En la máxima extensión permitida por ley, P2 TECH INOVA SIMPLES (I.S.) no será responsable por daños indirectos, incidentales, especiales o consecuentes. Las respuestas generadas por IA se proporcionan tal cual." },
-    "termination": { "title": "7. Terminación", "content": "Cualquier parte puede terminar el acuerdo en cualquier momento. Tras la terminación, su acceso será revocado y sus datos retenidos por 30 días antes de la eliminación permanente." },
-    "dataProtection": { "title": "8. Protección de Datos", "content": "Procesamos datos personales de acuerdo con nuestra Política de Privacidad y leyes aplicables, incluida la LGPD brasileña, el GDPR de la UE y la CCPA de California." },
-    "governing": { "title": "9. Ley Aplicable", "content": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Las disputas se someterán a los tribunales de la ciudad de la sede de la empresa." },
-    "changes": { "title": "10. Cambios en los Términos", "content": "Podemos actualizar estos términos periódicamente. Le notificaremos los cambios materiales por correo electrónico o a través de la plataforma." },
-    "contact": { "title": "11. Contacto", "content": "Para preguntas sobre estos términos, contáctenos a través del formulario de contacto en la plataforma." }
+    "acceptance": {
+      "title": "1. Aceptación de los Términos",
+      "content": "Al acceder o usar Foji AI, usted acepta vincularse a estos Términos de Servicio. Si no está de acuerdo, no utilice la plataforma."
+    },
+    "services": {
+      "title": "2. Descripción de los Servicios",
+      "content": "Foji AI es una plataforma SaaS que permite a empresas crear agentes de chat con inteligencia artificial entrenados en sus documentos. Los servicios incluyen creación de agentes, procesamiento de documentos, integración de widget de chat, integración con WhatsApp y paneles de análisis."
+    },
+    "accounts": {
+      "title": "3. Cuentas de Usuario",
+      "content": "Debe proporcionar información precisa al crear una cuenta. Es responsable de mantener la confidencialidad de sus credenciales y de todas las actividades en su cuenta."
+    },
+    "acceptableUse": {
+      "title": "4. Uso Aceptable",
+      "content": "Usted acepta no subir contenido ilegal o dañino, no usar la plataforma para spam o fraude, no intentar eludir medidas de seguridad, no hacer ingeniería inversa de la plataforma, y no usar agentes de IA para proporcionar asesoramiento profesional regulado sin los avisos correspondientes."
+    },
+    "intellectualProperty": {
+      "title": "5. Propiedad Intelectual",
+      "content": "Usted mantiene la propiedad de todo el contenido que suba. Al subir contenido, nos otorga una licencia limitada para procesarlo y usarlo exclusivamente para proporcionar los servicios."
+    },
+    "liability": {
+      "title": "6. Limitación de Responsabilidad",
+      "content": "En la máxima extensión permitida por ley, P2 TECH INOVA SIMPLES (I.S.) no será responsable por daños indirectos, incidentales, especiales o consecuentes. Las respuestas generadas por IA se proporcionan tal cual."
+    },
+    "termination": {
+      "title": "7. Terminación",
+      "content": "Cualquier parte puede terminar el acuerdo en cualquier momento. Tras la terminación, su acceso será revocado y sus datos retenidos por 30 días antes de la eliminación permanente."
+    },
+    "dataProtection": {
+      "title": "8. Protección de Datos",
+      "content": "Procesamos datos personales de acuerdo con nuestra Política de Privacidad y leyes aplicables, incluida la LGPD brasileña, el GDPR de la UE y la CCPA de California."
+    },
+    "governing": {
+      "title": "9. Ley Aplicable",
+      "content": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Las disputas se someterán a los tribunales de la ciudad de la sede de la empresa."
+    },
+    "changes": {
+      "title": "10. Cambios en los Términos",
+      "content": "Podemos actualizar estos términos periódicamente. Le notificaremos los cambios materiales por correo electrónico o a través de la plataforma."
+    },
+    "contact": {
+      "title": "11. Contacto",
+      "content": "Para preguntas sobre estos términos, contáctenos a través del formulario de contacto en la plataforma."
+    }
   },
   "privacy": {
     "title": "Política de Privacidad",
     "lastUpdated": "Última actualización: Marzo 2026",
     "intro": "P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59, está comprometida con la protección de su privacidad.",
-    "dataCollected": { "title": "1. Datos que Recopilamos", "content": "Recopilamos datos de cuenta (nombre, email, contraseña cifrada, empresa, CPF/CNPJ), datos de uso (conversaciones, agentes, documentos), datos técnicos (IP, navegador, logs), datos de pago (procesados por Stripe) y cookies esenciales." },
-    "legalBasis": { "title": "2. Base Legal (LGPD Art. 7 / GDPR Art. 6)", "content": "Procesamos datos con base en ejecución de contrato, interés legítimo, consentimiento y obligación legal." },
-    "dataUse": { "title": "3. Cómo Usamos sus Datos", "content": "Usamos sus datos para proporcionar la plataforma, procesar solicitudes de IA, enviar emails transaccionales, analizar uso y cumplir obligaciones legales." },
-    "dataSharing": { "title": "4. Compartir Datos", "content": "Compartimos datos con proveedores de IA (OpenAI, Google, AWS), Stripe, AWS, Resend y Vercel. No vendemos datos personales a terceros." },
-    "dataRetention": { "title": "5. Retención de Datos", "content": "Datos de cuenta: mientras esté activa. Chat: 90 días. Documentos: mientras el agente esté activo. Registros fiscales: 5 años. Logs de auditoría: 1 año." },
-    "yourRights": { "title": "6. Sus Derechos (LGPD Art. 18 / GDPR Art. 15-22)", "content": "Tiene derecho a acceso, corrección, eliminación, portabilidad, restricción, oposición y revocación del consentimiento." },
-    "cookies": { "title": "7. Cookies", "content": "Usamos cookies esenciales para autenticación. No usamos cookies de rastreo de terceros." },
-    "internationalTransfers": { "title": "8. Transferencias Internacionales", "content": "Sus datos pueden procesarse en EE.UU. y otros países. Garantizamos salvaguardas mediante cláusulas contractuales estándar." },
-    "children": { "title": "9. Privacidad de Menores", "content": "Foji AI no está destinado a usuarios menores de 18 años." },
-    "changes": { "title": "10. Cambios", "content": "Podemos actualizar esta política periódicamente. Le notificaremos los cambios materiales por email." },
-    "contact": { "title": "11. Contacto y DPO", "content": "Para consultas de privacidad: use el formulario de Contacto o email privacy@fojiai.com. Controlador: P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59" }
+    "dataCollected": {
+      "title": "1. Datos que Recopilamos",
+      "content": "Recopilamos datos de cuenta (nombre, email, contraseña cifrada, empresa, CPF/CNPJ), datos de uso (conversaciones, agentes, documentos), datos técnicos (IP, navegador, logs), datos de pago (procesados por Stripe) y cookies esenciales."
+    },
+    "legalBasis": {
+      "title": "2. Base Legal (LGPD Art. 7 / GDPR Art. 6)",
+      "content": "Procesamos datos con base en ejecución de contrato, interés legítimo, consentimiento y obligación legal."
+    },
+    "dataUse": {
+      "title": "3. Cómo Usamos sus Datos",
+      "content": "Usamos sus datos para proporcionar la plataforma, procesar solicitudes de IA, enviar emails transaccionales, analizar uso y cumplir obligaciones legales."
+    },
+    "dataSharing": {
+      "title": "4. Compartir Datos",
+      "content": "Compartimos datos con proveedores de IA (OpenAI, Google, AWS), Stripe, AWS, Resend y Vercel. No vendemos datos personales a terceros."
+    },
+    "dataRetention": {
+      "title": "5. Retención de Datos",
+      "content": "Datos de cuenta: mientras esté activa. Chat: 90 días. Documentos: mientras el agente esté activo. Registros fiscales: 5 años. Logs de auditoría: 1 año."
+    },
+    "yourRights": {
+      "title": "6. Sus Derechos (LGPD Art. 18 / GDPR Art. 15-22)",
+      "content": "Tiene derecho a acceso, corrección, eliminación, portabilidad, restricción, oposición y revocación del consentimiento."
+    },
+    "cookies": {
+      "title": "7. Cookies",
+      "content": "Usamos cookies esenciales para autenticación. No usamos cookies de rastreo de terceros."
+    },
+    "internationalTransfers": {
+      "title": "8. Transferencias Internacionales",
+      "content": "Sus datos pueden procesarse en EE.UU. y otros países. Garantizamos salvaguardas mediante cláusulas contractuales estándar."
+    },
+    "children": {
+      "title": "9. Privacidad de Menores",
+      "content": "Foji AI no está destinado a usuarios menores de 18 años."
+    },
+    "changes": {
+      "title": "10. Cambios",
+      "content": "Podemos actualizar esta política periódicamente. Le notificaremos los cambios materiales por email."
+    },
+    "contact": {
+      "title": "11. Contacto y DPO",
+      "content": "Para consultas de privacidad: use el formulario de Contacto o email privacy@fojiai.com. Controlador: P2 TECH INOVA SIMPLES (I.S.), CNPJ 52.417.209/0001-59"
+    }
   },
   "refund": {
     "title": "Política de Reembolso y Cancelación",
     "lastUpdated": "Última actualización: Marzo 2026",
     "summary": "Foji AI es un servicio digital SaaS. Las suscripciones generalmente no son reembolsables. Puede cancelar en cualquier momento.",
-    "policy": { "title": "1. Política General", "content": "Las suscripciones se cobran mensualmente por adelantado. Como servicio digital de entrega inmediata, generalmente no se proporcionan reembolsos." },
-    "regretPeriod": { "title": "2. Derecho de Arrepentimiento (CDC Art. 49)", "content": "Los suscriptores primerizos pueden ejercer su derecho de arrepentimiento dentro de los 7 días calendario de la suscripción inicial. Contacte a través del formulario de la plataforma." },
-    "cancellation": { "title": "3. Cancelación", "content": "Puede cancelar en cualquier momento desde la página de Facturación. Su acceso continúa hasta el final del período actual. Sus datos se retienen 30 días." },
-    "chargebacks": { "title": "4. Contracargos", "content": "Abrir un contracargo resultará en suspensión inmediata de la cuenta. Contacte primero a través de la plataforma." },
-    "exceptions": { "title": "5. Excepciones", "content": "Podemos considerar reembolsos para interrupciones prolongadas del servicio, errores de facturación o cobros duplicados." },
-    "contact": { "title": "6. Contacto", "content": "Para preguntas de facturación, use el formulario de Contacto. Respondemos en 2 días hábiles." }
+    "policy": {
+      "title": "1. Política General",
+      "content": "Las suscripciones se cobran mensualmente por adelantado. Como servicio digital de entrega inmediata, generalmente no se proporcionan reembolsos."
+    },
+    "regretPeriod": {
+      "title": "2. Derecho de Arrepentimiento (CDC Art. 49)",
+      "content": "Los suscriptores primerizos pueden ejercer su derecho de arrepentimiento dentro de los 7 días calendario de la suscripción inicial. Contacte a través del formulario de la plataforma."
+    },
+    "cancellation": {
+      "title": "3. Cancelación",
+      "content": "Puede cancelar en cualquier momento desde la página de Facturación. Su acceso continúa hasta el final del período actual. Sus datos se retienen 30 días."
+    },
+    "chargebacks": {
+      "title": "4. Contracargos",
+      "content": "Abrir un contracargo resultará en suspensión inmediata de la cuenta. Contacte primero a través de la plataforma."
+    },
+    "exceptions": {
+      "title": "5. Excepciones",
+      "content": "Podemos considerar reembolsos para interrupciones prolongadas del servicio, errores de facturación o cobros duplicados."
+    },
+    "contact": {
+      "title": "6. Contacto",
+      "content": "Para preguntas de facturación, use el formulario de Contacto. Respondemos en 2 días hábiles."
+    }
   },
   "contact": {
     "title": "Contacto",

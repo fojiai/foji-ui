@@ -23,7 +23,7 @@ import { toast } from "@/hooks/use-toast";
 const schema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  industryType: z.enum(["accounting_finance", "law", "internal_systems"]),
+  industryType: z.enum(["accounting_finance", "law", "internal_systems", "general_assistant"]),
   agentLanguage: z.enum(["pt-br", "en", "es"]),
   systemPrompt: z.string().min(10),
   userPrompt: z.string().optional(),
@@ -31,6 +31,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const EXAMPLE_PROMPTS: Record<string, { labelKey: string; promptKey: string }[]> = {
+  general_assistant: [
+    { labelKey: "agents.examples.generalAssistant", promptKey: "agents.examples.generalAssistantPrompt" },
+  ],
   internal_systems: [
     { labelKey: "agents.examples.customerSupport", promptKey: "agents.examples.customerSupportPrompt" },
     { labelKey: "agents.examples.itHelpdesk", promptKey: "agents.examples.itHelpdeskPrompt" },
@@ -60,7 +63,7 @@ export default function NewAgentPage() {
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { industryType: "internal_systems", agentLanguage: "pt-br" },
+    defaultValues: { industryType: "general_assistant", agentLanguage: "pt-br" },
   });
 
   const selectedIndustry = watch("industryType");
@@ -163,6 +166,7 @@ export default function NewAgentPage() {
                 <Select value={watch("industryType")} onValueChange={(v) => setValue("industryType", v as any)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="general_assistant">{t("agents.industries.general_assistant")}</SelectItem>
                     <SelectItem value="accounting_finance">{t("agents.industries.accounting_finance")}</SelectItem>
                     <SelectItem value="law">{t("agents.industries.law")}</SelectItem>
                     <SelectItem value="internal_systems">{t("agents.industries.internal_systems")}</SelectItem>

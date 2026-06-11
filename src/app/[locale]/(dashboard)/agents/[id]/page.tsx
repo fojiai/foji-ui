@@ -25,7 +25,7 @@ import { toast } from "@/hooks/use-toast";
 const schema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  industryType: z.enum(["accounting_finance", "law", "internal_systems"]),
+  industryType: z.enum(["accounting_finance", "law", "internal_systems", "general_assistant"]),
   agentLanguage: z.enum(["pt-br", "en", "es"]),
   systemPrompt: z.string().min(10),
   userPrompt: z.string().optional(),
@@ -57,6 +57,7 @@ const INDUSTRY_MAP: Record<string, string> = {
   AccountingFinance: "accounting_finance",
   Law: "law",
   InternalSystems: "internal_systems",
+  GeneralAssistant: "general_assistant",
 };
 const LANGUAGE_MAP: Record<string, string> = {
   PtBr: "pt-br",
@@ -373,6 +374,7 @@ export default function AgentDetailPage() {
                     <Select value={watch("industryType")} onValueChange={(v) => setValue("industryType", v as any)}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="general_assistant">{t("agents.industries.general_assistant")}</SelectItem>
                         <SelectItem value="accounting_finance">{t("agents.industries.accounting_finance")}</SelectItem>
                         <SelectItem value="law">{t("agents.industries.law")}</SelectItem>
                         <SelectItem value="internal_systems">{t("agents.industries.internal_systems")}</SelectItem>
