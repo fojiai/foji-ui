@@ -66,7 +66,8 @@
     "leads": "Leads",
     "handoffs": "Atendimentos",
     "contacts": "Contatos",
-    "pipeline": "Funil"
+    "pipeline": "Funil",
+    "tasks": "Tarefas"
   },
   "dashboard": {
     "title": "Painel",
@@ -695,7 +696,10 @@
       "dealCreated": "Negócio criado",
       "dealWon": "Negócio ganho",
       "dealLost": "Negócio perdido",
-      "movedTo": "Movido para"
+      "movedTo": "Movido para",
+      "meeting": "Reunião agendada",
+      "email": "E-mail enviado",
+      "taskDone": "Tarefa concluída"
     },
     "pipeline": {
       "title": "Funil",
@@ -715,6 +719,62 @@
       "deals": "negócios",
       "moved": "Negócio movido",
       "created": "Negócio criado"
+    },
+    "tasks": {
+      "title": "Tarefas",
+      "description": "Acompanhamentos dos seus contatos e negócios.",
+      "new": "Nova tarefa",
+      "empty": "Nenhuma tarefa ainda",
+      "emptyHint": "Crie tarefas de acompanhamento, ou elas aparecem automaticamente a partir de transferências e reuniões agendadas.",
+      "title_field": "Título",
+      "description_field": "Descrição",
+      "type": "Tipo",
+      "priority": "Prioridade",
+      "dueAt": "Prazo",
+      "assignee": "Responsável",
+      "contact": "Contato",
+      "status": "Status",
+      "markDone": "Concluir",
+      "reopen": "Reabrir",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "create": "Criar tarefa",
+      "delete": "Excluir",
+      "created": "Tarefa criada",
+      "updated": "Tarefa salva",
+      "completed": "Tarefa concluída",
+      "filterByStatus": "Status",
+      "filterByAssignee": "Responsável",
+      "allStatuses": "Todas",
+      "allAssignees": "Todos",
+      "overdue": "Atrasada",
+      "noContact": "Sem contato",
+      "types": {
+        "General": "Geral",
+        "Call": "Ligação",
+        "Email": "E-mail",
+        "WhatsApp": "WhatsApp",
+        "Meeting": "Reunião"
+      },
+      "priorities": {
+        "Low": "Baixa",
+        "Normal": "Normal",
+        "High": "Alta"
+      },
+      "statuses": {
+        "Open": "Aberta",
+        "Done": "Concluída"
+      }
+    },
+    "email": {
+      "compose": "Enviar e-mail",
+      "to": "Para",
+      "subject": "Assunto",
+      "body": "Mensagem",
+      "send": "Enviar",
+      "cancel": "Cancelar",
+      "sent": "E-mail enviado",
+      "noEmail": "Este contato não tem endereço de e-mail."
     }
   }
 }

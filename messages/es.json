@@ -66,7 +66,8 @@
     "leads": "Leads",
     "handoffs": "Transferencias",
     "contacts": "Contactos",
-    "pipeline": "Embudo"
+    "pipeline": "Embudo",
+    "tasks": "Tareas"
   },
   "dashboard": {
     "title": "Panel",
@@ -695,7 +696,10 @@
       "dealCreated": "Negocio creado",
       "dealWon": "Negocio ganado",
       "dealLost": "Negocio perdido",
-      "movedTo": "Movido a"
+      "movedTo": "Movido a",
+      "meeting": "Reunión agendada",
+      "email": "Correo enviado",
+      "taskDone": "Tarea completada"
     },
     "pipeline": {
       "title": "Embudo",
@@ -715,6 +719,62 @@
       "deals": "negocios",
       "moved": "Negocio movido",
       "created": "Negocio creado"
+    },
+    "tasks": {
+      "title": "Tareas",
+      "description": "Seguimientos de tus contactos y negocios.",
+      "new": "Nueva tarea",
+      "empty": "Aún no hay tareas",
+      "emptyHint": "Crea tareas de seguimiento, o aparecen automáticamente desde transferencias y reuniones agendadas.",
+      "title_field": "Título",
+      "description_field": "Descripción",
+      "type": "Tipo",
+      "priority": "Prioridad",
+      "dueAt": "Fecha límite",
+      "assignee": "Responsable",
+      "contact": "Contacto",
+      "status": "Estado",
+      "markDone": "Completar",
+      "reopen": "Reabrir",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "create": "Crear tarea",
+      "delete": "Eliminar",
+      "created": "Tarea creada",
+      "updated": "Tarea guardada",
+      "completed": "Tarea completada",
+      "filterByStatus": "Estado",
+      "filterByAssignee": "Responsable",
+      "allStatuses": "Todas",
+      "allAssignees": "Todos",
+      "overdue": "Atrasada",
+      "noContact": "Sin contacto",
+      "types": {
+        "General": "General",
+        "Call": "Llamada",
+        "Email": "Correo",
+        "WhatsApp": "WhatsApp",
+        "Meeting": "Reunión"
+      },
+      "priorities": {
+        "Low": "Baja",
+        "Normal": "Normal",
+        "High": "Alta"
+      },
+      "statuses": {
+        "Open": "Abierta",
+        "Done": "Completada"
+      }
+    },
+    "email": {
+      "compose": "Enviar correo",
+      "to": "Para",
+      "subject": "Asunto",
+      "body": "Mensaje",
+      "send": "Enviar",
+      "cancel": "Cancelar",
+      "sent": "Correo enviado",
+      "noEmail": "Este contacto no tiene dirección de correo."
     }
   }
 }

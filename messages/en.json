@@ -66,7 +66,8 @@
     "leads": "Leads",
     "handoffs": "Handoffs",
     "contacts": "Contacts",
-    "pipeline": "Pipeline"
+    "pipeline": "Pipeline",
+    "tasks": "Tasks"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -695,7 +696,10 @@
       "dealCreated": "Deal created",
       "dealWon": "Deal won",
       "dealLost": "Deal lost",
-      "movedTo": "Moved to"
+      "movedTo": "Moved to",
+      "meeting": "Meeting scheduled",
+      "email": "Email sent",
+      "taskDone": "Task completed"
     },
     "pipeline": {
       "title": "Pipeline",
@@ -715,6 +719,62 @@
       "deals": "deals",
       "moved": "Deal moved",
       "created": "Deal created"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "description": "Follow-ups across your contacts and deals.",
+      "new": "New task",
+      "empty": "No tasks yet",
+      "emptyHint": "Create follow-up tasks, or they appear automatically from handoffs and booked meetings.",
+      "title_field": "Title",
+      "description_field": "Description",
+      "type": "Type",
+      "priority": "Priority",
+      "dueAt": "Due date",
+      "assignee": "Assignee",
+      "contact": "Contact",
+      "status": "Status",
+      "markDone": "Mark done",
+      "reopen": "Reopen",
+      "save": "Save",
+      "cancel": "Cancel",
+      "create": "Create task",
+      "delete": "Delete",
+      "created": "Task created",
+      "updated": "Task saved",
+      "completed": "Task completed",
+      "filterByStatus": "Status",
+      "filterByAssignee": "Assignee",
+      "allStatuses": "All",
+      "allAssignees": "Everyone",
+      "overdue": "Overdue",
+      "noContact": "No contact",
+      "types": {
+        "General": "General",
+        "Call": "Call",
+        "Email": "Email",
+        "WhatsApp": "WhatsApp",
+        "Meeting": "Meeting"
+      },
+      "priorities": {
+        "Low": "Low",
+        "Normal": "Normal",
+        "High": "High"
+      },
+      "statuses": {
+        "Open": "Open",
+        "Done": "Done"
+      }
+    },
+    "email": {
+      "compose": "Send email",
+      "to": "To",
+      "subject": "Subject",
+      "body": "Message",
+      "send": "Send",
+      "cancel": "Cancel",
+      "sent": "Email sent",
+      "noEmail": "This contact has no email address."
     }
   }
 }

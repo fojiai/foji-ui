@@ -21,6 +21,7 @@ import {
   PhoneForwarded,
   Contact2,
   KanbanSquare,
+  ListChecks,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -50,6 +51,7 @@ const MAIN_NAV: NavItem[] = [
   { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
   { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },
   { href: "/crm/pipeline", icon: KanbanSquare, labelKey: "nav.pipeline" },
+  { href: "/crm/tasks", icon: ListChecks, labelKey: "nav.tasks" },
   {
     href: "/team",
     icon: Users,

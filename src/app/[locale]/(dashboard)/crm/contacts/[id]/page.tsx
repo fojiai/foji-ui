@@ -11,6 +11,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   contactsApi,
   membersApi,
+  crmEmailsApi,
   type Contact,
   type CompanyMember,
   type TimelineItem,
@@ -22,11 +23,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
 import {
-  ArrowLeft, AlertTriangle, X, Plus,
-  UserPlus, PhoneForwarded, Briefcase, Trophy, XCircle, ArrowRightLeft,
+  ArrowLeft, AlertTriangle, X, Plus, Mail,
+  UserPlus, PhoneForwarded, Briefcase, Trophy, XCircle, ArrowRightLeft, CalendarClock, CheckCircle2,
 } from "lucide-react";
 
 const STATUSES = ["New", "Open", "Qualified", "Customer", "Unqualified", "Archived"];
@@ -52,6 +54,9 @@ const TIMELINE_ICON: Record<string, React.ComponentType<{ className?: string }>>
   deal_won: Trophy,
   deal_lost: XCircle,
   deal_stage: ArrowRightLeft,
+  meeting: CalendarClock,
+  email: Mail,
+  task_done: CheckCircle2,
 };
 
 export default function ContactDetailPage() {
@@ -68,6 +73,10 @@ export default function ContactDetailPage() {
   const [newTag, setNewTag] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const [emailOpen, setEmailOpen] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailForm, setEmailForm] = useState({ to: "", subject: "", body: "" });
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -149,6 +158,35 @@ export default function ContactDetailPage() {
     }
   }
 
+  function openEmail() {
+    if (!contact?.email) {
+      toast({ variant: "destructive", title: t("crm.email.noEmail") });
+      return;
+    }
+    setEmailForm({ to: contact.email, subject: "", body: "" });
+    setEmailOpen(true);
+  }
+
+  async function sendEmail() {
+    if (!activeCompanyId || !emailForm.to.trim() || !emailForm.subject.trim() || !emailForm.body.trim()) return;
+    setSendingEmail(true);
+    try {
+      await crmEmailsApi.send(activeCompanyId, {
+        contactId,
+        toEmail: emailForm.to.trim(),
+        subject: emailForm.subject.trim(),
+        body: emailForm.body,
+      });
+      setEmailOpen(false);
+      toast({ title: t("crm.email.sent") });
+      setTimeline(await contactsApi.timeline(activeCompanyId, contactId).catch(() => timeline));
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    } finally {
+      setSendingEmail(false);
+    }
+  }
+
   function timelineLabel(item: TimelineItem): string {
     switch (item.type) {
       case "lead": return t("crm.timeline.leadCaptured") + (item.detail ? ` · ${item.detail}` : "");
@@ -157,6 +195,9 @@ export default function ContactDetailPage() {
       case "deal_won": return t("crm.timeline.dealWon");
       case "deal_lost": return t("crm.timeline.dealLost");
       case "deal_stage": return `${t("crm.timeline.movedTo")} ${item.detail ?? ""}`.trim();
+      case "meeting": return t("crm.timeline.meeting") + (item.detail ? ` · ${item.detail}` : "");
+      case "email": return t("crm.timeline.email") + (item.detail ? ` · ${item.detail}` : "");
+      case "task_done": return t("crm.timeline.taskDone") + (item.detail ? ` · ${item.detail}` : "");
       default: return item.title;
     }
   }
@@ -170,13 +211,16 @@ export default function ContactDetailPage() {
         <Button variant="ghost" size="icon" asChild>
           <Link href={`/${locale}/crm/contacts`}><ArrowLeft className="h-4 w-4" /></Link>
         </Button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight">{contact.name || t("crm.contacts.anonymous")}</h1>
           <div className="flex items-center gap-2">
             <Badge variant="outline">{t(`crm.statuses.${contact.status}`)}</Badge>
             {contact.ownerName && <span className="text-xs text-muted-foreground">{contact.ownerName}</span>}
           </div>
         </div>
+        <Button variant="outline" onClick={openEmail}>
+          <Mail className="mr-2 h-4 w-4" /> {t("crm.email.compose")}
+        </Button>
       </div>
 
       {contact.needsReviewDuplicate && (
@@ -308,6 +352,42 @@ export default function ContactDetailPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("crm.email.compose")}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>{t("crm.email.to")}</Label>
+              <Input type="email" value={emailForm.to} onChange={(e) => setEmailForm({ ...emailForm, to: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>{t("crm.email.subject")}</Label>
+              <Input value={emailForm.subject} onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>{t("crm.email.body")}</Label>
+              <textarea
+                className={textareaClass + " min-h-[180px]"}
+                value={emailForm.body}
+                onChange={(e) => setEmailForm({ ...emailForm, body: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmailOpen(false)}>{t("crm.email.cancel")}</Button>
+            <Button
+              onClick={sendEmail}
+              disabled={sendingEmail || !emailForm.to.trim() || !emailForm.subject.trim() || !emailForm.body.trim()}
+            >
+              {sendingEmail && <LoadingSpinner size="sm" className="mr-2" />}
+              {t("crm.email.send")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -502,6 +502,98 @@ export const dealsApi = {
     }),
 };
 
+// ─── CRM tasks ─────────────────────────────────────────────────────────────
+
+export interface CrmTask {
+  id: number;
+  contactId?: number | null;
+  contactName?: string | null;
+  dealId?: number | null;
+  dealTitle?: string | null;
+  title: string;
+  description?: string | null;
+  type: string;
+  priority: string;
+  status: string;
+  dueAt?: string | null;
+  assigneeUserId?: number | null;
+  assigneeName?: string | null;
+  completedAt?: string | null;
+  createdAt: string;
+}
+
+export interface CrmTaskInput {
+  contactId?: number | null;
+  dealId?: number | null;
+  title: string;
+  description?: string | null;
+  type: string;
+  priority: string;
+  dueAt?: string | null;
+  assigneeUserId?: number | null;
+}
+
+export const tasksApi = {
+  list: (companyId: number, params?: { assigneeUserId?: number; status?: string; contactId?: number; dealId?: number }) => {
+    const qs = new URLSearchParams({ companyId: String(companyId) });
+    if (params?.assigneeUserId) qs.set("assigneeUserId", String(params.assigneeUserId));
+    if (params?.status) qs.set("status", params.status);
+    if (params?.contactId) qs.set("contactId", String(params.contactId));
+    if (params?.dealId) qs.set("dealId", String(params.dealId));
+    return apiFetch<CrmTask[]>(`/api/crm/tasks?${qs.toString()}`);
+  },
+  create: (companyId: number, data: CrmTaskInput) =>
+    apiFetch<CrmTask>("/api/crm/tasks", { method: "POST", body: JSON.stringify({ companyId, ...data }) }),
+  update: (companyId: number, taskId: number, data: CrmTaskInput) =>
+    apiFetch<CrmTask>(`/api/crm/tasks/${taskId}`, { method: "PUT", body: JSON.stringify({ companyId, ...data }) }),
+  setStatus: (companyId: number, taskId: number, status: string) =>
+    apiFetch<CrmTask>(`/api/crm/tasks/${taskId}/status`, { method: "POST", body: JSON.stringify({ companyId, status }) }),
+  delete: (companyId: number, taskId: number) =>
+    apiFetch<void>(`/api/crm/tasks/${taskId}?companyId=${companyId}`, { method: "DELETE" }),
+};
+
+// ─── CRM meetings ──────────────────────────────────────────────────────────
+
+export interface Meeting {
+  id: number;
+  contactId?: number | null;
+  meetLink?: string | null;
+  htmlLink?: string | null;
+  title: string;
+  startsAt: string;
+  endsAt: string;
+  attendeeEmail?: string | null;
+  attendeeName?: string | null;
+}
+
+export const meetingsApi = {
+  list: (companyId: number, contactId?: number) => {
+    const url = contactId
+      ? `/api/meetings?companyId=${companyId}&contactId=${contactId}`
+      : `/api/meetings?companyId=${companyId}`;
+    return apiFetch<Meeting[]>(url);
+  },
+};
+
+// ─── CRM emails ────────────────────────────────────────────────────────────
+
+export interface EmailLog {
+  id: number;
+  contactId?: number | null;
+  dealId?: number | null;
+  toEmail: string;
+  subject: string;
+  body: string;
+  sentAt: string;
+}
+
+export const crmEmailsApi = {
+  listForContact: (companyId: number, contactId: number) =>
+    apiFetch<EmailLog[]>(`/api/crm/emails?companyId=${companyId}&contactId=${contactId}`),
+  send: (companyId: number, data: { contactId: number; dealId?: number | null; toEmail: string; subject: string; body: string }) =>
+    apiFetch<EmailLog>("/api/crm/emails", { method: "POST", body: JSON.stringify({ companyId, ...data }) }),
+};
+
 // ─── Plans ───────────────────────────────────────────────────────────────────
 
 export interface Plan {
