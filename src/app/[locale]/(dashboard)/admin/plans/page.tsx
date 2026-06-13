@@ -28,6 +28,8 @@ const schema = z.object({
   maxAgents: z.coerce.number().int().min(1),
   hasWhatsApp: z.boolean(),
   hasEscalationContacts: z.boolean(),
+  hasGoogleCalendar: z.boolean(),
+  hasCrm: z.boolean(),
   maxConversationsPerMonth: z.coerce.number().int().min(0),
   maxMessagesPerMonth: z.coerce.number().int().min(0),
   isActive: z.boolean(),
@@ -45,7 +47,7 @@ export default function PlansPage() {
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true },
+    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true },
   });
 
   async function load() {
@@ -58,7 +60,7 @@ export default function PlansPage() {
 
   function openCreate() {
     setEditing(null);
-    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true });
+    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true });
     setDialogOpen(true);
   }
 
@@ -257,6 +259,20 @@ export default function PlansPage() {
               <Switch
                 checked={watch("hasEscalationContacts")}
                 onCheckedChange={(v) => setValue("hasEscalationContacts", v)}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label>{t("admin.plans.hasGoogleCalendar")}</Label>
+              <Switch
+                checked={watch("hasGoogleCalendar")}
+                onCheckedChange={(v) => setValue("hasGoogleCalendar", v)}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label>{t("admin.plans.hasCrm")}</Label>
+              <Switch
+                checked={watch("hasCrm")}
+                onCheckedChange={(v) => setValue("hasCrm", v)}
               />
             </div>
             <div className="flex items-center justify-between">

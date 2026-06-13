@@ -64,7 +64,9 @@
     "admin": "Admin",
     "contact": "Contacto",
     "leads": "Leads",
-    "handoffs": "Transferencias"
+    "handoffs": "Transferencias",
+    "contacts": "Contactos",
+    "pipeline": "Embudo"
   },
   "dashboard": {
     "title": "Panel",
@@ -391,7 +393,9 @@
       "publicPlan": "Plan público",
       "publicPlanHint": "Visible en la página de precios",
       "public": "Público",
-      "private": "Privado"
+      "private": "Privado",
+      "hasGoogleCalendar": "Google Calendar",
+      "hasCrm": "CRM"
     },
     "invitations": {
       "title": "Admins del Sistema",
@@ -633,5 +637,84 @@
     "viewDetails": "Detalles",
     "adminNotesLabel": "Notas del Admin",
     "adminNotesPlaceholder": "Notas internas sobre este mensaje..."
+  },
+  "crm": {
+    "locked": {
+      "title": "CRM",
+      "description": "Convierte los leads capturados en una lista de contactos sin duplicados y un embudo de ventas visual. Disponible en un plan superior.",
+      "upgrade": "Mejorar plan"
+    },
+    "contacts": {
+      "title": "Contactos",
+      "description": "Tus contactos sin duplicados, creados automáticamente a partir de las conversaciones de los agentes.",
+      "total": "contactos",
+      "empty": "Aún no hay contactos",
+      "emptyHint": "Los contactos aparecen aquí automáticamente cuando tus agentes capturan leads. También puedes agregar uno manualmente.",
+      "anonymous": "Contacto sin nombre",
+      "new": "Nuevo contacto",
+      "search": "Buscar nombre, correo o teléfono",
+      "filterByOwner": "Responsable",
+      "allOwners": "Todos los responsables",
+      "noOwner": "Sin asignar",
+      "filterByStatus": "Estado",
+      "allStatuses": "Todos los estados",
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "owner": "Responsable",
+      "source": "Origen",
+      "estimatedValue": "Valor estimado",
+      "notes": "Notas",
+      "tags": "Etiquetas",
+      "addTag": "Agregar etiqueta",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "create": "Crear contacto",
+      "created": "Contacto creado",
+      "updated": "Contacto guardado",
+      "duplicateWarning": "Posible duplicado — este contacto coincidió con otro por correo y teléfono. Revisa antes de combinar.",
+      "tabDetails": "Detalles",
+      "tabTimeline": "Historial",
+      "tabDeals": "Negocios",
+      "timelineEmpty": "Aún no hay actividad",
+      "dealsEmpty": "Aún no hay negocios",
+      "back": "Volver a contactos"
+    },
+    "statuses": {
+      "New": "Nuevo",
+      "Open": "Abierto",
+      "Qualified": "Calificado",
+      "Customer": "Cliente",
+      "Unqualified": "Descalificado",
+      "Archived": "Archivado"
+    },
+    "timeline": {
+      "leadCaptured": "Lead capturado",
+      "handoff": "Solicitó atención humana",
+      "dealCreated": "Negocio creado",
+      "dealWon": "Negocio ganado",
+      "dealLost": "Negocio perdido",
+      "movedTo": "Movido a"
+    },
+    "pipeline": {
+      "title": "Embudo",
+      "description": "Arrastra los negocios entre etapas a medida que avanzan.",
+      "empty": "Aún no hay negocios en este embudo",
+      "newDeal": "Nuevo negocio",
+      "dealTitle": "Título del negocio",
+      "value": "Valor",
+      "owner": "Responsable",
+      "contact": "Contacto",
+      "expectedClose": "Fecha prevista de cierre",
+      "currency": "Moneda",
+      "selectContact": "Selecciona un contacto",
+      "noContacts": "Crea un contacto antes de agregar un negocio.",
+      "create": "Crear negocio",
+      "cancel": "Cancelar",
+      "deals": "negocios",
+      "moved": "Negocio movido",
+      "created": "Negocio creado"
+    }
   }
 }

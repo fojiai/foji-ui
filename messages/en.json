@@ -64,7 +64,9 @@
     "admin": "Admin",
     "contact": "Contact",
     "leads": "Leads",
-    "handoffs": "Handoffs"
+    "handoffs": "Handoffs",
+    "contacts": "Contacts",
+    "pipeline": "Pipeline"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -391,7 +393,9 @@
       "publicPlan": "Public plan",
       "publicPlanHint": "Visible on the pricing page",
       "public": "Public",
-      "private": "Private"
+      "private": "Private",
+      "hasGoogleCalendar": "Google Calendar",
+      "hasCrm": "CRM"
     },
     "invitations": {
       "title": "System Admins",
@@ -633,5 +637,84 @@
     "viewDetails": "Details",
     "adminNotesLabel": "Admin Notes",
     "adminNotesPlaceholder": "Internal notes about this submission..."
+  },
+  "crm": {
+    "locked": {
+      "title": "CRM",
+      "description": "Turn captured leads into a deduped contact list and a visual sales pipeline. Available on a higher plan.",
+      "upgrade": "Upgrade plan"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "description": "Your deduped contacts, auto-built from agent conversations.",
+      "total": "contacts",
+      "empty": "No contacts yet",
+      "emptyHint": "Contacts appear here automatically when your agents capture leads. You can also add one manually.",
+      "anonymous": "Unnamed contact",
+      "new": "New contact",
+      "search": "Search name, email or phone",
+      "filterByOwner": "Owner",
+      "allOwners": "All owners",
+      "noOwner": "Unassigned",
+      "filterByStatus": "Status",
+      "allStatuses": "All statuses",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "owner": "Owner",
+      "source": "Source",
+      "estimatedValue": "Estimated value",
+      "notes": "Notes",
+      "tags": "Tags",
+      "addTag": "Add tag",
+      "save": "Save",
+      "cancel": "Cancel",
+      "create": "Create contact",
+      "created": "Contact created",
+      "updated": "Contact saved",
+      "duplicateWarning": "Possible duplicate — this contact matched another by email and phone. Review before merging.",
+      "tabDetails": "Details",
+      "tabTimeline": "Timeline",
+      "tabDeals": "Deals",
+      "timelineEmpty": "No activity yet",
+      "dealsEmpty": "No deals yet",
+      "back": "Back to contacts"
+    },
+    "statuses": {
+      "New": "New",
+      "Open": "Open",
+      "Qualified": "Qualified",
+      "Customer": "Customer",
+      "Unqualified": "Unqualified",
+      "Archived": "Archived"
+    },
+    "timeline": {
+      "leadCaptured": "Lead captured",
+      "handoff": "Requested human handoff",
+      "dealCreated": "Deal created",
+      "dealWon": "Deal won",
+      "dealLost": "Deal lost",
+      "movedTo": "Moved to"
+    },
+    "pipeline": {
+      "title": "Pipeline",
+      "description": "Drag deals across stages as they progress.",
+      "empty": "No deals in this pipeline yet",
+      "newDeal": "New deal",
+      "dealTitle": "Deal title",
+      "value": "Value",
+      "owner": "Owner",
+      "contact": "Contact",
+      "expectedClose": "Expected close date",
+      "currency": "Currency",
+      "selectContact": "Select a contact",
+      "noContacts": "Create a contact first before adding a deal.",
+      "create": "Create deal",
+      "cancel": "Cancel",
+      "deals": "deals",
+      "moved": "Deal moved",
+      "created": "Deal created"
+    }
   }
 }

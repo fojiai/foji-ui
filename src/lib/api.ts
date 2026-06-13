@@ -282,6 +282,226 @@ export const calendarApi = {
     apiFetch<void>(`/api/agents/${agentId}/calendar/disconnect`, { method: "DELETE" }),
 };
 
+// ─── CRM ─────────────────────────────────────────────────────────────────────
+
+export interface CompanyMember {
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: "owner" | "admin" | "user";
+}
+
+export const membersApi = {
+  list: (companyId: number) =>
+    apiFetch<CompanyMember[]>(`/api/companies/${companyId}/members`),
+};
+
+export interface Contact {
+  id: number;
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  status: string;
+  source?: string | null;
+  ownerUserId?: number | null;
+  ownerName?: string | null;
+  estimatedValue?: number | null;
+  notes?: string | null;
+  needsReviewDuplicate: boolean;
+  lastActivityAt?: string | null;
+  tags: string[];
+  leadCount?: number;
+  dealCount?: number;
+  createdAt: string;
+}
+
+export interface TimelineItem {
+  type: string;
+  timestamp: string;
+  title: string;
+  detail?: string | null;
+  refId?: number | null;
+}
+
+export interface PipelineStage {
+  id: number;
+  pipelineId: number;
+  name: string;
+  sortOrder: number;
+  isWon: boolean;
+  isLost: boolean;
+}
+
+export interface Pipeline {
+  id: number;
+  name: string;
+  isDefault: boolean;
+  sortOrder: number;
+  stages: PipelineStage[];
+}
+
+export interface DealCard {
+  id: number;
+  title: string;
+  value: number;
+  currency: string;
+  status: string;
+  contactId: number;
+  contactName?: string | null;
+  ownerUserId?: number | null;
+  ownerName?: string | null;
+  expectedCloseDate?: string | null;
+}
+
+export interface BoardColumn {
+  stage: PipelineStage;
+  total: number;
+  deals: DealCard[];
+}
+
+export interface Board {
+  pipelineId: number;
+  pipelineName: string;
+  columns: BoardColumn[];
+}
+
+export interface Deal {
+  id: number;
+  pipelineId: number;
+  stageId: number;
+  stageName: string;
+  contactId: number;
+  contactName?: string | null;
+  ownerUserId?: number | null;
+  ownerName?: string | null;
+  title: string;
+  value: number;
+  currency: string;
+  status: string;
+  expectedCloseDate?: string | null;
+  closedAt?: string | null;
+  createdAt: string;
+}
+
+export interface ContactInput {
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  ownerUserId?: number | null;
+  status?: string;
+  source?: string | null;
+  estimatedValue?: number | null;
+  notes?: string | null;
+}
+
+export const contactsApi = {
+  list: (companyId: number, params?: { ownerUserId?: number; status?: string; tag?: string; search?: string }) => {
+    const qs = new URLSearchParams({ companyId: String(companyId) });
+    if (params?.ownerUserId) qs.set("ownerUserId", String(params.ownerUserId));
+    if (params?.status) qs.set("status", params.status);
+    if (params?.tag) qs.set("tag", params.tag);
+    if (params?.search) qs.set("search", params.search);
+    return apiFetch<Contact[]>(`/api/contacts?${qs.toString()}`);
+  },
+
+  get: (companyId: number, contactId: number) =>
+    apiFetch<Contact>(`/api/contacts/${contactId}?companyId=${companyId}`),
+
+  timeline: (companyId: number, contactId: number) =>
+    apiFetch<TimelineItem[]>(`/api/contacts/${contactId}/timeline?companyId=${companyId}`),
+
+  create: (companyId: number, data: ContactInput) =>
+    apiFetch<Contact>("/api/contacts", {
+      method: "POST",
+      body: JSON.stringify({ companyId, ...data }),
+    }),
+
+  update: (companyId: number, contactId: number, data: ContactInput) =>
+    apiFetch<Contact>(`/api/contacts/${contactId}`, {
+      method: "PUT",
+      body: JSON.stringify({ companyId, ...data }),
+    }),
+
+  addTag: (companyId: number, contactId: number, tag: string) =>
+    apiFetch<string[]>(`/api/contacts/${contactId}/tags`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, tag }),
+    }),
+
+  removeTag: (companyId: number, contactId: number, tag: string) =>
+    apiFetch<string[]>(`/api/contacts/${contactId}/tags?companyId=${companyId}&tag=${encodeURIComponent(tag)}`, {
+      method: "DELETE",
+    }),
+};
+
+export const pipelineApi = {
+  list: (companyId: number) =>
+    apiFetch<Pipeline[]>(`/api/pipelines?companyId=${companyId}`),
+
+  getDefault: (companyId: number) =>
+    apiFetch<Pipeline>(`/api/pipelines/default?companyId=${companyId}`),
+
+  addStage: (companyId: number, pipelineId: number, name: string, isWon: boolean, isLost: boolean) =>
+    apiFetch<PipelineStage>(`/api/pipelines/${pipelineId}/stages`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, name, isWon, isLost }),
+    }),
+
+  updateStage: (companyId: number, stageId: number, name: string, isWon: boolean, isLost: boolean) =>
+    apiFetch<PipelineStage>(`/api/pipelines/stages/${stageId}`, {
+      method: "PUT",
+      body: JSON.stringify({ companyId, name, isWon, isLost }),
+    }),
+
+  removeStage: (companyId: number, stageId: number) =>
+    apiFetch<void>(`/api/pipelines/stages/${stageId}?companyId=${companyId}`, { method: "DELETE" }),
+
+  reorder: (companyId: number, pipelineId: number, orderedStageIds: number[]) =>
+    apiFetch<void>(`/api/pipelines/${pipelineId}/reorder`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, orderedStageIds }),
+    }),
+};
+
+export interface CreateDealInput {
+  pipelineId?: number;
+  stageId?: number;
+  contactId: number;
+  ownerUserId?: number | null;
+  title: string;
+  value: number;
+  currency?: string;
+  expectedCloseDate?: string | null;
+}
+
+export const dealsApi = {
+  board: (companyId: number, pipelineId?: number) => {
+    const url = pipelineId
+      ? `/api/deals/board?companyId=${companyId}&pipelineId=${pipelineId}`
+      : `/api/deals/board?companyId=${companyId}`;
+    return apiFetch<Board>(url);
+  },
+
+  create: (companyId: number, data: CreateDealInput) =>
+    apiFetch<Deal>("/api/deals", {
+      method: "POST",
+      body: JSON.stringify({ companyId, ...data }),
+    }),
+
+  update: (companyId: number, dealId: number, data: { ownerUserId?: number | null; title: string; value: number; currency?: string; expectedCloseDate?: string | null }) =>
+    apiFetch<Deal>(`/api/deals/${dealId}`, {
+      method: "PUT",
+      body: JSON.stringify({ companyId, ...data }),
+    }),
+
+  move: (companyId: number, dealId: number, toStageId: number) =>
+    apiFetch<Deal>(`/api/deals/${dealId}/move`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, toStageId }),
+    }),
+};
+
 // ─── Plans ───────────────────────────────────────────────────────────────────
 
 export interface Plan {
@@ -296,6 +516,7 @@ export interface Plan {
   hasWhatsApp: boolean;
   hasEscalationContacts: boolean;
   hasGoogleCalendar: boolean;
+  hasCrm: boolean;
   maxConversationsPerMonth: number;
   maxMessagesPerMonth: number;
   isActive: boolean;
@@ -348,6 +569,8 @@ export interface SubscriptionPlan {
   maxAgents: number;
   hasWhatsApp: boolean;
   hasEscalationContacts: boolean;
+  hasGoogleCalendar: boolean;
+  hasCrm: boolean;
   maxConversationsPerMonth: number;
   maxMessagesPerMonth: number;
 }

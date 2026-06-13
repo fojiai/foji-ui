@@ -17,6 +17,10 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ChevronRight,
+  UserPlus,
+  PhoneForwarded,
+  Contact2,
+  KanbanSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -42,6 +46,10 @@ interface NavItem {
 const MAIN_NAV: NavItem[] = [
   { href: "/dashboard", icon: LayoutDashboard, labelKey: "nav.dashboard" },
   { href: "/agents", icon: Bot, labelKey: "nav.agents" },
+  { href: "/leads", icon: UserPlus, labelKey: "nav.leads" },
+  { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
+  { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },
+  { href: "/crm/pipeline", icon: KanbanSquare, labelKey: "nav.pipeline" },
   {
     href: "/team",
     icon: Users,
