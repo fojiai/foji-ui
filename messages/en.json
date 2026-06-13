@@ -774,7 +774,12 @@
       "send": "Send",
       "cancel": "Cancel",
       "sent": "Email sent",
-      "noEmail": "This contact has no email address."
+      "noEmail": "This contact has no email address.",
+      "draftWithAi": "Draft with AI",
+      "goal": "What should this email achieve?",
+      "goalPlaceholder": "e.g. follow up on our demo and propose a meeting",
+      "drafting": "Drafting...",
+      "drafted": "Draft ready"
     }
   }
 }

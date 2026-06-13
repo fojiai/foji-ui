@@ -774,7 +774,12 @@
       "send": "Enviar",
       "cancel": "Cancelar",
       "sent": "Correo enviado",
-      "noEmail": "Este contacto no tiene dirección de correo."
+      "noEmail": "Este contacto no tiene dirección de correo.",
+      "draftWithAi": "Redactar con IA",
+      "goal": "¿Qué debe lograr este correo?",
+      "goalPlaceholder": "ej.: dar seguimiento a nuestra demo y proponer una reunión",
+      "drafting": "Redactando...",
+      "drafted": "Borrador listo"
     }
   }
 }

@@ -592,6 +592,11 @@ export const crmEmailsApi = {
     apiFetch<EmailLog[]>(`/api/crm/emails?companyId=${companyId}&contactId=${contactId}`),
   send: (companyId: number, data: { contactId: number; dealId?: number | null; toEmail: string; subject: string; body: string }) =>
     apiFetch<EmailLog>("/api/crm/emails", { method: "POST", body: JSON.stringify({ companyId, ...data }) }),
+  draft: (companyId: number, data: { contactId?: number | null; goal: string; tone?: string }) =>
+    apiFetch<{ subject: string; body: string }>("/api/crm/emails/draft", {
+      method: "POST",
+      body: JSON.stringify({ companyId, ...data }),
+    }),
 };
 
 // ─── Plans ───────────────────────────────────────────────────────────────────

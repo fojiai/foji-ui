@@ -27,7 +27,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
 import {
-  ArrowLeft, AlertTriangle, X, Plus, Mail,
+  ArrowLeft, AlertTriangle, X, Plus, Mail, Sparkles,
   UserPlus, PhoneForwarded, Briefcase, Trophy, XCircle, ArrowRightLeft, CalendarClock, CheckCircle2,
 } from "lucide-react";
 
@@ -77,6 +77,8 @@ export default function ContactDetailPage() {
   const [emailOpen, setEmailOpen] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(false);
   const [emailForm, setEmailForm] = useState({ to: "", subject: "", body: "" });
+  const [emailGoal, setEmailGoal] = useState("");
+  const [drafting, setDrafting] = useState(false);
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -164,7 +166,22 @@ export default function ContactDetailPage() {
       return;
     }
     setEmailForm({ to: contact.email, subject: "", body: "" });
+    setEmailGoal("");
     setEmailOpen(true);
+  }
+
+  async function draftEmail() {
+    if (!activeCompanyId || !emailGoal.trim()) return;
+    setDrafting(true);
+    try {
+      const draft = await crmEmailsApi.draft(activeCompanyId, { contactId, goal: emailGoal.trim() });
+      setEmailForm((f) => ({ ...f, subject: draft.subject, body: draft.body }));
+      toast({ title: t("crm.email.drafted") });
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
+    } finally {
+      setDrafting(false);
+    }
   }
 
   async function sendEmail() {
@@ -359,6 +376,23 @@ export default function ContactDetailPage() {
             <DialogTitle>{t("crm.email.compose")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
+            <div className="space-y-1.5 rounded-lg border border-dashed p-3">
+              <Label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Sparkles className="h-3.5 w-3.5" /> {t("crm.email.goal")}
+              </Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  value={emailGoal}
+                  onChange={(e) => setEmailGoal(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); draftEmail(); } }}
+                  placeholder={t("crm.email.goalPlaceholder")}
+                />
+                <Button type="button" variant="secondary" onClick={draftEmail} disabled={drafting || !emailGoal.trim()}>
+                  {drafting ? <LoadingSpinner size="sm" className="mr-2" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                  {drafting ? t("crm.email.drafting") : t("crm.email.draftWithAi")}
+                </Button>
+              </div>
+            </div>
             <div className="space-y-1.5">
               <Label>{t("crm.email.to")}</Label>
               <Input type="email" value={emailForm.to} onChange={(e) => setEmailForm({ ...emailForm, to: e.target.value })} />
