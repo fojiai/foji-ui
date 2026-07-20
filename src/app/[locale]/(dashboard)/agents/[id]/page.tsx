@@ -396,10 +396,10 @@ export default function AgentDetailPage() {
                 <div className="space-y-2">
                   <Label>{t("agents.responseStyle")}</Label>
                   <p className="text-xs text-muted-foreground">{t("agents.responseStyleHint")}</p>
-                  <Select value={watch("responseStyle") || ""} onValueChange={(v) => setValue("responseStyle", v as any)}>
+                  <Select value={watch("responseStyle") || "default"} onValueChange={(v) => setValue("responseStyle", (v === "default" ? "" : v) as any)}>
                     <SelectTrigger><SelectValue placeholder={t("agents.responseStyleDefault")} /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">{t("agents.responseStyleDefault")}</SelectItem>
+                      <SelectItem value="default">{t("agents.responseStyleDefault")}</SelectItem>
                       <SelectItem value="Professional">{t("agents.responseStyles.professional")}</SelectItem>
                       <SelectItem value="Friendly">{t("agents.responseStyles.friendly")}</SelectItem>
                       <SelectItem value="Concise">{t("agents.responseStyles.concise")}</SelectItem>
