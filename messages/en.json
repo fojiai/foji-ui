@@ -98,8 +98,8 @@
       "title": "WhatsApp",
       "enable": "Enable WhatsApp",
       "requiresPlan": "Requires Professional or Scale plan",
-      "phoneNumberId": "WhatsApp Phone Number",
-      "phoneNumberHint": "The phone number registered in your Meta Business account for WhatsApp Business API (e.g. +5511999999999)."
+      "phoneNumberId": "Phone Number ID",
+      "phoneNumberHint": "Not your phone number — this is the numeric Phone Number ID shown under WhatsApp → API Setup in the Meta developer panel (e.g. 123456789012345)."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",

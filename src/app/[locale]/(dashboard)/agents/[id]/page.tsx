@@ -626,7 +626,8 @@ export default function AgentDetailPage() {
                       <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
                       <Input
                         {...register("whatsAppPhoneNumberId")}
-                        placeholder="+5511999999999"
+                        placeholder="123456789012345"
+                        inputMode="numeric"
                       />
                     </div>
                   )}
