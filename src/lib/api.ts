@@ -142,6 +142,7 @@ export interface Agent {
   whatsAppEnabled: boolean;
   fileCount?: number;
   whatsAppPhoneNumberId?: string;
+  hasWhatsAppToken?: boolean;
   supportWhatsAppNumber?: string;
   salesWhatsAppNumber?: string;
   supportEmail?: string;

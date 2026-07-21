@@ -32,6 +32,7 @@ const schema = z.object({
   isActive: z.boolean(),
   whatsAppEnabled: z.boolean(),
   whatsAppPhoneNumberId: z.string().optional(),
+  whatsAppAccessToken: z.string().optional(),
   supportWhatsAppNumber: z.string().optional(),
   salesWhatsAppNumber: z.string().optional(),
   supportEmail: z.string().email().optional().or(z.literal("")),
@@ -220,8 +221,8 @@ export default function AgentDetailPage() {
         ...cleaned,
         conversationStarters: JSON.stringify(starters.filter((s) => s.trim())),
       };
-      const updated = await agentsApi.update(activeCompanyId, agentId, payload);
-      setAgent(updated);
+      await agentsApi.update(activeCompanyId, agentId, payload);
+      await loadAgent(); // refresh full detail — update returns only a partial result
       setTestKey((k) => k + 1); // reload test iframe
       toast({ title: t("common.success") });
     } catch {
@@ -621,14 +622,31 @@ export default function AgentDetailPage() {
                     />
                   </div>
                   {watch("whatsAppEnabled") && (
-                    <div className="space-y-2">
-                      <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
-                      <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
-                      <Input
-                        {...register("whatsAppPhoneNumberId")}
-                        placeholder="123456789012345"
-                        inputMode="numeric"
-                      />
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
+                        <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
+                        <Input
+                          {...register("whatsAppPhoneNumberId")}
+                          placeholder="123456789012345"
+                          inputMode="numeric"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                          {t("agents.whatsapp.accessToken")}
+                          <Badge variant={agent.hasWhatsAppToken ? "success" : "outline"}>
+                            {agent.hasWhatsAppToken ? t("agents.whatsapp.tokenSet") : t("agents.whatsapp.tokenNotSet")}
+                          </Badge>
+                        </Label>
+                        <p className="text-xs text-muted-foreground">{t("agents.whatsapp.accessTokenHint")}</p>
+                        <Input
+                          {...register("whatsAppAccessToken")}
+                          type="password"
+                          autoComplete="off"
+                          placeholder={agent.hasWhatsAppToken ? "••••••••••••••••" : "EAAG..."}
+                        />
+                      </div>
                     </div>
                   )}
                 </CardContent>

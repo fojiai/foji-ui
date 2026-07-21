@@ -99,7 +99,11 @@
       "enable": "Activar WhatsApp",
       "requiresPlan": "Requiere plan Professional o Scale",
       "phoneNumberId": "Phone Number ID",
-      "phoneNumberHint": "No es tu número de teléfono — es el Phone Number ID numérico que aparece en WhatsApp → API Setup en el panel de desarrollador de Meta (ej: 123456789012345)."
+      "phoneNumberHint": "No es tu número de teléfono — es el Phone Number ID numérico que aparece en WhatsApp → API Setup en el panel de desarrollador de Meta (ej: 123456789012345).",
+      "accessToken": "Access Token",
+      "accessTokenHint": "Token permanente de la API de WhatsApp (System User) de tu cuenta Meta. Se guarda cifrado y nunca se muestra. Déjalo en blanco para mantener el actual.",
+      "tokenSet": "Configurado",
+      "tokenNotSet": "No configurado"
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",
