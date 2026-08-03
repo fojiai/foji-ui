@@ -795,6 +795,26 @@
       "goalPlaceholder": "e.g. follow up on our demo and propose a meeting",
       "drafting": "Drafting...",
       "drafted": "Draft ready"
+    },
+    "deals": {
+      "back": "Back to pipeline",
+      "details": "Details",
+      "stage": "Stage",
+      "stageHint": "Move the deal between pipeline stages.",
+      "saved": "Deal saved",
+      "deleted": "Deal deleted",
+      "delete": "Delete deal",
+      "deleteTitle": "Delete this deal?",
+      "deleteDescription": "This cannot be undone. Linked tasks, meetings and emails are kept on the contact.",
+      "tasks": "Tasks",
+      "tasksEmpty": "No tasks linked to this deal",
+      "titleRequired": "Enter a title for the deal",
+      "valueInvalid": "Enter a valid value"
+    },
+    "dealStatuses": {
+      "Open": "Open",
+      "Won": "Won",
+      "Lost": "Lost"
     }
   }
 }

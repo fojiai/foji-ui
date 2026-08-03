@@ -795,6 +795,26 @@
       "goalPlaceholder": "ex.: dar seguimento à nossa demo e propor uma reunião",
       "drafting": "Escrevendo...",
       "drafted": "Rascunho pronto"
+    },
+    "deals": {
+      "back": "Voltar ao funil",
+      "details": "Detalhes",
+      "stage": "Etapa",
+      "stageHint": "Mova o negócio entre as etapas do funil.",
+      "saved": "Negócio salvo",
+      "deleted": "Negócio excluído",
+      "delete": "Excluir negócio",
+      "deleteTitle": "Excluir este negócio?",
+      "deleteDescription": "Esta ação não pode ser desfeita. As tarefas, reuniões e e-mails ligados a ele serão mantidos no contato.",
+      "tasks": "Tarefas",
+      "tasksEmpty": "Nenhuma tarefa ligada a este negócio",
+      "titleRequired": "Informe um título para o negócio",
+      "valueInvalid": "Informe um valor válido"
+    },
+    "dealStatuses": {
+      "Open": "Aberto",
+      "Won": "Ganho",
+      "Lost": "Perdido"
     }
   }
 }

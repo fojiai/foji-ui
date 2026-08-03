@@ -795,6 +795,26 @@
       "goalPlaceholder": "ej.: dar seguimiento a nuestra demo y proponer una reunión",
       "drafting": "Redactando...",
       "drafted": "Borrador listo"
+    },
+    "deals": {
+      "back": "Volver al embudo",
+      "details": "Detalles",
+      "stage": "Etapa",
+      "stageHint": "Mueve el negocio entre las etapas del embudo.",
+      "saved": "Negocio guardado",
+      "deleted": "Negocio eliminado",
+      "delete": "Eliminar negocio",
+      "deleteTitle": "¿Eliminar este negocio?",
+      "deleteDescription": "Esta acción no se puede deshacer. Las tareas, reuniones y correos vinculados se mantienen en el contacto.",
+      "tasks": "Tareas",
+      "tasksEmpty": "Ninguna tarea vinculada a este negocio",
+      "titleRequired": "Ingresa un título para el negocio",
+      "valueInvalid": "Ingresa un valor válido"
+    },
+    "dealStatuses": {
+      "Open": "Abierto",
+      "Won": "Ganado",
+      "Lost": "Perdido"
     }
   }
 }

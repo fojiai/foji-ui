@@ -24,15 +24,27 @@ import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner"
 import { toast } from "@/hooks/use-toast";
 import { Plus, Lock, GripVertical } from "lucide-react";
 
-function formatMoney(value: number, currency: string) {
+function formatMoney(value: number, currency: string, locale: string) {
   try {
-    return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(value);
+    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(value);
   } catch {
     return `${currency} ${value.toFixed(2)}`;
   }
 }
 
-function DealCardItem({ deal }: { deal: DealCard }) {
+/**
+ * Currency for a stage total. Deals carry their own currency, so a column can be
+ * mixed — summing those into one number is meaningless. Report the single
+ * currency when there is one, and flag the column otherwise.
+ */
+function columnCurrency(deals: DealCard[]): { code: string; mixed: boolean } {
+  const codes = new Set(deals.map((d) => d.currency).filter(Boolean));
+  if (codes.size === 0) return { code: "BRL", mixed: false };
+  const [first] = [...codes];
+  return { code: first, mixed: codes.size > 1 };
+}
+
+function DealCardItem({ deal, locale }: { deal: DealCard; locale: string }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const style = transform
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, opacity: isDragging ? 0.5 : 1 }
@@ -44,12 +56,22 @@ function DealCardItem({ deal }: { deal: DealCard }) {
       className="rounded-lg border bg-card p-3 shadow-sm"
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-medium leading-tight">{deal.title}</p>
-        <button {...listeners} {...attributes} className="cursor-grab touch-none text-muted-foreground active:cursor-grabbing">
+        <Link
+          href={`/${locale}/crm/deals/${deal.id}`}
+          className="text-sm font-medium leading-tight hover:underline"
+        >
+          {deal.title}
+        </Link>
+        <button
+          {...listeners}
+          {...attributes}
+          aria-label="Drag"
+          className="cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
+        >
           <GripVertical className="h-4 w-4" />
         </button>
       </div>
-      <p className="mt-1 text-sm font-semibold text-primary">{formatMoney(deal.value, deal.currency)}</p>
+      <p className="mt-1 text-sm font-semibold text-primary">{formatMoney(deal.value, deal.currency, locale)}</p>
       {deal.contactName && <p className="mt-0.5 text-xs text-muted-foreground">{deal.contactName}</p>}
       {deal.ownerName && <p className="text-xs text-muted-foreground">{deal.ownerName}</p>}
     </div>
@@ -57,9 +79,10 @@ function DealCardItem({ deal }: { deal: DealCard }) {
 }
 
 function StageColumn({
-  stageId, name, total, currency, children,
+  stageId, name, total, currency, mixed, locale, count, children,
 }: {
-  stageId: number; name: string; total: number; currency: string; children: React.ReactNode;
+  stageId: number; name: string; total: number; currency: string; mixed: boolean;
+  locale: string; count: number; children: React.ReactNode;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: stageId });
   return (
@@ -68,8 +91,15 @@ function StageColumn({
       className={`flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 p-3 ${isOver ? "ring-2 ring-primary" : ""}`}
     >
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-semibold">{name}</span>
-        <Badge variant="outline" className="text-xs">{formatMoney(total, currency)}</Badge>
+        <span className="flex items-center gap-1.5 text-sm font-semibold">
+          {name}
+          <span className="rounded bg-muted px-1.5 text-xs font-normal text-muted-foreground tabular-nums">
+            {count}
+          </span>
+        </span>
+        <Badge variant="outline" className="text-xs tabular-nums" title={mixed ? "Mixed currencies" : undefined}>
+          {mixed ? "~" : ""}{formatMoney(total, currency, locale)}
+        </Badge>
       </div>
       <div className="flex flex-col gap-2">{children}</div>
     </div>
@@ -92,7 +122,6 @@ export default function PipelinePage() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<CreateDealInput>({ contactId: 0, title: "", value: 0, currency: "BRL" });
 
-  const currency = board?.columns[0]?.deals[0]?.currency ?? "BRL";
 
   useEffect(() => {
     if (!activeCompanyId) return;
@@ -211,19 +240,25 @@ export default function PipelinePage() {
 
       <DndContext sensors={sensors} onDragEnd={onDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-4">
-          {board?.columns.map((col) => (
-            <StageColumn
-              key={col.stage.id}
-              stageId={col.stage.id}
-              name={col.stage.name}
-              total={col.total}
-              currency={currency}
-            >
-              {col.deals.map((deal) => (
-                <DealCardItem key={deal.id} deal={deal} />
-              ))}
-            </StageColumn>
-          ))}
+          {board?.columns.map((col) => {
+            const { code, mixed } = columnCurrency(col.deals);
+            return (
+              <StageColumn
+                key={col.stage.id}
+                stageId={col.stage.id}
+                name={col.stage.name}
+                total={col.total}
+                currency={code}
+                mixed={mixed}
+                locale={locale}
+                count={col.deals.length}
+              >
+                {col.deals.map((deal) => (
+                  <DealCardItem key={deal.id} deal={deal} locale={locale} />
+                ))}
+              </StageColumn>
+            );
+          })}
         </div>
       </DndContext>
 

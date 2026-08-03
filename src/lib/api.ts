@@ -484,11 +484,17 @@ export const dealsApi = {
     return apiFetch<Board>(url);
   },
 
+  get: (companyId: number, dealId: number) =>
+    apiFetch<Deal>(`/api/deals/${dealId}?companyId=${companyId}`),
+
   create: (companyId: number, data: CreateDealInput) =>
     apiFetch<Deal>("/api/deals", {
       method: "POST",
       body: JSON.stringify({ companyId, ...data }),
     }),
+
+  delete: (companyId: number, dealId: number) =>
+    apiFetch<void>(`/api/deals/${dealId}?companyId=${companyId}`, { method: "DELETE" }),
 
   update: (companyId: number, dealId: number, data: { ownerUserId?: number | null; title: string; value: number; currency?: string; expectedCloseDate?: string | null }) =>
     apiFetch<Deal>(`/api/deals/${dealId}`, {
