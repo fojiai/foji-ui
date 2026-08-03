@@ -836,6 +836,18 @@
       "added": "Stage added",
       "renamed": "Stage renamed",
       "removed": "Stage removed"
+    },
+    "merge": {
+      "title": "Merge duplicate contacts",
+      "description": "The current contact is kept. Only its blank fields are filled from the duplicate. Leads, deals, tasks, meetings and emails are moved over.",
+      "review": "Review duplicates",
+      "keeping": "Contact being kept",
+      "candidates": "Possible duplicates",
+      "none": "No duplicates found",
+      "action": "Merge",
+      "merged": "Contacts merged",
+      "confirmTitle": "Merge these contacts?",
+      "confirmDescription": "\"{duplicate}\" will be removed and all its history moves to \"{primary}\". This cannot be undone."
     }
   }
 }

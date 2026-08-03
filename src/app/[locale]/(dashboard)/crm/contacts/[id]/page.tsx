@@ -25,6 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { MergeDialog } from "@/components/crm/merge-dialog";
 import { toast } from "@/hooks/use-toast";
 import {
   ArrowLeft, AlertTriangle, X, Plus, Mail, Sparkles,
@@ -66,6 +67,7 @@ export default function ContactDetailPage() {
   const locale = (params.locale as string) ?? "pt-br";
   const contactId = Number(params.id);
 
+  const [mergeOpen, setMergeOpen] = useState(false);
   const [contact, setContact] = useState<Contact | null>(null);
   const [members, setMembers] = useState<CompanyMember[]>([]);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
@@ -241,10 +243,28 @@ export default function ContactDetailPage() {
       </div>
 
       {contact.needsReviewDuplicate && (
-        <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+        <div className="flex flex-wrap items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>{t("crm.contacts.duplicateWarning")}</span>
+          <span className="flex-1 min-w-[12rem]">{t("crm.contacts.duplicateWarning")}</span>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-amber-400 bg-transparent text-amber-900 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/40"
+            onClick={() => setMergeOpen(true)}
+          >
+            {t("crm.merge.review")}
+          </Button>
         </div>
+      )}
+
+      {activeCompanyId && (
+        <MergeDialog
+          open={mergeOpen}
+          onOpenChange={setMergeOpen}
+          companyId={activeCompanyId}
+          contact={contact}
+          onMerged={(merged) => setContact(merged)}
+        />
       )}
 
       <Tabs defaultValue="details">

@@ -836,6 +836,18 @@
       "added": "Etapa adicionada",
       "renamed": "Etapa renomeada",
       "removed": "Etapa removida"
+    },
+    "merge": {
+      "title": "Mesclar contatos duplicados",
+      "description": "O contato atual é mantido. Só os campos vazios dele são preenchidos com os dados do duplicado. Leads, negócios, tarefas, reuniões e e-mails são transferidos.",
+      "review": "Revisar duplicados",
+      "keeping": "Contato que será mantido",
+      "candidates": "Possíveis duplicados",
+      "none": "Nenhum duplicado encontrado",
+      "action": "Mesclar",
+      "merged": "Contatos mesclados",
+      "confirmTitle": "Mesclar estes contatos?",
+      "confirmDescription": "\"{duplicate}\" será removido e todo o histórico dele passa para \"{primary}\". Esta ação não pode ser desfeita."
     }
   }
 }

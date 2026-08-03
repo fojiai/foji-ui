@@ -424,6 +424,15 @@ export const contactsApi = {
       body: JSON.stringify({ companyId, ...data }),
     }),
 
+  duplicates: (companyId: number, contactId: number) =>
+    apiFetch<Contact[]>(`/api/contacts/${contactId}/duplicates?companyId=${companyId}`),
+
+  merge: (companyId: number, contactId: number, duplicateId: number) =>
+    apiFetch<Contact>(`/api/contacts/${contactId}/merge`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, duplicateId }),
+    }),
+
   addTag: (companyId: number, contactId: number, tag: string) =>
     apiFetch<string[]>(`/api/contacts/${contactId}/tags`, {
       method: "POST",

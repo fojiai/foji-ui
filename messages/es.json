@@ -836,6 +836,18 @@
       "added": "Etapa agregada",
       "renamed": "Etapa renombrada",
       "removed": "Etapa eliminada"
+    },
+    "merge": {
+      "title": "Combinar contactos duplicados",
+      "description": "Se mantiene el contacto actual. Solo se completan sus campos vacíos con los datos del duplicado. Leads, negocios, tareas, reuniones y correos se transfieren.",
+      "review": "Revisar duplicados",
+      "keeping": "Contacto que se mantiene",
+      "candidates": "Posibles duplicados",
+      "none": "No se encontraron duplicados",
+      "action": "Combinar",
+      "merged": "Contactos combinados",
+      "confirmTitle": "¿Combinar estos contactos?",
+      "confirmDescription": "\"{duplicate}\" será eliminado y todo su historial pasa a \"{primary}\". Esta acción no se puede deshacer."
     }
   }
 }
