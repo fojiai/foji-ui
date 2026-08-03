@@ -684,7 +684,18 @@
       "tabDeals": "Negócios",
       "timelineEmpty": "Nenhuma atividade ainda",
       "dealsEmpty": "Nenhum negócio ainda",
-      "back": "Voltar aos contatos"
+      "back": "Voltar aos contatos",
+      "lastActivity": "Última atividade",
+      "actions": "Ações",
+      "view": "Ver detalhes",
+      "selectAll": "Selecionar todos",
+      "clearSearch": "Limpar busca",
+      "selected": "{count} selecionados",
+      "clearSelection": "Limpar seleção",
+      "bulkStatus": "Alterar status",
+      "bulkOwner": "Atribuir responsável",
+      "bulkUpdated": "{count} contatos atualizados",
+      "bulkPartial": "{failed} contatos não puderam ser atualizados"
     },
     "statuses": {
       "New": "Novo",

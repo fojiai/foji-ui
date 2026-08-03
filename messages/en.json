@@ -684,7 +684,18 @@
       "tabDeals": "Deals",
       "timelineEmpty": "No activity yet",
       "dealsEmpty": "No deals yet",
-      "back": "Back to contacts"
+      "back": "Back to contacts",
+      "lastActivity": "Last activity",
+      "actions": "Actions",
+      "view": "View details",
+      "selectAll": "Select all",
+      "clearSearch": "Clear search",
+      "selected": "{count} selected",
+      "clearSelection": "Clear selection",
+      "bulkStatus": "Change status",
+      "bulkOwner": "Assign owner",
+      "bulkUpdated": "{count} contacts updated",
+      "bulkPartial": "{failed} contacts could not be updated"
     },
     "statuses": {
       "New": "New",
