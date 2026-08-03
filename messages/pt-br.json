@@ -67,7 +67,8 @@
     "handoffs": "Atendimentos",
     "contacts": "Contatos",
     "pipeline": "Funil",
-    "tasks": "Tarefas"
+    "tasks": "Tarefas",
+    "reports": "Relatórios"
   },
   "dashboard": {
     "title": "Painel",
@@ -873,6 +874,35 @@
       "andMore": "e mais {count} linhas…",
       "done": "{created} contatos importados · {duplicates} já existiam",
       "doneWithErrors": "{created} importados · {duplicates} já existiam · {failed} com erro"
+    },
+    "reports": {
+      "title": "Relatórios",
+      "description": "Desempenho do seu funil e da sua base de contatos.",
+      "last30": "Últimos 30 dias",
+      "last90": "Últimos 90 dias",
+      "last365": "Últimos 12 meses",
+      "openPipeline": "Funil em aberto",
+      "openDeals": "{count} negócios abertos",
+      "winRate": "Taxa de conversão",
+      "wonLost": "{won} ganhos · {lost} perdidos",
+      "avgDeal": "Ticket médio",
+      "wonValue": "{value} ganhos no período",
+      "avgCycle": "Ciclo médio",
+      "days": "{count} dias",
+      "cycleHint": "Da criação ao fechamento",
+      "tasksLabel": "Tarefas:",
+      "contactsSummary": "{total} contatos · {added} novos no período",
+      "funnelTitle": "Valor por etapa",
+      "funnelHint": "Negócios em aberto no funil padrão.",
+      "outcomesTitle": "Ganhos e perdidos por mês",
+      "outcomesHint": "Negócios fechados no período.",
+      "sourcesTitle": "Origem dos contatos",
+      "sourcesHint": "De onde vieram os contatos criados no período.",
+      "month": "Mês",
+      "contacts": "contatos",
+      "dealsCount": "{count} negócios",
+      "noData": "Sem dados no período",
+      "noClosed": "Nenhum negócio fechado no período"
     }
   }
 }

@@ -445,6 +445,53 @@ export const contactsApi = {
     }),
 };
 
+// ─── CRM analytics ───────────────────────────────────────────────────────────
+
+export interface StageFunnel {
+  stageId: number;
+  stageName: string;
+  sortOrder: number;
+  openDeals: number;
+  openValue: number;
+}
+
+export interface MonthlyOutcome {
+  year: number;
+  month: number;
+  won: number;
+  lost: number;
+  wonValue: number;
+}
+
+export interface SourceBreakdown {
+  source: string;
+  contacts: number;
+}
+
+export interface CrmSummary {
+  openDeals: number;
+  openValue: number;
+  currency: string;
+  wonDeals: number;
+  lostDeals: number;
+  wonValue: number;
+  winRate: number;
+  averageWonValue: number;
+  averageCycleDays?: number | null;
+  totalContacts: number;
+  newContacts: number;
+  openTasks: number;
+  overdueTasks: number;
+  funnel: StageFunnel[];
+  monthlyOutcomes: MonthlyOutcome[];
+  sources: SourceBreakdown[];
+}
+
+export const crmAnalyticsApi = {
+  summary: (companyId: number, days = 90) =>
+    apiFetch<CrmSummary>(`/api/crm/analytics/summary?companyId=${companyId}&days=${days}`),
+};
+
 export const pipelineApi = {
   list: (companyId: number) =>
     apiFetch<Pipeline[]>(`/api/pipelines?companyId=${companyId}`),

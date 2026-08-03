@@ -20,6 +20,7 @@ import {
   UserPlus,
   PhoneForwarded,
   Contact2,
+  BarChart3,
   KanbanSquare,
   ListChecks,
 } from "lucide-react";
@@ -52,6 +53,7 @@ const MAIN_NAV: NavItem[] = [
   { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },
   { href: "/crm/pipeline", icon: KanbanSquare, labelKey: "nav.pipeline" },
   { href: "/crm/tasks", icon: ListChecks, labelKey: "nav.tasks" },
+  { href: "/crm/reports", icon: BarChart3, labelKey: "nav.reports" },
   {
     href: "/team",
     icon: Users,

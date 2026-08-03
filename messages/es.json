@@ -67,7 +67,8 @@
     "handoffs": "Transferencias",
     "contacts": "Contactos",
     "pipeline": "Embudo",
-    "tasks": "Tareas"
+    "tasks": "Tareas",
+    "reports": "Informes"
   },
   "dashboard": {
     "title": "Panel",
@@ -873,6 +874,35 @@
       "andMore": "y {count} filas más…",
       "done": "{created} contactos importados · {duplicates} ya existían",
       "doneWithErrors": "{created} importados · {duplicates} ya existían · {failed} con error"
+    },
+    "reports": {
+      "title": "Informes",
+      "description": "Rendimiento de tu embudo y tu base de contactos.",
+      "last30": "Últimos 30 días",
+      "last90": "Últimos 90 días",
+      "last365": "Últimos 12 meses",
+      "openPipeline": "Embudo abierto",
+      "openDeals": "{count} negocios abiertos",
+      "winRate": "Tasa de conversión",
+      "wonLost": "{won} ganados · {lost} perdidos",
+      "avgDeal": "Ticket promedio",
+      "wonValue": "{value} ganados en el período",
+      "avgCycle": "Ciclo promedio",
+      "days": "{count} días",
+      "cycleHint": "De la creación al cierre",
+      "tasksLabel": "Tareas:",
+      "contactsSummary": "{total} contactos · {added} nuevos en el período",
+      "funnelTitle": "Valor por etapa",
+      "funnelHint": "Negocios abiertos en el embudo predeterminado.",
+      "outcomesTitle": "Ganados y perdidos por mes",
+      "outcomesHint": "Negocios cerrados en el período.",
+      "sourcesTitle": "Origen de los contactos",
+      "sourcesHint": "De dónde vinieron los contactos del período.",
+      "month": "Mes",
+      "contacts": "contactos",
+      "dealsCount": "{count} negocios",
+      "noData": "Sin datos en el período",
+      "noClosed": "Ningún negocio cerrado en el período"
     }
   }
 }

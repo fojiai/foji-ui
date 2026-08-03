@@ -67,7 +67,8 @@
     "handoffs": "Handoffs",
     "contacts": "Contacts",
     "pipeline": "Pipeline",
-    "tasks": "Tasks"
+    "tasks": "Tasks",
+    "reports": "Reports"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -873,6 +874,35 @@
       "andMore": "and {count} more rows…",
       "done": "{created} contacts imported · {duplicates} already existed",
       "doneWithErrors": "{created} imported · {duplicates} already existed · {failed} failed"
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "How your pipeline and contact base are performing.",
+      "last30": "Last 30 days",
+      "last90": "Last 90 days",
+      "last365": "Last 12 months",
+      "openPipeline": "Open pipeline",
+      "openDeals": "{count} open deals",
+      "winRate": "Win rate",
+      "wonLost": "{won} won · {lost} lost",
+      "avgDeal": "Average deal",
+      "wonValue": "{value} won in period",
+      "avgCycle": "Average cycle",
+      "days": "{count} days",
+      "cycleHint": "From creation to close",
+      "tasksLabel": "Tasks:",
+      "contactsSummary": "{total} contacts · {added} new in period",
+      "funnelTitle": "Value by stage",
+      "funnelHint": "Open deals in the default pipeline.",
+      "outcomesTitle": "Won and lost by month",
+      "outcomesHint": "Deals closed in the period.",
+      "sourcesTitle": "Contact sources",
+      "sourcesHint": "Where contacts created in the period came from.",
+      "month": "Month",
+      "contacts": "contacts",
+      "dealsCount": "{count} deals",
+      "noData": "No data in this period",
+      "noClosed": "No deals closed in this period"
     }
   }
 }
