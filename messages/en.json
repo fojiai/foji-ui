@@ -815,6 +815,27 @@
       "Open": "Open",
       "Won": "Won",
       "Lost": "Lost"
+    },
+    "stages": {
+      "title": "Pipeline stages",
+      "description": "Create, rename, reorder and remove your pipeline stages.",
+      "manage": "Stages",
+      "addNew": "New stage",
+      "add": "Add",
+      "namePlaceholder": "e.g. Negotiation",
+      "markWon": "Marks as won",
+      "markLost": "Marks as lost",
+      "won": "Won",
+      "lost": "Lost",
+      "rename": "Rename",
+      "remove": "Remove",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "removeTitle": "Remove the \"{name}\" stage?",
+      "removeDescription": "Only stages with no deals can be removed. Move the deals out first.",
+      "added": "Stage added",
+      "renamed": "Stage renamed",
+      "removed": "Stage removed"
     }
   }
 }

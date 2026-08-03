@@ -22,7 +22,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
-import { Plus, Lock, GripVertical } from "lucide-react";
+import { Plus, Lock, GripVertical, Settings2 } from "lucide-react";
+import { StageManager } from "@/components/crm/stage-manager";
+import { pipelineApi, type Pipeline } from "@/lib/api";
 
 function formatMoney(value: number, currency: string, locale: string) {
   try {
@@ -119,6 +121,8 @@ export default function PipelinePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [stagesOpen, setStagesOpen] = useState(false);
+  const [pipeline, setPipeline] = useState<Pipeline | null>(null);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<CreateDealInput>({ contactId: 0, title: "", value: 0, currency: "BRL" });
 
@@ -131,14 +135,16 @@ export default function PipelinePage() {
         const enabled = sub?.plan?.hasCrm ?? false;
         setHasCrm(enabled);
         if (enabled) {
-          const [b, contactList, memberList] = await Promise.all([
+          const [b, contactList, memberList, pipes] = await Promise.all([
             dealsApi.board(activeCompanyId!),
             contactsApi.list(activeCompanyId!).catch(() => []),
             membersApi.list(activeCompanyId!).catch(() => []),
+            pipelineApi.list(activeCompanyId!).catch(() => [] as Pipeline[]),
           ]);
           setBoard(b);
           setContacts(contactList);
           setMembers(memberList);
+          setPipeline(pipes.find((x) => x.id === b.pipelineId) ?? null);
         }
       } catch {
         toast({ variant: "destructive", title: t("errors.generic") });
@@ -152,6 +158,17 @@ export default function PipelinePage() {
   async function refreshBoard() {
     if (!activeCompanyId || !board) return;
     setBoard(await dealsApi.board(activeCompanyId, board.pipelineId));
+  }
+
+  /** Reload both the board and the pipeline definition after a stage edit. */
+  async function refreshAfterStageChange() {
+    if (!activeCompanyId || !board) return;
+    const [b, pipes] = await Promise.all([
+      dealsApi.board(activeCompanyId, board.pipelineId),
+      pipelineApi.list(activeCompanyId).catch(() => [] as Pipeline[]),
+    ]);
+    setBoard(b);
+    setPipeline(pipes.find((x) => x.id === b.pipelineId) ?? null);
   }
 
   async function onDragEnd(event: DragEndEvent) {
@@ -224,14 +241,19 @@ export default function PipelinePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t("crm.pipeline.title")}</h1>
           <p className="text-muted-foreground">{t("crm.pipeline.description")}</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} disabled={contacts.length === 0}>
-          <Plus className="mr-1 h-4 w-4" /> {t("crm.pipeline.newDeal")}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" onClick={() => setStagesOpen(true)}>
+            <Settings2 className="mr-1 h-4 w-4" /> {t("crm.stages.manage")}
+          </Button>
+          <Button onClick={() => setDialogOpen(true)} disabled={contacts.length === 0}>
+            <Plus className="mr-1 h-4 w-4" /> {t("crm.pipeline.newDeal")}
+          </Button>
+        </div>
       </div>
 
       {contacts.length === 0 && (
@@ -261,6 +283,16 @@ export default function PipelinePage() {
           })}
         </div>
       </DndContext>
+
+      {activeCompanyId && (
+        <StageManager
+          open={stagesOpen}
+          onOpenChange={setStagesOpen}
+          companyId={activeCompanyId}
+          pipeline={pipeline}
+          onChanged={refreshAfterStageChange}
+        />
+      )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>

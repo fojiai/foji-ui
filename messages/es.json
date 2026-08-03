@@ -815,6 +815,27 @@
       "Open": "Abierto",
       "Won": "Ganado",
       "Lost": "Perdido"
+    },
+    "stages": {
+      "title": "Etapas del embudo",
+      "description": "Crea, renombra, reordena y elimina las etapas de tu embudo.",
+      "manage": "Etapas",
+      "addNew": "Nueva etapa",
+      "add": "Agregar",
+      "namePlaceholder": "ej: Negociación",
+      "markWon": "Marca como ganado",
+      "markLost": "Marca como perdido",
+      "won": "Ganado",
+      "lost": "Perdido",
+      "rename": "Renombrar",
+      "remove": "Eliminar",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "removeTitle": "¿Eliminar la etapa \"{name}\"?",
+      "removeDescription": "Solo se pueden eliminar etapas sin negocios. Mueve los negocios antes de continuar.",
+      "added": "Etapa agregada",
+      "renamed": "Etapa renombrada",
+      "removed": "Etapa eliminada"
     }
   }
 }

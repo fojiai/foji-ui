@@ -815,6 +815,27 @@
       "Open": "Aberto",
       "Won": "Ganho",
       "Lost": "Perdido"
+    },
+    "stages": {
+      "title": "Etapas do funil",
+      "description": "Crie, renomeie, reordene e remova as etapas do seu funil.",
+      "manage": "Etapas",
+      "addNew": "Nova etapa",
+      "add": "Adicionar",
+      "namePlaceholder": "ex: Negociação",
+      "markWon": "Marca como ganho",
+      "markLost": "Marca como perdido",
+      "won": "Ganho",
+      "lost": "Perdido",
+      "rename": "Renomear",
+      "remove": "Remover",
+      "moveUp": "Mover para cima",
+      "moveDown": "Mover para baixo",
+      "removeTitle": "Remover a etapa \"{name}\"?",
+      "removeDescription": "Só é possível remover etapas sem negócios. Mova os negócios antes de continuar.",
+      "added": "Etapa adicionada",
+      "renamed": "Etapa renomeada",
+      "removed": "Etapa removida"
     }
   }
 }
