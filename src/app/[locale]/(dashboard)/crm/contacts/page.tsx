@@ -43,8 +43,10 @@ import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner"
 import { toast } from "@/hooks/use-toast";
 import {
   Contact2, Plus, Search, AlertTriangle, Lock, X, MoreHorizontal,
-  ArrowUpDown, Eye, Users,
+  ArrowUpDown, Eye, Users, Upload, Download,
 } from "lucide-react";
+import { ContactImportDialog } from "@/components/crm/contact-import-dialog";
+import { toCsv, downloadCsv } from "@/lib/csv";
 
 const STATUSES = ["New", "Open", "Qualified", "Customer", "Unqualified", "Archived"];
 type SortKey = "name" | "status" | "owner" | "lastActivity";
@@ -71,6 +73,7 @@ export default function ContactsPage() {
   const [sort, setSort] = useState<{ key: SortKey; dir: "asc" | "desc" }>({ key: "name", dir: "asc" });
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<ContactInput>({ status: "New" });
 
@@ -190,6 +193,20 @@ export default function ContactsPage() {
     }
   }
 
+  function exportCsv() {
+    const headers = ["nome", "email", "telefone", "status", "responsavel", "etiquetas", "criado_em"];
+    const rows = sorted.map((c) => [
+      c.name ?? "",
+      c.email ?? "",
+      c.phone ?? "",
+      t(`crm.statuses.${c.status}`),
+      c.ownerName ?? "",
+      c.tags.join(", "),
+      c.createdAt ? new Date(c.createdAt).toISOString().slice(0, 10) : "",
+    ]);
+    downloadCsv(`contatos-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(headers, rows));
+  }
+
   async function createContact() {
     if (!activeCompanyId) return;
     setSaving(true);
@@ -253,6 +270,12 @@ export default function ContactsPage() {
           <Badge variant="outline" className="text-sm tabular-nums">
             {contacts.length} {t("crm.contacts.total")}
           </Badge>
+          <Button variant="outline" onClick={() => setImportOpen(true)}>
+            <Upload className="mr-1 h-4 w-4" /> {t("crm.import.action")}
+          </Button>
+          <Button variant="outline" onClick={exportCsv} disabled={sorted.length === 0}>
+            <Download className="mr-1 h-4 w-4" /> {t("crm.import.export")}
+          </Button>
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="mr-1 h-4 w-4" /> {t("crm.contacts.new")}
           </Button>
@@ -445,6 +468,15 @@ export default function ContactsPage() {
             </TableBody>
           </Table>
         </div>
+      )}
+
+      {activeCompanyId && (
+        <ContactImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          companyId={activeCompanyId}
+          onImported={() => fetchContacts()}
+        />
       )}
 
       {/* Create dialog */}

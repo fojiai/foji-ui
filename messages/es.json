@@ -848,6 +848,21 @@
       "merged": "Contactos combinados",
       "confirmTitle": "¿Combinar estos contactos?",
       "confirmDescription": "\"{duplicate}\" será eliminado y todo su historial pasa a \"{primary}\". Esta acción no se puede deshacer."
+    },
+    "import": {
+      "title": "Importar contactos",
+      "action": "Importar",
+      "export": "Exportar",
+      "description": "Sube un archivo CSV. Reconocemos las columnas nombre, correo y teléfono (y sus variantes comunes).",
+      "choose": "Elegir archivo CSV",
+      "chooseAnother": "Elegir otro",
+      "columnsHint": "Columnas aceptadas: nombre/name, email/correo, teléfono/phone/celular, notas/observaciones",
+      "parseError": "No se pudo leer este archivo CSV",
+      "readyCount": "{count} contactos listos",
+      "skippedCount": "{count} filas sin datos",
+      "andMore": "y {count} filas más…",
+      "done": "{created} contactos importados · {duplicates} ya existían",
+      "doneWithErrors": "{created} importados · {duplicates} ya existían · {failed} con error"
     }
   }
 }
