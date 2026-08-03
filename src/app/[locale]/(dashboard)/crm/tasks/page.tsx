@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { SkeletonRows } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
@@ -22,17 +24,39 @@ import {
 } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
-import { ListChecks, Plus, Lock, Trash2, Check, RotateCcw } from "lucide-react";
+import { ListChecks, Plus, Lock, Trash2, Check, RotateCcw, AlertTriangle } from "lucide-react";
 
 const TYPES = ["General", "Call", "Email", "WhatsApp", "Meeting"];
 const PRIORITIES = ["Low", "Normal", "High"];
-const textareaClass =
-  "flex min-h-[70px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
-
 const emptyForm: CrmTaskInput = { title: "", type: "General", priority: "Normal" };
+
+type BucketKey = "overdue" | "today" | "week" | "later" | "done";
+const BUCKET_ORDER: BucketKey[] = ["overdue", "today", "week", "later", "done"];
+
+/** Start of day, so "today" doesn't depend on the current time. */
+function startOfDay(d: Date) {
+  const c = new Date(d);
+  c.setHours(0, 0, 0, 0);
+  return c;
+}
+
+function bucketFor(task: CrmTask, now: Date): BucketKey {
+  if (task.status === "Done") return "done";
+  if (!task.dueAt) return "later";
+
+  const due = startOfDay(new Date(task.dueAt));
+  const today = startOfDay(now);
+  const diffDays = Math.round((due.getTime() - today.getTime()) / 86_400_000);
+
+  if (diffDays < 0) return "overdue";
+  if (diffDays === 0) return "today";
+  if (diffDays <= 7) return "week";
+  return "later";
+}
 
 export default function TasksPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId } = useAuth();
   const locale = (useParams().locale as string) ?? "pt-br";
 
@@ -41,6 +65,7 @@ export default function TasksPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [members, setMembers] = useState<CompanyMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   const [statusFilter, setStatusFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
@@ -49,45 +74,72 @@ export default function TasksPage() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<CrmTaskInput>(emptyForm);
 
-  async function loadTasks(companyId: number, next?: { status?: string; assignee?: string }) {
-    const status = next?.status ?? statusFilter;
-    const assignee = next?.assignee ?? assigneeFilter;
-    const params: { status?: string; assigneeUserId?: number } = {};
-    if (status !== "all") params.status = status;
-    if (assignee !== "all") params.assigneeUserId = Number(assignee);
-    setTasks(await tasksApi.list(companyId, params));
-  }
+  const fetchTasks = useCallback(
+    async (next?: { status?: string; assignee?: string }) => {
+      if (!activeCompanyId) return;
+      const status = next?.status ?? statusFilter;
+      const assignee = next?.assignee ?? assigneeFilter;
+      const params: { status?: string; assigneeUserId?: number } = {};
+      if (status !== "all") params.status = status;
+      if (assignee !== "all") params.assigneeUserId = Number(assignee);
+      setIsFetching(true);
+      try {
+        setTasks(await tasksApi.list(activeCompanyId, params));
+      } catch {
+        toast({ variant: "destructive", title: t("errors.generic") });
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [activeCompanyId, statusFilter, assigneeFilter, t]
+  );
 
   useEffect(() => {
     if (!activeCompanyId) return;
-    async function load() {
+    let cancelled = false;
+    (async () => {
       try {
-        const sub = await subscriptionsApi.getSubscription(activeCompanyId!).catch(() => null);
+        const sub = await subscriptionsApi.getSubscription(activeCompanyId).catch(() => null);
         const enabled = sub?.plan?.hasCrm ?? false;
+        if (cancelled) return;
         setHasCrm(enabled);
         if (enabled) {
-          const [, contactList, memberList] = await Promise.all([
-            loadTasks(activeCompanyId!),
-            contactsApi.list(activeCompanyId!).catch(() => []),
-            membersApi.list(activeCompanyId!).catch(() => []),
+          const [taskList, contactList, memberList] = await Promise.all([
+            tasksApi.list(activeCompanyId, {}),
+            contactsApi.list(activeCompanyId).catch(() => []),
+            membersApi.list(activeCompanyId).catch(() => []),
           ]);
+          if (cancelled) return;
+          setTasks(taskList);
           setContacts(contactList);
           setMembers(memberList);
         }
       } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+        if (!cancelled) toast({ variant: "destructive", title: t("errors.generic") });
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
-    }
-    load();
+    })();
+    return () => { cancelled = true; };
   }, [activeCompanyId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function refilter(next: { status?: string; assignee?: string }) {
-    if (!activeCompanyId) return;
-    try { await loadTasks(activeCompanyId, next); }
-    catch { toast({ variant: "destructive", title: t("errors.generic") }); }
-  }
+  /** Group by urgency — a flat list gives no sense of what needs doing now. */
+  const buckets = useMemo(() => {
+    const now = new Date();
+    const map: Record<BucketKey, CrmTask[]> = { overdue: [], today: [], week: [], later: [], done: [] };
+    for (const task of tasks) map[bucketFor(task, now)].push(task);
+
+    const byDue = (a: CrmTask, b: CrmTask) => {
+      if (!a.dueAt && !b.dueAt) return 0;
+      if (!a.dueAt) return 1;
+      if (!b.dueAt) return -1;
+      return new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime();
+    };
+    BUCKET_ORDER.forEach((k) => map[k].sort(byDue));
+    return map;
+  }, [tasks]);
+
+  const openCount = tasks.filter((x) => x.status !== "Done").length;
 
   async function createTask() {
     if (!activeCompanyId || !form.title.trim()) return;
@@ -96,7 +148,7 @@ export default function TasksPage() {
       await tasksApi.create(activeCompanyId, form);
       setDialogOpen(false);
       setForm(emptyForm);
-      await loadTasks(activeCompanyId);
+      await fetchTasks();
       toast({ title: t("crm.tasks.created") });
     } catch {
       toast({ variant: "destructive", title: t("errors.generic") });
@@ -105,30 +157,32 @@ export default function TasksPage() {
     }
   }
 
+  /** Optimistic — the checkbox should feel instant; revert if the call fails. */
   async function toggleStatus(task: CrmTask) {
     if (!activeCompanyId) return;
     const next = task.status === "Done" ? "Open" : "Done";
+    const previous = tasks;
+    setTasks((prev) => prev.map((x) => (x.id === task.id ? { ...x, status: next } : x)));
     try {
       const updated = await tasksApi.setStatus(activeCompanyId, task.id, next);
       setTasks((prev) => prev.map((x) => (x.id === task.id ? updated : x)));
       if (next === "Done") toast({ title: t("crm.tasks.completed") });
     } catch {
+      setTasks(previous);
       toast({ variant: "destructive", title: t("errors.generic") });
     }
   }
 
   async function deleteTask(id: number) {
     if (!activeCompanyId) return;
+    const previous = tasks;
+    setTasks((prev) => prev.filter((x) => x.id !== id));
     try {
       await tasksApi.delete(activeCompanyId, id);
-      setTasks((prev) => prev.filter((x) => x.id !== id));
     } catch {
+      setTasks(previous);
       toast({ variant: "destructive", title: t("errors.generic") });
     }
-  }
-
-  function isOverdue(task: CrmTask) {
-    return task.status === "Open" && task.dueAt != null && new Date(task.dueAt) < new Date();
   }
 
   if (isLoading) return <PageLoader />;
@@ -154,20 +208,112 @@ export default function TasksPage() {
     );
   }
 
+  function TaskRow({ task, overdue }: { task: CrmTask; overdue: boolean }) {
+    const done = task.status === "Done";
+    return (
+      <div
+        className={`flex items-start justify-between gap-3 rounded-lg border bg-card p-3 transition-colors ${
+          done ? "opacity-60" : ""
+        } ${overdue ? "border-destructive/40" : ""}`}
+      >
+        <div className="flex min-w-0 items-start gap-3">
+          <Button
+            variant="outline"
+            size="icon"
+            className="mt-0.5 h-7 w-7 shrink-0"
+            onClick={() => toggleStatus(task)}
+            aria-label={done ? t("crm.tasks.reopen") : t("crm.tasks.markDone")}
+          >
+            {done ? <RotateCcw className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
+          </Button>
+          <div className="min-w-0 space-y-1">
+            <p className={`text-sm font-medium ${done ? "line-through" : ""}`}>{task.title}</p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+              <Badge variant="outline" className="text-[10px]">{t(`crm.tasks.types.${task.type}`)}</Badge>
+              {task.contactName && (
+                <Link
+                  href={`/${locale}/crm/contacts/${task.contactId}`}
+                  className="truncate hover:underline"
+                >
+                  {task.contactName}
+                </Link>
+              )}
+              {task.dealTitle && (
+                <Link
+                  href={`/${locale}/crm/deals/${task.dealId}`}
+                  className="truncate hover:underline"
+                >
+                  {task.dealTitle}
+                </Link>
+              )}
+              {task.assigneeName && <span>· {task.assigneeName}</span>}
+              {task.dueAt && (
+                <span className={overdue ? "font-medium text-destructive" : ""}>
+                  · {format.dateTime(new Date(task.dueAt), { dateStyle: "short" })}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Badge
+            variant={task.priority === "High" ? "destructive" : task.priority === "Low" ? "secondary" : "outline"}
+            className="text-[10px]"
+          >
+            {t(`crm.tasks.priorities.${task.priority}`)}
+          </Badge>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{task.title}</AlertDialogTitle>
+                <AlertDialogDescription>{t("crm.tasks.deleteConfirm")}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("crm.tasks.cancel")}</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => deleteTask(task.id)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {t("crm.tasks.delete")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t("crm.tasks.title")}</h1>
           <p className="text-muted-foreground">{t("crm.tasks.description")}</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="mr-1 h-4 w-4" /> {t("crm.tasks.new")}
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          {buckets.overdue.length > 0 && (
+            <Badge variant="destructive" className="gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              {t("crm.tasks.overdueCount", { count: buckets.overdue.length })}
+            </Badge>
+          )}
+          <Badge variant="outline" className="tabular-nums">
+            {t("crm.tasks.openCount", { count: openCount })}
+          </Badge>
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="mr-1 h-4 w-4" /> {t("crm.tasks.new")}
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); refilter({ status: v }); }}>
+        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); fetchTasks({ status: v }); }}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder={t("crm.tasks.filterByStatus")} />
           </SelectTrigger>
@@ -177,7 +323,7 @@ export default function TasksPage() {
             <SelectItem value="Done">{t("crm.tasks.statuses.Done")}</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={assigneeFilter} onValueChange={(v) => { setAssigneeFilter(v); refilter({ assignee: v }); }}>
+        <Select value={assigneeFilter} onValueChange={(v) => { setAssigneeFilter(v); fetchTasks({ assignee: v }); }}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder={t("crm.tasks.filterByAssignee")} />
           </SelectTrigger>
@@ -190,7 +336,9 @@ export default function TasksPage() {
         </Select>
       </div>
 
-      {tasks.length === 0 ? (
+      {isFetching ? (
+        <SkeletonRows rows={5} />
+      ) : tasks.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
             <ListChecks className="h-10 w-10 text-muted-foreground/40" />
@@ -199,62 +347,32 @@ export default function TasksPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
-          {tasks.map((task) => (
-            <Card key={task.id} className={task.status === "Done" ? "opacity-60" : ""}>
-              <CardContent className="flex items-center justify-between gap-4 py-3">
-                <div className="flex items-start gap-3">
-                  <Button
-                    variant="outline" size="icon" className="mt-0.5 h-7 w-7 shrink-0"
-                    onClick={() => toggleStatus(task)}
-                    title={task.status === "Done" ? t("crm.tasks.reopen") : t("crm.tasks.markDone")}
-                  >
-                    {task.status === "Done" ? <RotateCcw className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
-                  </Button>
-                  <div className="space-y-1">
-                    <p className={`text-sm font-medium ${task.status === "Done" ? "line-through" : ""}`}>{task.title}</p>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      <Badge variant="outline" className="text-xs">{t(`crm.tasks.types.${task.type}`)}</Badge>
-                      {task.contactName && (
-                        <Link href={`/${locale}/crm/contacts/${task.contactId}`} className="hover:underline">{task.contactName}</Link>
-                      )}
-                      {task.assigneeName && <span>· {task.assigneeName}</span>}
-                      {task.dueAt && (
-                        <span className={isOverdue(task) ? "font-medium text-destructive" : ""}>
-                          · {new Date(task.dueAt).toLocaleDateString()}{isOverdue(task) ? ` (${t("crm.tasks.overdue")})` : ""}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+        <div className="space-y-6">
+          {BUCKET_ORDER.map((key) => {
+            const items = buckets[key];
+            if (items.length === 0) return null;
+            return (
+              <section key={key} className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Badge
-                    variant={task.priority === "High" ? "destructive" : task.priority === "Low" ? "secondary" : "outline"}
-                    className="text-xs"
+                  <h2
+                    className={`text-sm font-semibold uppercase tracking-wide ${
+                      key === "overdue" ? "text-destructive" : "text-muted-foreground"
+                    }`}
                   >
-                    {t(`crm.tasks.priorities.${task.priority}`)}
-                  </Badge>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>{task.title}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("crm.tasks.delete")}?</AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>{t("crm.tasks.cancel")}</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => deleteTask(task.id)}>{t("crm.tasks.delete")}</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                    {t(`crm.tasks.buckets.${key}`)}
+                  </h2>
+                  <span className="rounded bg-muted px-1.5 text-xs text-muted-foreground tabular-nums">
+                    {items.length}
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+                <div className="space-y-2">
+                  {items.map((task) => (
+                    <TaskRow key={task.id} task={task} overdue={key === "overdue"} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
       )}
 
@@ -268,7 +386,7 @@ export default function TasksPage() {
               <Label>{t("crm.tasks.title_field")}</Label>
               <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label>{t("crm.tasks.type")}</Label>
                 <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
@@ -288,7 +406,7 @@ export default function TasksPage() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label>{t("crm.tasks.contact")}</Label>
                 <Select
@@ -330,7 +448,10 @@ export default function TasksPage() {
             </div>
             <div className="space-y-1.5">
               <Label>{t("crm.tasks.description_field")}</Label>
-              <textarea className={textareaClass} value={form.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              <Textarea
+                value={form.description ?? ""}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+              />
             </div>
           </div>
           <DialogFooter>

@@ -779,7 +779,17 @@
       "statuses": {
         "Open": "Open",
         "Done": "Done"
-      }
+      },
+      "buckets": {
+        "overdue": "Overdue",
+        "today": "Today",
+        "week": "Next 7 days",
+        "later": "Later",
+        "done": "Completed"
+      },
+      "overdueCount": "{count} overdue",
+      "openCount": "{count} open",
+      "deleteConfirm": "This task will be permanently deleted."
     },
     "email": {
       "compose": "Send email",

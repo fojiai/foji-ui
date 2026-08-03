@@ -779,7 +779,17 @@
       "statuses": {
         "Open": "Abierta",
         "Done": "Completada"
-      }
+      },
+      "buckets": {
+        "overdue": "Atrasadas",
+        "today": "Hoy",
+        "week": "Próximos 7 días",
+        "later": "Después",
+        "done": "Completadas"
+      },
+      "overdueCount": "{count} atrasadas",
+      "openCount": "{count} abiertas",
+      "deleteConfirm": "Esta tarea se eliminará permanentemente."
     },
     "email": {
       "compose": "Enviar correo",
