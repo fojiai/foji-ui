@@ -923,6 +923,8 @@
     "prefixHint": "Tu nombre se agrega automáticamente al inicio del mensaje.",
     "openContact": "Ver contacto",
     "windowClosedShort": "fuera de plazo",
-    "windowClosed": "Han pasado más de 24 horas desde el último mensaje del cliente. WhatsApp solo permite responder libremente dentro de ese plazo — espera a que escriba de nuevo."
+    "windowClosed": "Han pasado más de 24 horas desde el último mensaje del cliente. WhatsApp solo permite responder libremente dentro de ese plazo — espera a que escriba de nuevo.",
+    "unassigned": "Sin responsable",
+    "mediaPreview": "[adjunto]"
   }
 }

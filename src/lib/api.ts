@@ -455,6 +455,8 @@ export interface InboxConversation {
   contactWaId: string;
   contactName?: string | null;
   contactId?: number | null;
+  assignedUserId?: number | null;
+  assignedUserName?: string | null;
   lastMessagePreview?: string | null;
   lastMessageAt: string;
   lastInboundAt?: string | null;
@@ -467,6 +469,11 @@ export interface InboxMessage {
   id: number;
   direction: "Inbound" | "Outbound";
   body: string;
+  messageType: string;
+  /** Short-lived presigned URL; null for text messages. */
+  mediaUrl?: string | null;
+  mediaContentType?: string | null;
+  mediaFileName?: string | null;
   sentByUserId?: number | null;
   senderDisplayName?: string | null;
   createdAt: string;
@@ -491,6 +498,12 @@ export const inboxApi = {
     apiFetch<InboxMessage>(`/api/whatsapp/inbox/conversations/${conversationId}/reply`, {
       method: "POST",
       body: JSON.stringify({ companyId, text }),
+    }),
+
+  assign: (companyId: number, conversationId: number, userId: number | null) =>
+    apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/assign`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, userId }),
     }),
 
   markRead: (companyId: number, conversationId: number) =>

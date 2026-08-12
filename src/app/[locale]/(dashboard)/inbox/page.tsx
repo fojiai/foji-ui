@@ -6,7 +6,8 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import {
-  inboxApi, type InboxConversation, type InboxMessage, type InboxThread,
+  inboxApi, membersApi,
+  type InboxConversation, type InboxMessage, type InboxThread, type CompanyMember,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { SkeletonRows } from "@/components/ui/skeleton";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
-import { MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw, Paperclip, FileText, UserCheck } from "lucide-react";
 
 const LIST_POLL_MS = 10_000;
 const THREAD_POLL_MS = 6_000;
@@ -26,6 +28,66 @@ function stripPrefix(body: string, name?: string | null): string {
   if (!name) return body;
   const prefix = `${name}:\n\n`;
   return body.startsWith(prefix) ? body.slice(prefix.length) : body;
+}
+
+/** Renders a message body: image, audio, document link, or plain text. */
+function MessageContent({ message: m }: { message: InboxMessage }) {
+  const caption = stripPrefix(m.body, m.senderDisplayName);
+  const type = m.messageType ?? "text";
+
+  if (m.mediaUrl && type === "image") {
+    return (
+      <span className="block space-y-1">
+        {/* Presigned S3 URL — not a configured next/image host, so a plain img. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={m.mediaUrl}
+          alt={caption || m.mediaFileName || "image"}
+          className="max-h-72 w-auto max-w-full rounded-lg"
+          loading="lazy"
+        />
+        {caption && <span className="block">{caption}</span>}
+      </span>
+    );
+  }
+
+  if (m.mediaUrl && type === "audio") {
+    return (
+      <span className="block space-y-1">
+        <audio controls src={m.mediaUrl} className="max-w-full" />
+        {caption && <span className="block">{caption}</span>}
+      </span>
+    );
+  }
+
+  if (m.mediaUrl) {
+    return (
+      <span className="block space-y-1">
+        <a
+          href={m.mediaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 underline underline-offset-2"
+        >
+          <FileText className="h-3.5 w-3.5 shrink-0" />
+          {m.mediaFileName || type}
+        </a>
+        {caption && <span className="block">{caption}</span>}
+      </span>
+    );
+  }
+
+  // Media we could not download — say so rather than showing an empty bubble.
+  if (type !== "text") {
+    return (
+      <span className="inline-flex items-center gap-1.5 italic opacity-80">
+        <Paperclip className="h-3.5 w-3.5 shrink-0" />
+        {caption || type}
+      </span>
+    );
+  }
+
+  return <>{caption}</>;
 }
 
 export default function InboxPage() {
@@ -40,6 +102,7 @@ export default function InboxPage() {
   const [threadLoading, setThreadLoading] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [members, setMembers] = useState<CompanyMember[]>([]);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,6 +134,7 @@ export default function InboxPage() {
   useEffect(() => {
     if (!activeCompanyId) return;
     loadConversations();
+    membersApi.list(activeCompanyId).then(setMembers).catch(() => setMembers([]));
     const id = setInterval(loadConversations, LIST_POLL_MS);
     return () => clearInterval(id);
   }, [activeCompanyId, loadConversations]);
@@ -97,6 +161,17 @@ export default function InboxPage() {
           prev?.map((x) => (x.id === c.id ? { ...x, unreadCount: 0 } : x)) ?? prev
         );
       } catch { /* non-critical */ }
+    }
+  }
+
+  async function assign(userId: number | null) {
+    if (!activeCompanyId || !selectedId) return;
+    try {
+      const updated = await inboxApi.assign(activeCompanyId, selectedId, userId);
+      setThread((prev) => (prev ? { ...prev, conversation: updated } : prev));
+      setConversations((prev) => prev?.map((x) => (x.id === updated.id ? updated : x)) ?? prev);
+    } catch {
+      toast({ variant: "destructive", title: t("errors.generic") });
     }
   }
 
@@ -167,10 +242,15 @@ export default function InboxPage() {
                         )}
                       </div>
                       <span className="line-clamp-1 w-full text-xs text-muted-foreground">
-                        {c.lastMessagePreview || "—"}
+                        {c.lastMessagePreview || t("inbox.mediaPreview")}
                       </span>
-                      <span className="flex w-full items-center gap-2 text-[10px] text-muted-foreground">
+                      <span className="flex w-full flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
                         {format.dateTime(new Date(c.lastMessageAt), { dateStyle: "short", timeStyle: "short" })}
+                        {c.assignedUserName && (
+                          <span className="inline-flex items-center gap-0.5">
+                            <UserCheck className="h-3 w-3" /> {c.assignedUserName}
+                          </span>
+                        )}
                         {!c.canReplyFreeform && (
                           <span className="inline-flex items-center gap-0.5 text-amber-600 dark:text-amber-400">
                             <Clock className="h-3 w-3" /> {t("inbox.windowClosedShort")}
@@ -212,8 +292,27 @@ export default function InboxPage() {
                       {selected?.contactWaId} · {selected?.agentName}
                     </p>
                   </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <Select
+                      value={selected?.assignedUserId ? String(selected.assignedUserId) : "none"}
+                      onValueChange={(v) => assign(v === "none" ? null : Number(v))}
+                    >
+                      <SelectTrigger className="h-8 w-[170px]">
+                        <UserCheck className="mr-1 h-3.5 w-3.5 shrink-0" />
+                        <SelectValue placeholder={t("inbox.unassigned")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t("inbox.unassigned")}</SelectItem>
+                        {members.map((m) => (
+                          <SelectItem key={m.userId} value={String(m.userId)}>
+                            {m.firstName} {m.lastName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   {selected?.contactId && (
-                    <Button variant="outline" size="sm" className="ml-auto" asChild>
+                    <Button variant="outline" size="sm" asChild>
                       <Link href={`/${locale}/crm/contacts/${selected.contactId}`}>
                         <Contact2 className="mr-1 h-3.5 w-3.5" /> {t("inbox.openContact")}
                       </Link>
@@ -237,13 +336,13 @@ export default function InboxPage() {
                               </p>
                             )}
                             <div
-                              className={`inline-block whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm ${
+                              className={`inline-block max-w-full whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm ${
                                 outbound
                                   ? "bg-primary text-primary-foreground rounded-br-sm"
                                   : "bg-muted rounded-bl-sm"
                               }`}
                             >
-                              {stripPrefix(m.body, m.senderDisplayName)}
+                              <MessageContent message={m} />
                             </div>
                             <p className="mt-0.5 text-[10px] text-muted-foreground">
                               {format.dateTime(new Date(m.createdAt), { timeStyle: "short" })}

@@ -923,6 +923,8 @@
     "prefixHint": "Your name is added automatically at the start of the message.",
     "openContact": "View contact",
     "windowClosedShort": "window closed",
-    "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again."
+    "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again.",
+    "unassigned": "Unassigned",
+    "mediaPreview": "[attachment]"
   }
 }
