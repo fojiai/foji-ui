@@ -21,6 +21,7 @@ import {
   PhoneForwarded,
   Contact2,
   BarChart3,
+  MessagesSquare,
   KanbanSquare,
   ListChecks,
 } from "lucide-react";
@@ -48,6 +49,7 @@ interface NavItem {
 const MAIN_NAV: NavItem[] = [
   { href: "/dashboard", icon: LayoutDashboard, labelKey: "nav.dashboard" },
   { href: "/agents", icon: Bot, labelKey: "nav.agents" },
+  { href: "/inbox", icon: MessagesSquare, labelKey: "nav.inbox" },
   { href: "/leads", icon: UserPlus, labelKey: "nav.leads" },
   { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
   { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },

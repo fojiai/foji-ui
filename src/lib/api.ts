@@ -143,6 +143,7 @@ export interface Agent {
   fileCount?: number;
   whatsAppPhoneNumberId?: string;
   hasWhatsAppToken?: boolean;
+  whatsAppMode?: string;
   supportWhatsAppNumber?: string;
   salesWhatsAppNumber?: string;
   supportEmail?: string;
@@ -442,6 +443,60 @@ export const contactsApi = {
   removeTag: (companyId: number, contactId: number, tag: string) =>
     apiFetch<string[]>(`/api/contacts/${contactId}/tags?companyId=${companyId}&tag=${encodeURIComponent(tag)}`, {
       method: "DELETE",
+    }),
+};
+
+// ─── WhatsApp shared inbox ───────────────────────────────────────────────────
+
+export interface InboxConversation {
+  id: number;
+  agentId: number;
+  agentName: string;
+  contactWaId: string;
+  contactName?: string | null;
+  contactId?: number | null;
+  lastMessagePreview?: string | null;
+  lastMessageAt: string;
+  lastInboundAt?: string | null;
+  unreadCount: number;
+  /** False once Meta's 24-hour reply window has closed. */
+  canReplyFreeform: boolean;
+}
+
+export interface InboxMessage {
+  id: number;
+  direction: "Inbound" | "Outbound";
+  body: string;
+  sentByUserId?: number | null;
+  senderDisplayName?: string | null;
+  createdAt: string;
+}
+
+export interface InboxThread {
+  conversation: InboxConversation;
+  messages: InboxMessage[];
+}
+
+export const inboxApi = {
+  conversations: (companyId: number, agentId?: number) => {
+    const qs = new URLSearchParams({ companyId: String(companyId) });
+    if (agentId) qs.set("agentId", String(agentId));
+    return apiFetch<InboxConversation[]>(`/api/whatsapp/inbox/conversations?${qs.toString()}`);
+  },
+
+  thread: (companyId: number, conversationId: number) =>
+    apiFetch<InboxThread>(`/api/whatsapp/inbox/conversations/${conversationId}?companyId=${companyId}`),
+
+  reply: (companyId: number, conversationId: number, text: string) =>
+    apiFetch<InboxMessage>(`/api/whatsapp/inbox/conversations/${conversationId}/reply`, {
+      method: "POST",
+      body: JSON.stringify({ companyId, text }),
+    }),
+
+  markRead: (companyId: number, conversationId: number) =>
+    apiFetch<void>(`/api/whatsapp/inbox/conversations/${conversationId}/read`, {
+      method: "POST",
+      body: JSON.stringify({ companyId }),
     }),
 };
 

@@ -68,7 +68,8 @@
     "contacts": "Contactos",
     "pipeline": "Embudo",
     "tasks": "Tareas",
-    "reports": "Informes"
+    "reports": "Informes",
+    "inbox": "Bandeja"
   },
   "dashboard": {
     "title": "Panel",
@@ -104,7 +105,11 @@
       "accessToken": "Access Token",
       "accessTokenHint": "Token permanente de la API de WhatsApp (System User) de tu cuenta Meta. Se guarda cifrado y nunca se muestra. Déjalo en blanco para mantener el actual.",
       "tokenSet": "Configurado",
-      "tokenNotSet": "No configurado"
+      "tokenNotSet": "No configurado",
+      "modeLabel": "Quién responde",
+      "modeHint": "Elige si la IA responde sola o si tu equipo responde desde la bandeja.",
+      "modeAgent": "Agente de IA",
+      "modeInbox": "Mi equipo (bandeja)"
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",
@@ -904,5 +909,20 @@
       "noData": "Sin datos en el período",
       "noClosed": "Ningún negocio cerrado en el período"
     }
+  },
+  "inbox": {
+    "title": "Bandeja de entrada",
+    "description": "Habla con tus clientes en WhatsApp — todo el equipo en un mismo número.",
+    "empty": "Aún no hay conversaciones",
+    "emptyHint": "Las conversaciones aparecen aquí cuando un cliente escribe a un número en modo bandeja de entrada.",
+    "selectConversation": "Selecciona una conversación",
+    "back": "Volver",
+    "refresh": "Actualizar",
+    "replyPlaceholder": "Escribe tu respuesta…",
+    "send": "Enviar",
+    "prefixHint": "Tu nombre se agrega automáticamente al inicio del mensaje.",
+    "openContact": "Ver contacto",
+    "windowClosedShort": "fuera de plazo",
+    "windowClosed": "Han pasado más de 24 horas desde el último mensaje del cliente. WhatsApp solo permite responder libremente dentro de ese plazo — espera a que escriba de nuevo."
   }
 }

@@ -68,7 +68,8 @@
     "contacts": "Contatos",
     "pipeline": "Funil",
     "tasks": "Tarefas",
-    "reports": "Relatórios"
+    "reports": "Relatórios",
+    "inbox": "Caixa de entrada"
   },
   "dashboard": {
     "title": "Painel",
@@ -104,7 +105,11 @@
       "accessToken": "Access Token",
       "accessTokenHint": "Token permanente da API do WhatsApp (System User) da sua conta Meta. Fica criptografado e nunca é exibido de volta. Deixe em branco para manter o atual.",
       "tokenSet": "Configurado",
-      "tokenNotSet": "Não configurado"
+      "tokenNotSet": "Não configurado",
+      "modeLabel": "Quem responde",
+      "modeHint": "Escolha se a IA responde sozinha ou se sua equipe responde pela caixa de entrada.",
+      "modeAgent": "Agente de IA",
+      "modeInbox": "Minha equipe (caixa de entrada)"
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",
@@ -904,5 +909,20 @@
       "noData": "Sem dados no período",
       "noClosed": "Nenhum negócio fechado no período"
     }
+  },
+  "inbox": {
+    "title": "Caixa de entrada",
+    "description": "Converse com seus clientes no WhatsApp — toda a equipe no mesmo número.",
+    "empty": "Nenhuma conversa ainda",
+    "emptyHint": "As conversas aparecem aqui quando um cliente manda mensagem para um número em modo caixa de entrada.",
+    "selectConversation": "Selecione uma conversa",
+    "back": "Voltar",
+    "refresh": "Atualizar",
+    "replyPlaceholder": "Escreva sua resposta…",
+    "send": "Enviar",
+    "prefixHint": "Seu nome é adicionado automaticamente no início da mensagem.",
+    "openContact": "Ver contato",
+    "windowClosedShort": "fora da janela",
+    "windowClosed": "Já se passaram mais de 24 horas desde a última mensagem do cliente. O WhatsApp só permite responder livremente dentro desse prazo — aguarde o cliente escrever novamente."
   }
 }

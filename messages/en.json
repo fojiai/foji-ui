@@ -68,7 +68,8 @@
     "contacts": "Contacts",
     "pipeline": "Pipeline",
     "tasks": "Tasks",
-    "reports": "Reports"
+    "reports": "Reports",
+    "inbox": "Inbox"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -104,7 +105,11 @@
       "accessToken": "Access Token",
       "accessTokenHint": "Permanent WhatsApp API token (System User) from your Meta account. Stored encrypted and never shown back. Leave blank to keep the current one.",
       "tokenSet": "Set",
-      "tokenNotSet": "Not set"
+      "tokenNotSet": "Not set",
+      "modeLabel": "Who replies",
+      "modeHint": "Choose whether the AI answers on its own or your team answers from the inbox.",
+      "modeAgent": "AI agent",
+      "modeInbox": "My team (inbox)"
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",
@@ -904,5 +909,20 @@
       "noData": "No data in this period",
       "noClosed": "No deals closed in this period"
     }
+  },
+  "inbox": {
+    "title": "Inbox",
+    "description": "Talk to your customers on WhatsApp — the whole team on one number.",
+    "empty": "No conversations yet",
+    "emptyHint": "Conversations appear here when a customer messages a number set to inbox mode.",
+    "selectConversation": "Select a conversation",
+    "back": "Back",
+    "refresh": "Refresh",
+    "replyPlaceholder": "Write your reply…",
+    "send": "Send",
+    "prefixHint": "Your name is added automatically at the start of the message.",
+    "openContact": "View contact",
+    "windowClosedShort": "window closed",
+    "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again."
   }
 }

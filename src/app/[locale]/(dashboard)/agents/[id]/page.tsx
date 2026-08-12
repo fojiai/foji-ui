@@ -33,6 +33,7 @@ const schema = z.object({
   whatsAppEnabled: z.boolean(),
   whatsAppPhoneNumberId: z.string().optional(),
   whatsAppAccessToken: z.string().optional(),
+  whatsAppMode: z.enum(["Agent", "Inbox"]).optional(),
   supportWhatsAppNumber: z.string().optional(),
   salesWhatsAppNumber: z.string().optional(),
   supportEmail: z.string().email().optional().or(z.literal("")),
@@ -126,6 +127,7 @@ export default function AgentDetailPage() {
         isActive: a.isActive,
         whatsAppEnabled: a.whatsAppEnabled,
         whatsAppPhoneNumberId: a.whatsAppPhoneNumberId ?? "",
+        whatsAppMode: (a.whatsAppMode as "Agent" | "Inbox") ?? "Agent",
         supportWhatsAppNumber: a.supportWhatsAppNumber ?? "",
         salesWhatsAppNumber: a.salesWhatsAppNumber ?? "",
         supportEmail: a.supportEmail ?? "",
@@ -623,6 +625,20 @@ export default function AgentDetailPage() {
                   </div>
                   {watch("whatsAppEnabled") && (
                     <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>{t("agents.whatsapp.modeLabel")}</Label>
+                        <p className="text-xs text-muted-foreground">{t("agents.whatsapp.modeHint")}</p>
+                        <Select
+                          value={watch("whatsAppMode") ?? "Agent"}
+                          onValueChange={(v) => setValue("whatsAppMode", v as "Agent" | "Inbox")}
+                        >
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Agent">{t("agents.whatsapp.modeAgent")}</SelectItem>
+                            <SelectItem value="Inbox">{t("agents.whatsapp.modeInbox")}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <div className="space-y-2">
                         <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
                         <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
