@@ -784,7 +784,10 @@
         "Call": "Call",
         "Email": "Email",
         "WhatsApp": "WhatsApp",
-        "Meeting": "Meeting"
+        "Meeting": "Meeting",
+        "Presentation": "Presentation",
+        "Visit": "Visit",
+        "FollowUp": "Follow-up"
       },
       "priorities": {
         "Low": "Low",
@@ -804,7 +807,8 @@
       },
       "overdueCount": "{count} overdue",
       "openCount": "{count} open",
-      "deleteConfirm": "This task will be permanently deleted."
+      "deleteConfirm": "This task will be permanently deleted.",
+      "addToCalendar": "Add to Google Calendar"
     },
     "email": {
       "compose": "Send email",

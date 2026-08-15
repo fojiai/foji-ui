@@ -784,7 +784,10 @@
         "Call": "Ligação",
         "Email": "E-mail",
         "WhatsApp": "WhatsApp",
-        "Meeting": "Reunião"
+        "Meeting": "Reunião",
+        "Presentation": "Apresentação",
+        "Visit": "Visita",
+        "FollowUp": "Follow-up"
       },
       "priorities": {
         "Low": "Baixa",
@@ -804,7 +807,8 @@
       },
       "overdueCount": "{count} atrasadas",
       "openCount": "{count} em aberto",
-      "deleteConfirm": "Esta tarefa será excluída permanentemente."
+      "deleteConfirm": "Esta tarefa será excluída permanentemente.",
+      "addToCalendar": "Adicionar ao Google Agenda"
     },
     "email": {
       "compose": "Enviar e-mail",

@@ -784,7 +784,10 @@
         "Call": "Llamada",
         "Email": "Correo",
         "WhatsApp": "WhatsApp",
-        "Meeting": "Reunión"
+        "Meeting": "Reunión",
+        "Presentation": "Presentación",
+        "Visit": "Visita",
+        "FollowUp": "Seguimiento"
       },
       "priorities": {
         "Low": "Baja",
@@ -804,7 +807,8 @@
       },
       "overdueCount": "{count} atrasadas",
       "openCount": "{count} abiertas",
-      "deleteConfirm": "Esta tarea se eliminará permanentemente."
+      "deleteConfirm": "Esta tarea se eliminará permanentemente.",
+      "addToCalendar": "Agregar a Google Calendar"
     },
     "email": {
       "compose": "Enviar correo",

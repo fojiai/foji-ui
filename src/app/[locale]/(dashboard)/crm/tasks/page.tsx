@@ -24,9 +24,25 @@ import {
 } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { toast } from "@/hooks/use-toast";
-import { ListChecks, Plus, Lock, Trash2, Check, RotateCcw, AlertTriangle } from "lucide-react";
+import {
+  ListChecks, Plus, Lock, Trash2, Check, RotateCcw, AlertTriangle,
+  Phone, Users, Presentation, MapPin, CornerUpRight, Mail, MessageCircle, CircleDot, CalendarPlus,
+} from "lucide-react";
+import { TASK_TYPES, googleCalendarUrl } from "@/lib/task-types";
 
-const TYPES = ["General", "Call", "Email", "WhatsApp", "Meeting"];
+const TYPES = TASK_TYPES;
+
+/** Icon per task type — a coloured badge alone is hard to scan in a long list. */
+const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Call: Phone,
+  Meeting: Users,
+  Presentation: Presentation,
+  Visit: MapPin,
+  FollowUp: CornerUpRight,
+  Email: Mail,
+  WhatsApp: MessageCircle,
+  General: CircleDot,
+};
 const PRIORITIES = ["Low", "Normal", "High"];
 const emptyForm: CrmTaskInput = { title: "", type: "General", priority: "Normal" };
 
@@ -229,7 +245,13 @@ export default function TasksPage() {
           <div className="min-w-0 space-y-1">
             <p className={`text-sm font-medium ${done ? "line-through" : ""}`}>{task.title}</p>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-              <Badge variant="outline" className="text-[10px]">{t(`crm.tasks.types.${task.type}`)}</Badge>
+              <Badge variant="outline" className="gap-1 text-[10px]">
+                {(() => {
+                  const Icon = TYPE_ICONS[task.type] ?? CircleDot;
+                  return <Icon className="h-3 w-3" />;
+                })()}
+                {t(`crm.tasks.types.${task.type}`)}
+              </Badge>
               {task.contactName && (
                 <Link
                   href={`/${locale}/crm/contacts/${task.contactId}`}
@@ -262,6 +284,28 @@ export default function TasksPage() {
           >
             {t(`crm.tasks.priorities.${task.priority}`)}
           </Badge>
+          {task.dueAt && !done && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground"
+              title={t("crm.tasks.addToCalendar")}
+              asChild
+            >
+              <a
+                href={googleCalendarUrl({
+                  title: task.title,
+                  dueAt: task.dueAt,
+                  details: task.description,
+                })}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t("crm.tasks.addToCalendar")}
+              >
+                <CalendarPlus className="h-3.5 w-3.5" />
+              </a>
+            </Button>
+          )}
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
