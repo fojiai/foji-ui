@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Lightbulb, FileText, Sparkles, Info } from "lucide-react";
+import { ArrowLeft, Lightbulb, FileText, Info } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import { agentsApi, ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -53,6 +54,23 @@ const EXAMPLE_PROMPTS: Record<string, { labelKey: string; promptKey: string }[]>
     { labelKey: "agents.examples.payroll", promptKey: "agents.examples.payrollPrompt" },
   ],
 };
+
+/** Numbered card header, so the form reads as the same 1-2-3 flow as the intro. */
+function StepHeader({ n, title, description }: { n: number; title: string; description?: string }) {
+  return (
+    <CardHeader>
+      <div className="flex items-start gap-3">
+        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+          {n}
+        </span>
+        <div>
+          <CardTitle className="text-base">{title}</CardTitle>
+          {description && <CardDescription className="mt-1">{description}</CardDescription>}
+        </div>
+      </div>
+    </CardHeader>
+  );
+}
 
 export default function NewAgentPage() {
   const t = useTranslations();
@@ -143,10 +161,7 @@ export default function NewAgentPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Basic info */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("agents.basicInfo")}</CardTitle>
-            <CardDescription>{t("agents.basicInfoHint")}</CardDescription>
-          </CardHeader>
+          <StepHeader n={1} title={t("agents.basicInfo")} description={t("agents.basicInfoHint")} />
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>{t("agents.name")}</Label>
@@ -160,7 +175,7 @@ export default function NewAgentPage() {
               </Label>
               <Input {...register("description")} placeholder={t("agents.descriptionPlaceholder")} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>{t("agents.industry")}</Label>
                 <Select value={watch("industryType")} onValueChange={(v) => setValue("industryType", v as any)}>
@@ -190,13 +205,7 @@ export default function NewAgentPage() {
 
         {/* System prompt with examples */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              {t("agents.systemPrompt")}
-            </CardTitle>
-            <CardDescription>{t("agents.systemPromptHint")}</CardDescription>
-          </CardHeader>
+          <StepHeader n={2} title={t("agents.systemPrompt")} description={t("agents.systemPromptHint")} />
           <CardContent className="space-y-4">
             {/* Example prompt buttons */}
             <div className="space-y-2">
@@ -238,8 +247,7 @@ export default function NewAgentPage() {
                 <span className="text-muted-foreground ml-1 text-xs">({t("common.optional")})</span>
               </Label>
               <p className="text-xs text-muted-foreground">{t("agents.userPromptHint")}</p>
-              <textarea
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              <Textarea
                 placeholder={t("agents.userPromptPlaceholder")}
                 {...register("userPrompt")}
               />
@@ -247,13 +255,14 @@ export default function NewAgentPage() {
           </CardContent>
         </Card>
 
-        {/* Files hint */}
-        <Card className="border-dashed">
+        {/* Files hint — deliberately prominent: people look for the upload here
+            and get confused when it only exists after the agent is created. */}
+        <Card className="border-accent/40 bg-accent/5">
           <CardContent className="flex items-start gap-3 py-4">
-            <FileText className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+            <FileText className="h-5 w-5 text-accent shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium">{t("agents.filesHint.title")}</p>
-              <p className="text-xs text-muted-foreground mt-1">{t("agents.filesHint.description")}</p>
+              <p className="text-sm font-bold">{t("agents.filesHint.title")}</p>
+              <p className="mt-1 text-sm font-medium text-foreground">{t("agents.filesHint.description")}</p>
               <div className="flex gap-2 mt-2">
                 <Badge variant="secondary" className="text-xs">PDF</Badge>
                 <Badge variant="secondary" className="text-xs">DOCX</Badge>

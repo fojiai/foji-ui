@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PhoneInput } from "@/components/shared/phone-input";
 import { toast } from "@/hooks/use-toast";
 
 const schema = z.object({
@@ -508,7 +509,11 @@ export default function AgentDetailPage() {
                       </div>
                       <div className="space-y-2">
                         <Label>{t("agents.handoff.notifyWhatsApp")} <span className="text-muted-foreground">({t("common.optional")})</span></Label>
-                        <Input {...register("handoffNotifyWhatsApp")} placeholder="+5511999999999" />
+                        <PhoneInput
+                        value={watch("handoffNotifyWhatsApp")}
+                        onChange={(v) => setValue("handoffNotifyWhatsApp", v)}
+                        placeholder="85 98156-0609"
+                      />
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -689,11 +694,19 @@ export default function AgentDetailPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>{t("agents.escalation.supportWhatsApp")}</Label>
-                      <Input {...register("supportWhatsAppNumber")} placeholder="+5511999999999" />
+                      <PhoneInput
+                        value={watch("supportWhatsAppNumber")}
+                        onChange={(v) => setValue("supportWhatsAppNumber", v)}
+                        placeholder="85 98156-0609"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>{t("agents.escalation.salesWhatsApp")}</Label>
-                      <Input {...register("salesWhatsAppNumber")} placeholder="+5511888888888" />
+                      <PhoneInput
+                        value={watch("salesWhatsAppNumber")}
+                        onChange={(v) => setValue("salesWhatsAppNumber", v)}
+                        placeholder="85 98156-0609"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>{t("agents.escalation.supportEmail")}</Label>
