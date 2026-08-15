@@ -15,6 +15,7 @@ import {
   type Contact,
   type CompanyMember,
   type TimelineItem,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -110,8 +111,8 @@ export default function ContactDetailPage() {
           estimatedValue: c.estimatedValue != null ? String(c.estimatedValue) : "",
           notes: c.notes ?? "",
         });
-      } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+      } catch (err) {
+        toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       } finally {
         setIsLoading(false);
       }
@@ -135,8 +136,8 @@ export default function ContactDetailPage() {
       });
       setContact(updated);
       toast({ title: t("crm.contacts.updated") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -148,8 +149,8 @@ export default function ContactDetailPage() {
     try {
       setTags(await contactsApi.addTag(activeCompanyId, contactId, tag));
       setNewTag("");
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -157,8 +158,8 @@ export default function ContactDetailPage() {
     if (!activeCompanyId) return;
     try {
       setTags(await contactsApi.removeTag(activeCompanyId, contactId, tag));
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -179,8 +180,8 @@ export default function ContactDetailPage() {
       const draft = await crmEmailsApi.draft(activeCompanyId, { contactId, goal: emailGoal.trim() });
       setEmailForm((f) => ({ ...f, subject: draft.subject, body: draft.body }));
       toast({ title: t("crm.email.drafted") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setDrafting(false);
     }
@@ -199,8 +200,8 @@ export default function ContactDetailPage() {
       setEmailOpen(false);
       toast({ title: t("crm.email.sent") });
       setTimeline(await contactsApi.timeline(activeCompanyId, contactId).catch(() => timeline));
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSendingEmail(false);
     }

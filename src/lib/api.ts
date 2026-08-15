@@ -984,3 +984,19 @@ export const analyticsApi = {
     return apiFetch<CompanyStats>(`/api/companies/${companyId}/stats?${params}`);
   },
 };
+
+/**
+ * Message to show the user for a failed request.
+ *
+ * 4xx bodies are written for humans — "Invalid email or password.", plan
+ * limits, validation. Those must reach the screen; swallowing them into a
+ * generic "something went wrong" is how a wrong password becomes unexplainable.
+ * 5xx is deliberately opaque server-side, so the caller's fallback is used.
+ */
+export function apiErrorMessage(err: unknown, fallback: string): string {
+  if (err instanceof ApiError && err.status < 500) {
+    const msg = err.message?.trim();
+    if (msg && msg.toLowerCase() !== "bad request") return msg;
+  }
+  return fallback;
+}

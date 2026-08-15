@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/components/providers/auth-provider";
-import { apiFetch, adminApi, type SystemAdminInvitation } from "@/lib/api";
+import { apiFetch, adminApi, type SystemAdminInvitation, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,8 +56,8 @@ function SuperAdminTeamView() {
     setIsLoading(true);
     try {
       setInvitations(await adminApi.listInvitations());
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }
@@ -73,8 +73,8 @@ function SuperAdminTeamView() {
       reset();
       setDialogOpen(false);
       await load();
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -85,8 +85,8 @@ function SuperAdminTeamView() {
       await adminApi.deleteInvitation(id);
       toast({ title: t("common.success") });
       setInvitations((prev) => prev.filter((i) => i.id !== id));
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 

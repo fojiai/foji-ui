@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { LogOut, ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -78,8 +78,8 @@ export function UserSettingsModal({
         body: JSON.stringify(data),
       });
       toast({ title: t("common.success") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSavingProfile(false);
     }
@@ -98,8 +98,8 @@ export function UserSettingsModal({
       toast({ title: t("common.success") });
       passwordForm.reset();
       setShowPasswordSection(false);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSavingPassword(false);
     }

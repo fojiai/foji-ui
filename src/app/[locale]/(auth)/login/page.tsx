@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { apiErrorMessage } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import Link from "next/link";
 
@@ -46,8 +47,8 @@ export default function LoginPage() {
       } else {
         router.push("/dashboard");
       }
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }

@@ -12,11 +12,13 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   dealsApi, contactsApi, membersApi, subscriptionsApi,
   type Board, type DealCard, type Contact, type CompanyMember, type CreateDealInput,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -146,8 +148,8 @@ export default function PipelinePage() {
           setMembers(memberList);
           setPipeline(pipes.find((x) => x.id === b.pipelineId) ?? null);
         }
-      } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+      } catch (err) {
+        toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       } finally {
         setIsLoading(false);
       }
@@ -194,8 +196,8 @@ export default function PipelinePage() {
       await dealsApi.move(activeCompanyId, dealId, toStageId);
       await refreshBoard();
       toast({ title: t("crm.pipeline.moved") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       await refreshBoard();
     }
   }
@@ -209,8 +211,8 @@ export default function PipelinePage() {
       setForm({ contactId: 0, title: "", value: 0, currency: "BRL" });
       await refreshBoard();
       toast({ title: t("crm.pipeline.created") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -355,10 +357,11 @@ export default function PipelinePage() {
               </div>
               <div className="space-y-1.5">
                 <Label>{t("crm.pipeline.expectedClose")}</Label>
-                <Input
-                  type="date"
+                <DatePicker
                   value={form.expectedCloseDate ?? ""}
-                  onChange={(e) => setForm({ ...form, expectedCloseDate: e.target.value || null })}
+                  onChange={(v) => setForm({ ...form, expectedCloseDate: v || null })}
+                  clearLabel={t("common.clear")}
+                  todayLabel={t("common.today")}
                 />
               </div>
             </div>

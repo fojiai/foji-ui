@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/components/providers/auth-provider";
-import { handoffsApi, agentsApi, type HandoffEvent, type Agent } from "@/lib/api";
+import { handoffsApi, agentsApi, type HandoffEvent, type Agent, apiErrorMessage } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -30,8 +30,8 @@ export default function HandoffsPage() {
         ]);
         setHandoffs(handoffList);
         setAgents(agentList);
-      } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+      } catch (err) {
+        toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       } finally {
         setIsLoading(false);
       }
@@ -46,8 +46,8 @@ export default function HandoffsPage() {
       const agentId = value === "all" ? undefined : Number(value);
       const filtered = await handoffsApi.list(activeCompanyId, agentId);
       setHandoffs(filtered);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 

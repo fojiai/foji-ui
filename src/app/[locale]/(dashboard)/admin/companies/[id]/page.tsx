@@ -11,6 +11,7 @@ import { z } from "zod";
 import { adminCompaniesApi, plansApi, type AdminCompanyDetail, type Plan } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -401,7 +402,10 @@ export default function AdminCompanyDetailPage() {
                 <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" /> Period End
                 <span className="text-xs text-muted-foreground ml-1">(leave blank = no expiry)</span>
               </Label>
-              <Input type="date" {...assignForm.register("periodEnd")} />
+              <DatePicker
+                value={assignForm.watch("periodEnd") ?? ""}
+                onChange={(v) => assignForm.setValue("periodEnd", v)}
+              />
             </div>
 
             <div className="space-y-2">

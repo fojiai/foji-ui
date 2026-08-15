@@ -8,11 +8,13 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   dealsApi, pipelineApi, membersApi, tasksApi,
   type Deal, type Pipeline, type CompanyMember, type CrmTask,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -113,8 +115,8 @@ export default function DealDetailPage() {
       });
       hydrate(updated);
       toast({ title: t("crm.deals.saved") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -126,8 +128,8 @@ export default function DealDetailPage() {
     try {
       hydrate(await dealsApi.move(activeCompanyId, deal.id, Number(stageId)));
       toast({ title: t("crm.pipeline.moved") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setMovingStage(false);
     }
@@ -139,8 +141,8 @@ export default function DealDetailPage() {
       await dealsApi.delete(activeCompanyId, deal.id);
       toast({ title: t("crm.deals.deleted") });
       router.push(`/${locale}/crm/pipeline`);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -283,7 +285,12 @@ export default function DealDetailPage() {
             </div>
             <div className="space-y-1.5">
               <Label>{t("crm.pipeline.expectedClose")}</Label>
-              <Input type="date" value={expectedClose} onChange={(e) => setExpectedClose(e.target.value)} />
+              <DatePicker
+                value={expectedClose}
+                onChange={setExpectedClose}
+                clearLabel={t("common.clear")}
+                todayLabel={t("common.today")}
+              />
             </div>
           </div>
           <div className="space-y-1.5">

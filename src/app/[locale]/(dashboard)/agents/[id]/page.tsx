@@ -9,7 +9,7 @@ import { z } from "zod";
 import { ArrowLeft, Calendar, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle, UserPlus, PhoneForwarded } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
-import { agentsApi, calendarApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription } from "@/lib/api";
+import { agentsApi, calendarApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -160,8 +160,8 @@ export default function AgentDetailPage() {
         handoffNotifyWhatsApp: a.handoffNotifyWhatsApp ?? "",
         handoffMessage: a.handoffMessage ?? "",
       });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }
@@ -221,8 +221,8 @@ export default function AgentDetailPage() {
       await calendarApi.disconnect(agentId);
       setAgent((prev) => prev ? { ...prev, calendarConnected: false, calendarGoogleEmail: null } : prev);
       toast({ title: t("agents.calendar.disconnectedSuccess") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -242,8 +242,8 @@ export default function AgentDetailPage() {
       await loadAgent(); // refresh full detail — update returns only a partial result
       setTestKey((k) => k + 1); // reload test iframe
       toast({ title: t("common.success") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsSaving(false);
     }
@@ -256,8 +256,8 @@ export default function AgentDetailPage() {
       const { agentToken } = await agentsApi.regenerateToken(activeCompanyId, agentId);
       setAgent((prev) => prev ? { ...prev, agentToken } : prev);
       toast({ title: t("agents.detail.tokenRegenerated") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsRegenerating(false);
     }
@@ -269,8 +269,8 @@ export default function AgentDetailPage() {
       await agentsApi.delete(activeCompanyId, agentId);
       toast({ title: t("agents.detail.agentDeleted") });
       router.push("/agents");
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -294,8 +294,8 @@ export default function AgentDetailPage() {
       const uploaded = await filesApi.upload(agentId, file);
       setFiles((prev) => [uploaded, ...prev]);
       toast({ title: t("files.uploadSuccess") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setUploadingFile(false);
     }
@@ -306,8 +306,8 @@ export default function AgentDetailPage() {
       await filesApi.delete(fileId);
       setFiles((prev) => prev.filter((f) => f.id !== fileId));
       toast({ title: t("common.success") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 

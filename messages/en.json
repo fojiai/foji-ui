@@ -24,7 +24,9 @@
     "date": "Date",
     "price": "Price",
     "optional": "optional",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "clear": "Clear",
+    "today": "Today"
   },
   "auth": {
     "login": "Sign in",
@@ -808,7 +810,8 @@
       "overdueCount": "{count} overdue",
       "openCount": "{count} open",
       "deleteConfirm": "This task will be permanently deleted.",
-      "addToCalendar": "Add to Google Calendar"
+      "addToCalendar": "Add to Google Calendar",
+      "noDueDate": "No due date"
     },
     "email": {
       "compose": "Send email",

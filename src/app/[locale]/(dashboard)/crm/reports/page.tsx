@@ -9,7 +9,7 @@ import {
   Tooltip, XAxis, YAxis,
 } from "recharts";
 import { useAuth } from "@/components/providers/auth-provider";
-import { crmAnalyticsApi, subscriptionsApi, type CrmSummary } from "@/lib/api";
+import { crmAnalyticsApi, subscriptionsApi, type CrmSummary, apiErrorMessage } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -70,8 +70,8 @@ export default function CrmReportsPage() {
     setIsFetching(true);
     try {
       setData(await crmAnalyticsApi.summary(activeCompanyId, Number(value)));
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsFetching(false);
     }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { contactsApi, type Contact } from "@/lib/api";
+import { contactsApi, type Contact, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -65,8 +65,8 @@ export function MergeDialog({
       toast({ title: t("crm.merge.merged") });
       onMerged(merged);
       onOpenChange(false);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setMergingId(null);
     }

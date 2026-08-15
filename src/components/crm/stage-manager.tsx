@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { pipelineApi, type Pipeline, type PipelineStage } from "@/lib/api";
+import { pipelineApi, type Pipeline, type PipelineStage, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,8 +54,8 @@ export function StageManager({
       await fn();
       await onChanged();
       if (successKey) toast({ title: t(successKey) });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setBusy(false);
     }

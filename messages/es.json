@@ -24,7 +24,9 @@
     "date": "Fecha",
     "price": "Precio",
     "optional": "opcional",
-    "copied": "¡Copiado!"
+    "copied": "¡Copiado!",
+    "clear": "Limpiar",
+    "today": "Hoy"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -808,7 +810,8 @@
       "overdueCount": "{count} atrasadas",
       "openCount": "{count} abiertas",
       "deleteConfirm": "Esta tarea se eliminará permanentemente.",
-      "addToCalendar": "Agregar a Google Calendar"
+      "addToCalendar": "Agregar a Google Calendar",
+      "noDueDate": "Sin fecha"
     },
     "email": {
       "compose": "Enviar correo",

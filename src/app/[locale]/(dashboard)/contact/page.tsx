@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CheckCircle2, Send, Clock, Check, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
-import { apiFetch, ApiError } from "@/lib/api";
+import { apiFetch, ApiError, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,8 +54,8 @@ function SuperAdminContactView() {
         (`/api/admin/contacts?resolved=${showResolved}&page=${page}&pageSize=${PAGE_SIZE}`);
       setContacts(data.items);
       setTotal(data.total);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }
@@ -71,8 +71,8 @@ function SuperAdminContactView() {
       });
       await load();
       toast({ title: t("common.success") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -87,8 +87,8 @@ function SuperAdminContactView() {
       toast({ title: t("common.success") });
       setSelected(null);
       await load();
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }

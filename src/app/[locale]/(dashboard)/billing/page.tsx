@@ -14,10 +14,12 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   analyticsApi, agentsApi, plansApi, subscriptionsApi, adminCompaniesApi,
   type Plan, type Subscription, type CompanyStats, type AdminCompanyListItem,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -80,8 +82,8 @@ function SuperAdminSubscriptionsView() {
       setCompanies(data.items);
       setTotal(data.total);
       setPlans(allPlans);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }
@@ -104,8 +106,8 @@ function SuperAdminSubscriptionsView() {
       setAssignTarget(null);
       setSelectedPlanId("");
       await load(search, page);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setAssigning(false);
     }
@@ -116,8 +118,8 @@ function SuperAdminSubscriptionsView() {
       await adminCompaniesApi.removePlan(companyId);
       toast({ title: t("common.success") });
       await load(search, page);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -134,8 +136,8 @@ function SuperAdminSubscriptionsView() {
       customPlanForm.reset();
       setCustomPlanOpen(false);
       await load(search, page);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setCreatingPlan(false);
     }
@@ -346,20 +348,18 @@ function SuperAdminSubscriptionsView() {
                 <Input type="number" {...customPlanForm.register("maxMessagesPerMonth")} />
               </div>
               <div className="flex items-center gap-2 pt-6">
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="hasWhatsApp"
-                  className="h-4 w-4 rounded border-input"
-                  {...customPlanForm.register("hasWhatsApp")}
+                  checked={!!customPlanForm.watch("hasWhatsApp")}
+                  onCheckedChange={(v) => customPlanForm.setValue("hasWhatsApp", v)}
                 />
                 <Label htmlFor="hasWhatsApp">WhatsApp</Label>
               </div>
               <div className="flex items-center gap-2 pt-6">
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="hasEscalation"
-                  className="h-4 w-4 rounded border-input"
-                  {...customPlanForm.register("hasEscalationContacts")}
+                  checked={!!customPlanForm.watch("hasEscalationContacts")}
+                  onCheckedChange={(v) => customPlanForm.setValue("hasEscalationContacts", v)}
                 />
                 <Label htmlFor="hasEscalation">Escalation</Label>
               </div>
@@ -465,8 +465,8 @@ function RegularBillingView() {
     try {
       const { portalUrl } = await subscriptionsApi.portal(activeCompanyId);
       window.location.href = portalUrl;
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setPortalLoading(false);
     }

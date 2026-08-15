@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Image from "next/image";
 import { Check, X, Loader2 } from "lucide-react";
-import { authApi, plansApi, subscriptionsApi, type Plan } from "@/lib/api";
+import { authApi, plansApi, subscriptionsApi, type Plan, apiErrorMessage } from "@/lib/api";
 import { setToken } from "@/lib/auth";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
@@ -131,8 +131,8 @@ export default function OnboardingPage() {
     try {
       const { checkoutUrl } = await subscriptionsApi.checkout(companyId, selectedPlanId);
       window.location.href = checkoutUrl;
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       setIsLoading(false);
     }
   }

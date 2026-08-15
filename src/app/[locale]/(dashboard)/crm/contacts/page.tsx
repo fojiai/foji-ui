@@ -12,6 +12,7 @@ import {
   type Contact,
   type CompanyMember,
   type ContactInput,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -92,8 +93,8 @@ export default function ContactsPage() {
       try {
         setContacts(await contactsApi.list(activeCompanyId, params));
         setSelected(new Set());
-      } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+      } catch (err) {
+        toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       } finally {
         setIsFetching(false);
       }
@@ -186,8 +187,8 @@ export default function ContactsPage() {
       } else {
         toast({ title: t("crm.contacts.bulkUpdated", { count: ids.length }) });
       }
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setBulkSaving(false);
     }
@@ -216,8 +217,8 @@ export default function ContactsPage() {
       setDialogOpen(false);
       setForm({ status: "New" });
       toast({ title: t("crm.contacts.created") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }

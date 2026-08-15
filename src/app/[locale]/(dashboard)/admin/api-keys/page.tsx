@@ -6,10 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Plus, Trash2, Eye, EyeOff, KeyRound, Cloud, Sparkles, Bot, Mail } from "lucide-react";
-import { adminApi, type PlatformSettingResult } from "@/lib/api";
+import { adminApi, type PlatformSettingResult, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -61,8 +62,8 @@ export default function ApiKeysPage() {
     setIsLoading(true);
     try {
       setSettings(await adminApi.getSettings());
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setIsLoading(false);
     }
@@ -78,8 +79,8 @@ export default function ApiKeysPage() {
       form.reset({ isSecret: true, category: "openai", key: "", value: "", label: "" });
       setDialogOpen(false);
       await load();
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -90,8 +91,8 @@ export default function ApiKeysPage() {
       await adminApi.deleteSetting(key);
       toast({ title: t("common.success") });
       setSettings((prev) => prev.filter((s) => s.key !== key));
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 
@@ -330,11 +331,10 @@ export default function ApiKeysPage() {
                 </Select>
               </div>
               <div className="flex items-center gap-2 pt-7">
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="isSecret"
-                  className="h-4 w-4 rounded border-input"
-                  {...form.register("isSecret")}
+                  checked={!!form.watch("isSecret")}
+                  onCheckedChange={(v) => form.setValue("isSecret", v)}
                 />
                 <Label htmlFor="isSecret">{t("admin.apiKeys.secret")}</Label>
               </div>

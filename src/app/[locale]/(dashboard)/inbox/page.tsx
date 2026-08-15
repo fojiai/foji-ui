@@ -8,6 +8,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   inboxApi, membersApi,
   type InboxConversation, type InboxMessage, type InboxThread, type CompanyMember,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -170,8 +171,8 @@ export default function InboxPage() {
       const updated = await inboxApi.assign(activeCompanyId, selectedId, userId);
       setThread((prev) => (prev ? { ...prev, conversation: updated } : prev));
       setConversations((prev) => prev?.map((x) => (x.id === updated.id ? updated : x)) ?? prev);
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     }
   }
 

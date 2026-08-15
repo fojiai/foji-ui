@@ -8,11 +8,13 @@ import { useAuth } from "@/components/providers/auth-provider";
 import {
   tasksApi, contactsApi, membersApi, subscriptionsApi,
   type CrmTask, type Contact, type CompanyMember, type CrmTaskInput,
+  apiErrorMessage,
 } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SkeletonRows } from "@/components/ui/skeleton";
@@ -101,8 +103,8 @@ export default function TasksPage() {
       setIsFetching(true);
       try {
         setTasks(await tasksApi.list(activeCompanyId, params));
-      } catch {
-        toast({ variant: "destructive", title: t("errors.generic") });
+      } catch (err) {
+        toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
       } finally {
         setIsFetching(false);
       }
@@ -166,8 +168,8 @@ export default function TasksPage() {
       setForm(emptyForm);
       await fetchTasks();
       toast({ title: t("crm.tasks.created") });
-    } catch {
-      toast({ variant: "destructive", title: t("errors.generic") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
       setSaving(false);
     }
@@ -436,7 +438,17 @@ export default function TasksPage() {
                 <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {TYPES.map((x) => <SelectItem key={x} value={x}>{t(`crm.tasks.types.${x}`)}</SelectItem>)}
+                    {TYPES.map((x) => {
+                      const Icon = TYPE_ICONS[x] ?? CircleDot;
+                      return (
+                        <SelectItem key={x} value={x}>
+                          <span className="flex items-center gap-2">
+                            <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                            {t(`crm.tasks.types.${x}`)}
+                          </span>
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               </div>
@@ -484,10 +496,12 @@ export default function TasksPage() {
             </div>
             <div className="space-y-1.5">
               <Label>{t("crm.tasks.dueAt")}</Label>
-              <Input
-                type="date"
+              <DatePicker
                 value={form.dueAt ?? ""}
-                onChange={(e) => setForm({ ...form, dueAt: e.target.value || null })}
+                onChange={(v) => setForm({ ...form, dueAt: v || null })}
+                placeholder={t("crm.tasks.noDueDate")}
+                clearLabel={t("common.clear")}
+                todayLabel={t("common.today")}
               />
             </div>
             <div className="space-y-1.5">
