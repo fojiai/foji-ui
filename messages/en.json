@@ -171,7 +171,7 @@
       "invoicingPrompt": "You are an invoicing and billing assistant. Help users understand invoicing procedures, payment terms, billing cycles, and how to resolve billing discrepancies based on the documents provided. Guide them through step-by-step processes when needed.",
       "payroll": "Payroll",
       "payrollPrompt": "You are a payroll information assistant. Help employees and managers understand payroll schedules, deductions, benefits calculations, and overtime rules based on the documents provided. For specific payroll corrections, recommend contacting the payroll department directly.",
-      "generalAssistantPrompt": "You are a smart virtual assistant for {COMPANY_NAME}. Help customers and team members with a wide range of tasks: answering general questions, scheduling appointments, providing information about products and services, and offering day-to-day support. Be proactive, attentive, and adapt your tone to the conversation.",
+      "generalAssistantPrompt": "You are a smart virtual assistant for our company. Help customers and team members with a wide range of tasks: answering general questions, scheduling appointments, providing information about products and services, and offering day-to-day support. Be proactive, attentive, and adapt your tone to the conversation.",
       "generalAssistant": "Virtual Assistant"
     },
     "howItWorks": {

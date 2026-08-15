@@ -171,7 +171,7 @@
       "invoicingPrompt": "Eres un asistente de facturación y cobros. Ayuda a los usuarios a entender procedimientos de emisión de facturas, condiciones de pago, ciclos de cobro y cómo resolver discrepancias basándote en los documentos proporcionados. Guíalos con procesos paso a paso cuando sea necesario.",
       "payroll": "Nómina",
       "payrollPrompt": "Eres un asistente de información de nómina. Ayuda a empleados y gerentes a entender cronogramas de pago, deducciones, cálculos de beneficios y reglas de horas extra basándote en los documentos proporcionados. Para correcciones específicas de nómina, recomienda contactar al departamento de nómina directamente.",
-      "generalAssistantPrompt": "Eres un asistente virtual inteligente para {COMPANY_NAME}. Ayuda a clientes y colaboradores con una amplia variedad de tareas: responder preguntas generales, agendar citas, brindar información sobre productos y servicios y ofrecer soporte cotidiano. Sé proactivo, atento y adapta tu tono al contexto de la conversación.",
+      "generalAssistantPrompt": "Eres un asistente virtual inteligente para nuestra empresa. Ayuda a clientes y colaboradores con una amplia variedad de tareas: responder preguntas generales, agendar citas, brindar información sobre productos y servicios y ofrecer soporte cotidiano. Sé proactivo, atento y adapta tu tono al contexto de la conversación.",
       "generalAssistant": "Asistente Virtual"
     },
     "howItWorks": {
