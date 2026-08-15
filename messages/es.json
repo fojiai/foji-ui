@@ -747,7 +747,8 @@
       "cancel": "Cancelar",
       "deals": "negocios",
       "moved": "Negocio movido",
-      "created": "Negocio creado"
+      "created": "Negocio creado",
+      "goToContacts": "Ir a Contactos"
     },
     "tasks": {
       "title": "Tareas",

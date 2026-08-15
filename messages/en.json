@@ -747,7 +747,8 @@
       "cancel": "Cancel",
       "deals": "deals",
       "moved": "Deal moved",
-      "created": "Deal created"
+      "created": "Deal created",
+      "goToContacts": "Go to Contacts"
     },
     "tasks": {
       "title": "Tasks",

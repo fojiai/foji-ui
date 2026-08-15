@@ -257,7 +257,14 @@ export default function PipelinePage() {
       </div>
 
       {contacts.length === 0 && (
-        <p className="text-sm text-muted-foreground">{t("crm.pipeline.noContacts")}</p>
+        // A deal needs a contact, so the button above is disabled. Say why and
+        // give the way out, instead of leaving a dead control on the page.
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-dashed p-3">
+          <p className="text-sm text-muted-foreground">{t("crm.pipeline.noContacts")}</p>
+          <Button variant="outline" size="sm" asChild className="ml-auto">
+            <Link href={`/${locale}/crm/contacts`}>{t("crm.pipeline.goToContacts")}</Link>
+          </Button>
+        </div>
       )}
 
       <DndContext sensors={sensors} onDragEnd={onDragEnd}>
