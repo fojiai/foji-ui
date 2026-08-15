@@ -264,6 +264,14 @@
       "disconnectedSuccess": "Google Agenda desconectado.",
       "requiresPlan": "Disponível em planos que incluem o Google Agenda. Faça upgrade para ativar.",
       "connectError": "Não foi possível conectar o Google Agenda. Tente novamente."
+    },
+    "sections": {
+      "setup": "Configuração do agente",
+      "setupHint": "Identidade e instruções que definem como ele responde.",
+      "experience": "Experiência do cliente",
+      "experienceHint": "O que a pessoa vê e o que acontece durante a conversa.",
+      "channels": "Canais e integrações",
+      "channelsHint": "Onde o agente atende e para onde as conversas vão."
     }
   },
   "handoffs": {

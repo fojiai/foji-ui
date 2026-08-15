@@ -264,6 +264,14 @@
       "disconnectedSuccess": "Google Calendar desconectado.",
       "requiresPlan": "Disponible en planes que incluyen Google Calendar. Actualiza para activarlo.",
       "connectError": "No se pudo conectar Google Calendar. Por favor intenta de nuevo."
+    },
+    "sections": {
+      "setup": "Configuración del agente",
+      "setupHint": "Identidad e instrucciones que definen cómo responde.",
+      "experience": "Experiencia del cliente",
+      "experienceHint": "Lo que ve la persona y lo que ocurre durante la conversación.",
+      "channels": "Canales e integraciones",
+      "channelsHint": "Dónde atiende el agente y a dónde van las conversaciones."
     }
   },
   "handoffs": {

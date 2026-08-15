@@ -75,6 +75,20 @@ function normalizeLanguage(val: string): string {
   return LANGUAGE_MAP[val] ?? val;
 }
 
+/**
+ * Groups the settings cards into labelled bands. The edit form is a long scroll
+ * of eleven cards; without headings it reads as an undifferentiated pile.
+ */
+function SectionHeading({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="pt-4 first:pt-0">
+      <h2 className="text-xs font-semibold uppercase tracking-wider text-primary">{title}</h2>
+      <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
+      <div className="mt-2 border-b border-border" />
+    </div>
+  );
+}
+
 export default function AgentDetailPage() {
   const t = useTranslations();
   const params = useParams();
@@ -354,8 +368,15 @@ export default function AgentDetailPage() {
         {/* ── Settings ─────────────────────────────────────────────────── */}
         <TabsContent value="settings" className="mt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <SectionHeading
+              title={t("agents.sections.setup")}
+              description={t("agents.sections.setupHint")}
+            />
             <Card>
-              <CardHeader><CardTitle className="text-base">{t("agents.basicInfo")}</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-base">{t("agents.basicInfo")}</CardTitle>
+                <CardDescription>{t("agents.basicInfoHint")}</CardDescription>
+              </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>{t("common.active")}</Label>
@@ -414,7 +435,10 @@ export default function AgentDetailPage() {
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="text-base">{t("agents.detail.prompts")}</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-base">{t("agents.detail.prompts")}</CardTitle>
+                <CardDescription>{t("agents.systemPromptHint")}</CardDescription>
+              </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>{t("agents.systemPrompt")}</Label>
@@ -433,6 +457,11 @@ export default function AgentDetailPage() {
                 </div>
               </CardContent>
             </Card>
+
+            <SectionHeading
+              title={t("agents.sections.experience")}
+              description={t("agents.sections.experienceHint")}
+            />
 
             {/* Welcome Message */}
             <Card>
@@ -615,9 +644,17 @@ export default function AgentDetailPage() {
               </CardContent>
             </Card>
 
+            <SectionHeading
+              title={t("agents.sections.channels")}
+              description={t("agents.sections.channelsHint")}
+            />
+
             {subscription?.plan?.hasWhatsApp ? (
               <Card>
-                <CardHeader><CardTitle className="text-base">{t("agents.whatsapp.title")}</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-base">{t("agents.whatsapp.title")}</CardTitle>
+                  <CardDescription>{t("agents.whatsapp.modeHint")}</CardDescription>
+                </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>

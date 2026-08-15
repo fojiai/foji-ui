@@ -264,6 +264,14 @@
       "disconnectedSuccess": "Google Calendar disconnected.",
       "requiresPlan": "Available on plans that include Google Calendar. Upgrade to enable.",
       "connectError": "Could not connect Google Calendar. Please try again."
+    },
+    "sections": {
+      "setup": "Agent setup",
+      "setupHint": "Identity and the instructions that shape how it answers.",
+      "experience": "Customer experience",
+      "experienceHint": "What the visitor sees and what happens during the conversation.",
+      "channels": "Channels & integrations",
+      "channelsHint": "Where the agent works and where conversations go."
     }
   },
   "handoffs": {
