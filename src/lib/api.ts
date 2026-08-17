@@ -255,6 +255,27 @@ export const agentsApi = {
     }),
 };
 
+// ─── WhatsApp usage (live metering) ──────────────────────────────────────────
+
+export interface WhatsAppUsage {
+  used: number;
+  limit: number;
+  unlimited: boolean;
+  periodStart: string;
+  periodEnd: string;
+  overageCentavos: number;
+  remaining: number;
+  overLimit: boolean;
+  overageMessages: number;
+  overageOwedCentavos: number;
+  canSend: boolean;
+}
+
+export const whatsAppUsageApi = {
+  get: (companyId: number) =>
+    apiFetch<WhatsAppUsage>(`/api/whatsapp/usage?companyId=${companyId}`),
+};
+
 // ─── WhatsApp onboarding (Embedded Signup) ───────────────────────────────────
 
 export interface WhatsAppOnboardingConfig {
@@ -824,6 +845,10 @@ export interface Plan {
   hasCrm: boolean;
   maxConversationsPerMonth: number;
   maxMessagesPerMonth: number;
+  /** Outbound WhatsApp messages included. -1 uncapped, 0 none. */
+  whatsAppMessagesPerMonth?: number;
+  /** Centavos per message past the allowance. 0 stops instead of billing. */
+  whatsAppOverageCentavos?: number;
   isActive: boolean;
   isPublic: boolean;
   customForCompanyId?: number;
@@ -878,6 +903,10 @@ export interface SubscriptionPlan {
   hasCrm: boolean;
   maxConversationsPerMonth: number;
   maxMessagesPerMonth: number;
+  /** Outbound WhatsApp messages included. -1 uncapped, 0 none. */
+  whatsAppMessagesPerMonth?: number;
+  /** Centavos per message past the allowance. 0 stops instead of billing. */
+  whatsAppOverageCentavos?: number;
 }
 
 export interface Subscription {

@@ -409,7 +409,10 @@
     "description": "Your plan, your usage and the options available.",
     "yourPlan": "Your plan",
     "popular": "Most chosen",
-    "perMonth": "/mo"
+    "perMonth": "/mo",
+    "whatsappMessages": "WhatsApp messages",
+    "whatsappOverage": "{count} messages over · R$ {amount}",
+    "whatsappLimitReached": "Message limit reached — the agent has stopped replying on WhatsApp."
   },
   "settings": {
     "title": "Settings",

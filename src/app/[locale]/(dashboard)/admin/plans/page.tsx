@@ -32,6 +32,8 @@ const schema = z.object({
   hasCrm: z.boolean(),
   maxConversationsPerMonth: z.coerce.number().int().min(0),
   maxMessagesPerMonth: z.coerce.number().int().min(0),
+  whatsAppMessagesPerMonth: z.coerce.number().int().min(-1),
+  whatsAppOverageCentavos: z.coerce.number().int().min(0),
   isActive: z.boolean(),
   isPublic: z.boolean(),
 });
@@ -47,7 +49,7 @@ export default function PlansPage() {
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true },
+    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, isPublic: true },
   });
 
   async function load() {
@@ -60,13 +62,19 @@ export default function PlansPage() {
 
   function openCreate() {
     setEditing(null);
-    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, isPublic: true });
+    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, isPublic: true });
     setDialogOpen(true);
   }
 
   function openEdit(plan: Plan) {
     setEditing(plan);
-    reset({ ...plan });
+    // Defaulted because plans created before the meter existed have no value,
+    // and zod's coerce would turn undefined into NaN.
+    reset({
+      ...plan,
+      whatsAppMessagesPerMonth: plan.whatsAppMessagesPerMonth ?? 0,
+      whatsAppOverageCentavos: plan.whatsAppOverageCentavos ?? 0,
+    });
     setDialogOpen(true);
   }
 
@@ -245,6 +253,30 @@ export default function PlansPage() {
               <div className="space-y-2">
                 <Label>{t("admin.plans.maxMessages")}</Label>
                 <Input type="number" {...register("maxMessagesPerMonth")} placeholder="0 = unlimited" />
+              </div>
+              {/* Meta bills per WhatsApp message, so this is the field that
+                  actually bounds cost — the conversation caps above do not. */}
+              <div className="space-y-1.5">
+                <Label>WhatsApp messages / month</Label>
+                <Input
+                  type="number"
+                  {...register("whatsAppMessagesPerMonth")}
+                  placeholder="-1 = unlimited, 0 = none"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Outbound only. ~R$0.039 each to Meta from 1 Oct 2026.
+                </p>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Overage (centavos / message)</Label>
+                <Input
+                  type="number"
+                  {...register("whatsAppOverageCentavos")}
+                  placeholder="0 = stop at the limit"
+                />
+                <p className="text-xs text-muted-foreground">
+                  0 means the agent stops replying instead of running up a bill.
+                </p>
               </div>
             </div>
             <div className="flex items-center justify-between">

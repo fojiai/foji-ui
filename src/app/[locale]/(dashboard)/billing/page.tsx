@@ -12,8 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/components/providers/auth-provider";
 import {
-  analyticsApi, agentsApi, plansApi, subscriptionsApi, adminCompaniesApi,
-  type Plan, type Subscription, type CompanyStats, type AdminCompanyListItem,
+  analyticsApi, agentsApi, plansApi, subscriptionsApi, adminCompaniesApi, whatsAppUsageApi,
+  type Plan, type Subscription, type CompanyStats, type AdminCompanyListItem, type WhatsAppUsage,
   apiErrorMessage,
 } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -430,6 +430,7 @@ function RegularBillingView() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [stats, setStats] = useState<CompanyStats | null>(null);
   const [agentCount, setAgentCount] = useState(0);
+  const [waUsage, setWaUsage] = useState<WhatsAppUsage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState<number | null>(null);
@@ -452,6 +453,10 @@ function RegularBillingView() {
         agentsApi.list(activeCompanyId).catch(() => []),
       );
     }
+    if (activeCompanyId) {
+      whatsAppUsageApi.get(activeCompanyId).then(setWaUsage).catch(() => setWaUsage(null));
+    }
+
     Promise.all(promises)
       .then(([p, sub, s, agents]) => {
         setPlans(p);
@@ -584,6 +589,28 @@ function RegularBillingView() {
             </CardHeader>
             <CardContent className="space-y-4">
               <UsageBar label={t("billing.agents")} used={agentCount} limit={plan.maxAgents} />
+              {/* WhatsApp is metered per message because that is how Meta bills
+                  us — the conversation counters below are a different thing. */}
+              {plan.hasWhatsApp && waUsage && !waUsage.unlimited && (
+                <div className="space-y-1">
+                  <UsageBar
+                    label={t("billing.whatsappMessages")}
+                    used={waUsage.used}
+                    limit={waUsage.limit}
+                  />
+                  {waUsage.overageMessages > 0 && (
+                    <p className="text-xs text-spark-ink">
+                      {t("billing.whatsappOverage", {
+                        count: waUsage.overageMessages,
+                        amount: (waUsage.overageOwedCentavos / 100).toFixed(2),
+                      })}
+                    </p>
+                  )}
+                  {waUsage.overLimit && waUsage.overageMessages === 0 && (
+                    <p className="text-xs text-spark-ink">{t("billing.whatsappLimitReached")}</p>
+                  )}
+                </div>
+              )}
               {plan.maxConversationsPerMonth > 0 && (
                 <UsageBar
                   label={t("billing.conversations")}

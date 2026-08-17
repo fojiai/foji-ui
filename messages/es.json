@@ -409,7 +409,10 @@
     "description": "Tu plan, tu consumo y las opciones disponibles.",
     "yourPlan": "Tu plan",
     "popular": "El más elegido",
-    "perMonth": "/mes"
+    "perMonth": "/mes",
+    "whatsappMessages": "Mensajes de WhatsApp",
+    "whatsappOverage": "{count} mensajes excedentes · R$ {amount}",
+    "whatsappLimitReached": "Límite de mensajes alcanzado — el agente dejó de responder en WhatsApp."
   },
   "settings": {
     "title": "Configuración",
