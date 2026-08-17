@@ -849,6 +849,8 @@ export interface Plan {
   whatsAppMessagesPerMonth?: number;
   /** Centavos per message past the allowance. 0 stops instead of billing. */
   whatsAppOverageCentavos?: number;
+  /** Marketing templates cost ~9x utility — off unless deliberately enabled. */
+  whatsAppAllowMarketing?: boolean;
   isActive: boolean;
   isPublic: boolean;
   customForCompanyId?: number;
@@ -907,6 +909,8 @@ export interface SubscriptionPlan {
   whatsAppMessagesPerMonth?: number;
   /** Centavos per message past the allowance. 0 stops instead of billing. */
   whatsAppOverageCentavos?: number;
+  /** Marketing templates cost ~9x utility — off unless deliberately enabled. */
+  whatsAppAllowMarketing?: boolean;
 }
 
 export interface Subscription {

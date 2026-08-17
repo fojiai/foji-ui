@@ -34,6 +34,7 @@ const schema = z.object({
   maxMessagesPerMonth: z.coerce.number().int().min(0),
   whatsAppMessagesPerMonth: z.coerce.number().int().min(-1),
   whatsAppOverageCentavos: z.coerce.number().int().min(0),
+  whatsAppAllowMarketing: z.boolean(),
   isActive: z.boolean(),
   isPublic: z.boolean(),
 });
@@ -49,7 +50,7 @@ export default function PlansPage() {
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, isPublic: true },
+    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true },
   });
 
   async function load() {
@@ -62,7 +63,7 @@ export default function PlansPage() {
 
   function openCreate() {
     setEditing(null);
-    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, isPublic: true });
+    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true });
     setDialogOpen(true);
   }
 
@@ -74,6 +75,7 @@ export default function PlansPage() {
       ...plan,
       whatsAppMessagesPerMonth: plan.whatsAppMessagesPerMonth ?? 0,
       whatsAppOverageCentavos: plan.whatsAppOverageCentavos ?? 0,
+      whatsAppAllowMarketing: plan.whatsAppAllowMarketing ?? false,
     });
     setDialogOpen(true);
   }
@@ -277,6 +279,19 @@ export default function PlansPage() {
                 <p className="text-xs text-muted-foreground">
                   0 means the agent stops replying instead of running up a bill.
                 </p>
+              </div>
+              <div className="flex items-center justify-between rounded-xl border p-3">
+                <div className="min-w-0 pr-3">
+                  <Label>Allow marketing templates</Label>
+                  <p className="text-xs text-muted-foreground">
+                    ~9x the cost of a utility message and never free inside the 24h
+                    window. Off unless a customer explicitly needs campaigns.
+                  </p>
+                </div>
+                <Switch
+                  checked={watch("whatsAppAllowMarketing")}
+                  onCheckedChange={(v) => setValue("whatsAppAllowMarketing", v)}
+                />
               </div>
             </div>
             <div className="flex items-center justify-between">
