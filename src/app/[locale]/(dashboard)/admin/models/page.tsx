@@ -99,7 +99,7 @@ export default function ModelsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("admin.models.title")}</h2>
+        <h2 className="type-display text-xl">{t("admin.models.title")}</h2>
         <Button size="sm" onClick={openCreate}>
           <Plus className="mr-1 h-4 w-4" /> {t("admin.models.create")}
         </Button>
@@ -111,12 +111,12 @@ export default function ModelsPage() {
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div>
-                  <CardTitle className="text-base">{model.displayName}</CardTitle>
+                  <CardTitle className="type-display text-base">{model.displayName}</CardTitle>
                   <p className="mt-0.5 font-mono text-xs text-muted-foreground">{model.modelId}</p>
                 </div>
                 <div className="flex gap-1">
                   {model.isDefault && <Badge variant="secondary">Default</Badge>}
-                  <Badge variant={model.isActive ? "success" : "outline"}>
+                  <Badge variant={model.isActive ? "secondary" : "outline"}>
                     {model.isActive ? t("common.active") : t("common.inactive")}
                   </Badge>
                 </div>

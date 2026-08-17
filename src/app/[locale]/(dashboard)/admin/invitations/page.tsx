@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Plus, Trash2, CheckCircle2, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +15,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { EmptyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
 
 const schema = z.object({ email: z.string().email() });
@@ -22,6 +24,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function InvitationsPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const [invitations, setInvitations] = useState<SystemAdminInvitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -64,52 +67,55 @@ export default function InvitationsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("admin.invitations.title")}</h2>
+        <h2 className="type-display text-xl">{t("admin.invitations.title")}</h2>
         <Button size="sm" onClick={() => { reset(); setDialogOpen(true); }}>
           <Plus className="mr-1 h-4 w-4" /> {t("admin.invitations.invite")}
         </Button>
       </div>
 
       {invitations.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            No system admin invitations yet.
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow="Nothing yet"
+          title="No system admin invitations"
+          description="Invite an administrator to give them access to this panel."
+        />
       ) : (
-        <div className="space-y-2">
+        <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
           {invitations.map((inv) => {
             const accepted = !!inv.acceptedAt;
             const expired = !accepted && new Date(inv.expiresAt) < new Date();
             return (
-              <Card key={inv.id}>
-                <CardContent className="flex items-center justify-between py-4">
-                  <div className="flex items-center gap-3">
-                    {accepted ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                    ) : (
-                      <Clock className="h-5 w-5 text-amber-500" />
-                    )}
-                    <div>
-                      <p className="font-medium">{inv.email}</p>
+              <div key={inv.id}>
+                <div className="flex items-center justify-between gap-3 px-4 py-2.5">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{inv.email}</p>
                       <p className="text-xs text-muted-foreground">
                         Invited by {inv.invitedByUserEmail}
-                        {accepted
-                          ? ` · Accepted ${new Date(inv.acceptedAt!).toLocaleDateString()}`
-                          : expired
-                          ? " · Expired"
-                          : ` · Expires ${new Date(inv.expiresAt).toLocaleDateString()}`}
+                        {accepted ? (
+                          <> · Accepted <span className="type-readout">{format.dateTime(new Date(inv.acceptedAt!), { dateStyle: "short" })}</span></>
+                        ) : expired ? (
+                          <> · Expired</>
+                        ) : (
+                          <> · Expires <span className="type-readout">{format.dateTime(new Date(inv.expiresAt), { dateStyle: "short" })}</span></>
+                        )}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={accepted ? "success" : expired ? "outline" : "warning"}>
-                      {accepted
-                        ? t("admin.invitations.accepted")
-                        : expired
-                        ? "Expired"
-                        : t("admin.invitations.pending")}
-                    </Badge>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {/* Real lifecycle state, so this one earns HeatStatus:
+                        pending waits on a human, accepted is settled,
+                        expired is cold. */}
+                    <HeatStatus
+                      level={accepted ? "cool" : expired ? "idle" : "attention"}
+                      label={
+                        accepted
+                          ? t("admin.invitations.accepted")
+                          : expired
+                          ? "Expired"
+                          : t("admin.invitations.pending")
+                      }
+                    />
                     {!accepted && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -134,8 +140,8 @@ export default function InvitationsPage() {
                       </AlertDialog>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>

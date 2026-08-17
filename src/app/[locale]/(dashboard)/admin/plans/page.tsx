@@ -98,7 +98,7 @@ export default function PlansPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("admin.plans.title")}</h2>
+        <h2 className="type-display text-xl">{t("admin.plans.title")}</h2>
         <Button size="sm" onClick={openCreate}>
           <Plus className="mr-1 h-4 w-4" /> {t("admin.plans.create")}
         </Button>
@@ -106,41 +106,41 @@ export default function PlansPage() {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {plans.map((plan) => (
-          <Card key={plan.id} className={plan.isActive ? "" : "opacity-60"}>
+          <Card key={plan.id} className={`plate ${plan.isActive ? "" : "border-dashed"}`}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">{plan.name}</CardTitle>
+                <CardTitle className="type-display text-base">{plan.name}</CardTitle>
                 <div className="flex items-center gap-1.5">
                   {plan.isPublic === false ? (
                     <Badge variant="outline" className="gap-1 text-xs">
                       <Lock className="h-3 w-3" /> {t("admin.plans.private")}
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="gap-1 text-xs text-emerald-600">
+                    <Badge variant="outline" className="gap-1 text-xs">
                       <Globe className="h-3 w-3" /> {t("admin.plans.public")}
                     </Badge>
                   )}
-                  <Badge variant={plan.isActive ? "success" : "outline"}>
+                  <Badge variant={plan.isActive ? "secondary" : "outline"}>
                     {plan.isActive ? t("common.active") : t("common.inactive")}
                   </Badge>
                 </div>
               </div>
-              <p className="font-mono text-xs text-muted-foreground">{plan.slug}</p>
+              <p className="type-readout text-xs text-muted-foreground">{plan.slug}</p>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-3xl font-bold">
+              <p className="type-readout text-3xl font-semibold">
                 {plan.currency === "BRL" ? "R$" : plan.currency === "EUR" ? "\u20AC" : "$"}{plan.monthlyPrice}
                 <span className="text-sm font-normal text-muted-foreground">/{plan.currency}/mo</span>
               </p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t("admin.plans.maxAgents")}</span>
-                  <span className="font-medium">{plan.maxAgents}</span>
+                  <span className="type-readout font-medium">{plan.maxAgents}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t("admin.plans.hasWhatsApp")}</span>
                   {plan.hasWhatsApp ? (
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-quench-ink" />
                   ) : (
                     <X className="h-4 w-4 text-muted-foreground" />
                   )}
@@ -148,14 +148,14 @@ export default function PlansPage() {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t("admin.plans.hasEscalationContacts")}</span>
                   {plan.hasEscalationContacts ? (
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-quench-ink" />
                   ) : (
                     <X className="h-4 w-4 text-muted-foreground" />
                   )}
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t("admin.plans.maxConversations")}</span>
-                  <span className="font-medium">{plan.maxConversationsPerMonth === 0 ? "∞" : plan.maxConversationsPerMonth}</span>
+                  <span className="type-readout font-medium">{plan.maxConversationsPerMonth === 0 ? "∞" : plan.maxConversationsPerMonth}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t("admin.plans.stripePriceId")}</span>

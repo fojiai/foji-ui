@@ -148,7 +148,7 @@ export default function ApiKeysPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">{t("admin.apiKeys.title")}</h2>
+          <h2 className="type-display text-xl">{t("admin.apiKeys.title")}</h2>
           <p className="text-sm text-muted-foreground mt-1">{t("admin.apiKeys.description")}</p>
         </div>
         <Button onClick={openCustomDialog}>
@@ -158,9 +158,9 @@ export default function ApiKeysPage() {
 
       {/* Unconfigured quick setup */}
       {unconfigured.length > 0 && (
-        <Card>
+        <Card className="plate">
           <CardHeader>
-            <CardTitle className="text-base">{t("admin.apiKeys.quickSetup")}</CardTitle>
+            <CardTitle className="type-display text-base">{t("admin.apiKeys.quickSetup")}</CardTitle>
             <CardDescription>{t("admin.apiKeys.quickSetupHint")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -184,7 +184,7 @@ export default function ApiKeysPage() {
 
       {/* Configured settings by category */}
       {Object.keys(grouped).length === 0 ? (
-        <Card>
+        <Card className="plate">
           <CardContent className="py-12 text-center text-muted-foreground">
             <KeyRound className="mx-auto h-8 w-8 mb-3 opacity-50" />
             <p>{t("admin.apiKeys.empty")}</p>
@@ -195,10 +195,10 @@ export default function ApiKeysPage() {
           const meta = CATEGORY_META[category];
           const Icon = meta?.icon ?? KeyRound;
           return (
-            <Card key={category}>
+            <Card key={category} className="plate">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-primary" />
+                <CardTitle className="type-display text-base flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-muted-foreground" />
                   {meta?.label ?? category}
                 </CardTitle>
               </CardHeader>
@@ -211,11 +211,11 @@ export default function ApiKeysPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium">{setting.label}</p>
-                        <Badge variant="secondary" className="text-xs font-mono">
+                        <Badge variant="secondary" className="type-readout">
                           {setting.key}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground font-mono mt-1">
+                      <p className="type-readout mt-1 text-sm text-muted-foreground">
                         {setting.isSecret && !revealedKeys.has(setting.key)
                           ? "••••••••••••"
                           : setting.value}
