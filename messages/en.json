@@ -71,7 +71,14 @@
     "pipeline": "Pipeline",
     "tasks": "Tasks",
     "reports": "Reports",
-    "inbox": "Inbox"
+    "inbox": "Inbox",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "groups": {
+      "service": "Support",
+      "customers": "Customers",
+      "account": "Account"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -84,7 +91,11 @@
     "conversations": "Conversations",
     "last30days": "Last 30 days",
     "noData": "No usage data yet",
-    "noDataHint": "Data will appear here after the first conversations"
+    "noDataHint": "Data will appear here after the first conversations",
+    "tagline": "Forge your intelligence",
+    "agentsLive": "{active} of {total} agents live",
+    "noAgentsLive": "No agents live yet",
+    "viewAgents": "View agents"
   },
   "agents": {
     "title": "Agents",
@@ -274,7 +285,9 @@
       "experienceHint": "What the visitor sees and what happens during the conversation.",
       "channels": "Channels & integrations",
       "channelsHint": "Where the agent works and where conversations go."
-    }
+    },
+    "eyebrow": "Your agents",
+    "liveSummary": "{active} of {total} live right now"
   },
   "handoffs": {
     "title": "Human Handoffs",
@@ -491,7 +504,11 @@
     "noPlanDescription": "Subscribe to a plan to unlock all features.",
     "trialExpiredTitle": "Your trial has ended",
     "trialExpiredDescription": "Subscribe to a plan to continue using Foji AI.",
-    "subscribePlan": "Choose a plan"
+    "subscribePlan": "Choose a plan",
+    "eyebrowStart": "Start here",
+    "eyebrowBilling": "Plan",
+    "eyebrowAdmin": "Administration",
+    "eyebrowNothingYet": "Still empty"
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -924,7 +941,8 @@
       "dealsCount": "{count} deals",
       "noData": "No data in this period",
       "noClosed": "No deals closed in this period"
-    }
+    },
+    "eyebrow": "Customers"
   },
   "inbox": {
     "title": "Inbox",
@@ -941,6 +959,14 @@
     "windowClosedShort": "window closed",
     "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again.",
     "unassigned": "Unassigned",
-    "mediaPreview": "[attachment]"
+    "mediaPreview": "[attachment]",
+    "eyebrow": "Support"
+  },
+  "audio": {
+    "play": "Play",
+    "pause": "Pause",
+    "seek": "Seek",
+    "speed": "Playback speed",
+    "unavailable": "Audio unavailable"
   }
 }

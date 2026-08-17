@@ -71,7 +71,14 @@
     "pipeline": "Embudo",
     "tasks": "Tareas",
     "reports": "Informes",
-    "inbox": "Bandeja"
+    "inbox": "Bandeja",
+    "expandMenu": "Expandir menú",
+    "collapseMenu": "Contraer menú",
+    "groups": {
+      "service": "Atención",
+      "customers": "Clientes",
+      "account": "Cuenta"
+    }
   },
   "dashboard": {
     "title": "Panel",
@@ -84,7 +91,11 @@
     "conversations": "Conversaciones",
     "last30days": "Últimos 30 días",
     "noData": "Sin datos de uso todavía",
-    "noDataHint": "Los datos aparecerán aquí tras las primeras conversaciones"
+    "noDataHint": "Los datos aparecerán aquí tras las primeras conversaciones",
+    "tagline": "Forja tu inteligencia",
+    "agentsLive": "{active} de {total} agentes activos",
+    "noAgentsLive": "Aún no hay agentes activos",
+    "viewAgents": "Ver agentes"
   },
   "agents": {
     "title": "Agentes",
@@ -274,7 +285,9 @@
       "experienceHint": "Lo que ve la persona y lo que ocurre durante la conversación.",
       "channels": "Canales e integraciones",
       "channelsHint": "Dónde atiende el agente y a dónde van las conversaciones."
-    }
+    },
+    "eyebrow": "Tus agentes",
+    "liveSummary": "{active} de {total} activos ahora"
   },
   "handoffs": {
     "title": "Transferencias a Humano",
@@ -491,7 +504,11 @@
     "noPlanDescription": "Suscríbete a un plan para desbloquear todas las funciones.",
     "trialExpiredTitle": "Tu prueba ha terminado",
     "trialExpiredDescription": "Suscríbete a un plan para seguir usando Foji AI.",
-    "subscribePlan": "Elegir un plan"
+    "subscribePlan": "Elegir un plan",
+    "eyebrowStart": "Empieza aquí",
+    "eyebrowBilling": "Plan",
+    "eyebrowAdmin": "Administración",
+    "eyebrowNothingYet": "Aún vacío"
   },
   "errors": {
     "generic": "Algo salió mal. Inténtalo de nuevo.",
@@ -924,7 +941,8 @@
       "dealsCount": "{count} negocios",
       "noData": "Sin datos en el período",
       "noClosed": "Ningún negocio cerrado en el período"
-    }
+    },
+    "eyebrow": "Clientes"
   },
   "inbox": {
     "title": "Bandeja de entrada",
@@ -941,6 +959,14 @@
     "windowClosedShort": "fuera de plazo",
     "windowClosed": "Han pasado más de 24 horas desde el último mensaje del cliente. WhatsApp solo permite responder libremente dentro de ese plazo — espera a que escriba de nuevo.",
     "unassigned": "Sin responsable",
-    "mediaPreview": "[adjunto]"
+    "mediaPreview": "[adjunto]",
+    "eyebrow": "Atención"
+  },
+  "audio": {
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "seek": "Avanzar o retroceder",
+    "speed": "Velocidad de reproducción",
+    "unavailable": "Audio no disponible"
   }
 }

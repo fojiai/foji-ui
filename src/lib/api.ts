@@ -15,6 +15,31 @@ function getToken(): string | null {
   );
 }
 
+/**
+ * Pulls a human-readable message out of an error body.
+ *
+ * Our own handlers return `{ error }`, but ASP.NET's automatic model validation
+ * short-circuits before them and returns ValidationProblemDetails —
+ * `{ title, errors: { Field: ["..."] } }` with no `error` key at all. That used
+ * to collapse to "Bad Request", so a field that failed validation looked to the
+ * user like a generic failure with no reason given.
+ */
+function errorMessageFrom(data: unknown, statusText: string): string {
+  const body = (data ?? {}) as Record<string, unknown>;
+
+  if (typeof body.error === "string" && body.error.trim()) return body.error;
+
+  if (body.errors && typeof body.errors === "object") {
+    const first = Object.values(body.errors as Record<string, unknown>)
+      .flat()
+      .find((m): m is string => typeof m === "string" && m.trim().length > 0);
+    if (first) return first;
+  }
+
+  if (typeof body.title === "string" && body.title.trim()) return body.title;
+  return statusText;
+}
+
 export async function apiFetch<T = unknown>(
   path: string,
   options: RequestInit = {}
@@ -30,7 +55,7 @@ export async function apiFetch<T = unknown>(
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, data.error ?? res.statusText, data);
+    throw new ApiError(res.status, errorMessageFrom(data, res.statusText), data);
   }
 
   if (res.status === 204) return undefined as T;
@@ -50,7 +75,7 @@ export async function apiFetchMultipart<T = unknown>(
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, data.error ?? res.statusText, data);
+    throw new ApiError(res.status, errorMessageFrom(data, res.statusText), data);
   }
 
   if (res.status === 204) return undefined as T;
@@ -994,9 +1019,24 @@ export const analyticsApi = {
  * 5xx is deliberately opaque server-side, so the caller's fallback is used.
  */
 export function apiErrorMessage(err: unknown, fallback: string): string {
-  if (err instanceof ApiError && err.status < 500) {
+  if (!(err instanceof ApiError)) return fallback;
+
+  if (err.status < 500) {
     const msg = err.message?.trim();
     if (msg && msg.toLowerCase() !== "bad request") return msg;
+    return fallback;
+  }
+
+  // A 500 says nothing useful by design, but the API returns a traceId with it.
+  // Showing it turns "something went wrong" into something we can actually find
+  // in the logs instead of a dead end.
+  const body = (err.data ?? {}) as { traceId?: unknown; detail?: unknown };
+  if (typeof body.detail === "string" && body.detail) {
+    // Only present when Debug:ExposeErrorDetail is on. Too long for a toast.
+    console.error("[api] server error detail:", body.detail);
+  }
+  if (typeof body.traceId === "string" && body.traceId) {
+    return `${fallback} (ref: ${body.traceId})`;
   }
   return fallback;
 }
