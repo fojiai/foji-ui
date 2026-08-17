@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import { z } from "zod";
 import { ArrowLeft, Calendar, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle, UserPlus, PhoneForwarded } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
-import { agentsApi, calendarApi, filesApi, subscriptionsApi, type Agent, type AgentFile, type Subscription, apiErrorMessage } from "@/lib/api";
+import { agentsApi, calendarApi, filesApi, subscriptionsApi, whatsAppOnboardingApi, type Agent, type AgentFile, type Subscription, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -95,9 +95,11 @@ function SectionHeading({ title, description }: { title: string; description: st
 
 export default function AgentDetailPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const params = useParams();
   const router = useRouter();
-  const { activeCompanyId } = useAuth();
+  const { activeCompanyId, user } = useAuth();
+  const [refreshingToken, setRefreshingToken] = useState(false);
   const agentId = Number(params.id);
   const searchParams = useSearchParams();
 
@@ -738,6 +740,57 @@ export default function AgentDetailPage() {
                             />
                           </div>
                         )
+                      )}
+
+                      {/* Proves the refresh path in seconds rather than 45
+                          days. Super admin only — customers never see it. */}
+                      {user?.isSuperAdmin && agent.hasWhatsAppToken && (
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed p-3">
+                          <div className="min-w-0">
+                            <p className="type-label text-muted-foreground">
+                              {t("agents.whatsapp.adminTools")}
+                            </p>
+                            <p className="type-readout mt-1 text-xs text-muted-foreground">
+                              {agent.whatsAppTokenExpiresAt
+                                ? t("agents.whatsapp.tokenExpires", {
+                                    date: format.dateTime(new Date(agent.whatsAppTokenExpiresAt), {
+                                      dateStyle: "short",
+                                      timeStyle: "short",
+                                    }),
+                                  })
+                                : t("agents.whatsapp.tokenPermanent")}
+                            </p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={refreshingToken}
+                            onClick={async () => {
+                              setRefreshingToken(true);
+                              try {
+                                const { refreshed } = await whatsAppOnboardingApi.refresh(agentId);
+                                toast({
+                                  variant: refreshed ? undefined : "destructive",
+                                  title: refreshed
+                                    ? t("agents.whatsapp.refreshSuccess")
+                                    : t("agents.whatsapp.refreshFailed"),
+                                });
+                                await loadAgent();
+                              } catch (err) {
+                                toast({
+                                  variant: "destructive",
+                                  title: apiErrorMessage(err, t("errors.generic")),
+                                });
+                              } finally {
+                                setRefreshingToken(false);
+                              }
+                            }}
+                          >
+                            {refreshingToken && <LoadingSpinner size="sm" className="mr-2" />}
+                            {t("agents.whatsapp.refreshToken")}
+                          </Button>
+                        </div>
                       )}
 
                       {/* Manual setup, collapsed. Only needed when Embedded

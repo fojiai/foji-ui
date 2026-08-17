@@ -273,6 +273,13 @@ export const whatsAppOnboardingApi = {
    * business token, subscribes the WABA to our webhooks and registers the
    * number. The code dies in ~30s, so call this immediately.
    */
+  /** Super-admin only: force a refresh now instead of waiting for the sweep. */
+  refresh: (agentId: number) =>
+    apiFetch<{ refreshed: boolean }>("/api/whatsapp/onboarding/refresh", {
+      method: "POST",
+      body: JSON.stringify({ agentId }),
+    }),
+
   complete: (data: {
     companyId: number;
     agentId: number;

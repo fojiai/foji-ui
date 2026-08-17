@@ -132,7 +132,13 @@
       "connectIncomplete": "A conexão não foi concluída. Tente novamente e selecione um número até o final.",
       "manualSetup": "Configuração manual (avançado)",
       "needsReconnect": "Reconexão necessária",
-      "needsReconnectHint": "O WhatsApp desconectou e não está recebendo mensagens. Clique para reconectar — leva um clique."
+      "needsReconnectHint": "O WhatsApp desconectou e não está recebendo mensagens. Clique para reconectar — leva um clique.",
+      "adminTools": "Ferramentas de admin",
+      "refreshToken": "Forçar refresh do token",
+      "refreshSuccess": "Token renovado.",
+      "refreshFailed": "A Meta recusou a renovação — o cliente precisa reconectar.",
+      "tokenExpires": "Token expira em {date}",
+      "tokenPermanent": "Token permanente (sem expiração)"
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",
