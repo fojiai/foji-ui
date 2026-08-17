@@ -2,17 +2,28 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+/* Badges are state, so they follow the heat rule: tinted, bordered chips rather
+   than saturated fills. A wall of solid colour reads as decoration and stops
+   telling the owner where to look. `live` and `attention` are the only variants
+   allowed to burn hot. */
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-md border px-2 py-0.5 text-[0.7rem] font-medium tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-        outline: "text-foreground",
-        success: "border-transparent bg-emerald-500 text-white shadow hover:bg-emerald-500/80",
-        warning: "border-transparent bg-amber-500 text-white shadow hover:bg-amber-500/80",
+        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/90",
+        secondary: "border-border/70 bg-muted text-muted-foreground",
+        destructive: "border-destructive/25 bg-destructive/10 text-destructive-ink",
+        outline: "border-border text-foreground",
+        /* Running right now — the forge is lit. */
+        live: "border-forge/30 bg-forge/12 text-forge-ink",
+        /* Waiting on a human. The hottest thing on the screen. */
+        attention: "border-spark/45 bg-spark/18 text-spark-ink",
+        /* Cooled metal — done, resolved, healthy. */
+        success: "border-quench/30 bg-quench/12 text-quench-ink",
+        /* Cold iron — off, idle, nothing wrong. */
+        idle: "border-border bg-muted/60 text-muted-foreground",
+        warning: "border-spark/45 bg-spark/18 text-spark-ink",
       },
     },
     defaultVariants: { variant: "default" },

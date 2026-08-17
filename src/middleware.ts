@@ -5,6 +5,9 @@ import { routing } from "./i18n/routing";
 const intlMiddleware = createMiddleware(routing);
 
 const PUBLIC_PATHS = [
+  // Design system gallery — no auth so the visual system can be reviewed
+  // without a backend. Safe to delete along with app/[locale]/design-preview.
+  "/design-preview",
   "/login",
   "/signup",
   "/verify-email",

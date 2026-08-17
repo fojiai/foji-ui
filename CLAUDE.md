@@ -21,13 +21,35 @@ These rules apply to every file in this repository. Follow them strictly.
 
 ## Colors
 
-- Use only Tailwind color tokens: `text-primary`, `bg-primary`, `text-secondary`, `bg-secondary`, `text-accent`, `bg-accent`
+Read `DESIGN.md` before changing anything visual. The short version:
+
+- **Heat is state.** The fire palette (`ember` / `forge` / `spark`) marks what is live,
+  hot, or waiting on the user. Never use it as decoration — if it's ornament, it's iron.
 - **Never hardcode hex values** (`#FF2D2D`, etc.) in component files
-- Dark mode via `dark:` Tailwind variants — never inline `style={{ color: '...' }}`
-- Brand palette is defined in `tailwind.config.ts`:
-  - `primary`: `#FF2D2D`
-  - `secondary`: `#FF5A1F`
-  - `accent`: `#FFB300`
+- All tokens live in `src/app/globals.css` (Tailwind v4 — there is **no** `tailwind.config.ts`).
+  Add new colors to the `@theme inline` block so they become Tailwind utilities.
+- Semantic tokens, all available as `bg-*` / `text-*` / `border-*`:
+  - `primary` — brand ember, primary actions and identity
+  - `forge` — live / running · `spark` — needs attention · `quench` — resolved / healthy
+  - `iron` (+ `iron-foreground`, `iron-muted`, `iron-border`) — the dark anvil band
+- **`*-ink` variants exist for a reason.** `forge-ink`, `spark-ink`, `quench-ink`,
+  `destructive-ink` are the AA-passing text versions. Use the raw hue for fills, marks
+  and charts; use the ink for any small text. `text-spark` on a light chip fails contrast.
+- Both themes are defined at `:root` / `.dark`. Never define a color only inside a
+  `dark:` variant — style through the tokens instead.
+- Anything inside the sidebar must use `sidebar-*` tokens. The sidebar is dark in **both**
+  themes, so page tokens like `text-muted-foreground` would be dark-on-dark.
+
+## Typography
+
+- `.type-display` — Archivo, for page/card titles and big numerals. Never for body copy.
+- `.type-label` — IBM Plex Mono uppercase, for eyebrows and micro-labels.
+- `.type-readout` — IBM Plex Mono tabular, for every number, metric and timestamp.
+- Body copy is Instrument Sans (the default `font-sans`) — do not set it explicitly.
+- Use `<PageHeader>` from `components/shared/page-header.tsx` for page titles, not a
+  bare `<h1 className="text-3xl font-bold">`.
+- Use `<EmptyState>` from `components/shared/empty-state.tsx` for empty/locked states —
+  never a centered icon-in-a-circle card.
 
 ## Internationalization (i18n)
 

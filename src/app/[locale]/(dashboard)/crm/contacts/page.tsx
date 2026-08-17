@@ -14,7 +14,6 @@ import {
   type ContactInput,
   apiErrorMessage,
 } from "@/lib/api";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,9 +40,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 import {
-  Contact2, Plus, Search, AlertTriangle, Lock, X, MoreHorizontal,
+  Contact2, Plus, Search, AlertTriangle, X, MoreHorizontal,
   ArrowUpDown, Eye, Users, Upload, Download,
 } from "lucide-react";
 import { ContactImportDialog } from "@/components/crm/contact-import-dialog";
@@ -228,21 +229,23 @@ export default function ContactsPage() {
 
   if (!hasCrm) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.contacts.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.contacts.description")}</p>
-        </div>
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <Lock className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.locked.title")}</p>
-            <p className="max-w-md text-xs text-muted-foreground">{t("crm.locked.description")}</p>
-            <Button asChild className="mt-2">
+      <div className="space-y-6 foji-enter">
+        <PageHeader
+          eyebrow={t("crm.eyebrow")}
+          title={t("crm.contacts.title")}
+          description={t("crm.contacts.description")}
+        />
+        <EmptyState
+          tone="warn"
+          eyebrow={t("emptyStates.eyebrowBilling")}
+          title={t("crm.locked.title")}
+          description={t("crm.locked.description")}
+          action={
+            <Button asChild>
               <Link href={`/${locale}/billing`}>{t("crm.locked.upgrade")}</Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        />
       </div>
     );
   }
@@ -262,14 +265,16 @@ export default function ContactsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.contacts.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.contacts.description")}</p>
-        </div>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <PageHeader
+          eyebrow={t("crm.eyebrow")}
+          title={t("crm.contacts.title")}
+          description={t("crm.contacts.description")}
+          className="flex-1"
+        />
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="outline" className="text-sm tabular-nums">
-            {contacts.length} {t("crm.contacts.total")}
+          <Badge variant="outline" className="type-readout px-2.5 py-1 text-xs">
+            {contacts.length} <span className="ml-1 font-sans">{t("crm.contacts.total")}</span>
           </Badge>
           <Button variant="outline" onClick={() => setImportOpen(true)}>
             <Upload className="mr-1 h-4 w-4" /> {t("crm.import.action")}
@@ -368,15 +373,18 @@ export default function ContactsPage() {
       {isFetching ? (
         <SkeletonRows rows={6} />
       ) : sorted.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <Contact2 className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.contacts.empty")}</p>
-            <p className="max-w-sm text-xs text-muted-foreground">{t("crm.contacts.emptyHint")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={t("crm.contacts.empty")}
+          description={t("crm.contacts.emptyHint")}
+          action={
+            <Button variant="outline" onClick={() => setImportOpen(true)}>
+              <Upload className="mr-1 h-4 w-4" /> {t("crm.import.action")}
+            </Button>
+          }
+        />
       ) : (
-        <div className="rounded-lg border">
+        <div className="plate overflow-hidden rounded-xl border bg-card">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">

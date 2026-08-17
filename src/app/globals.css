@@ -2,6 +2,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═════════════════════════════════════════════════════════════════════════
+   Foji AI — "the anvil, not the flame". See DESIGN.md.
+
+   The fire palette is a signal, not a skin: ember / forge / spark mark what is
+   live, hot, or waiting on the owner. Everything else is iron and steel.
+   ═════════════════════════════════════════════════════════════════════════ */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -22,6 +29,26 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* ── Brand: the forge ────────────────────────────────────────────────
+     Named so component code reads as intent (`bg-spark` = needs attention)
+     rather than as decoration (`bg-amber-500`). */
+  --color-ember: var(--ember);
+  --color-forge: var(--forge);
+  --color-spark: var(--spark);
+  --color-quench: var(--quench);
+  /* "ink" = the same heat, darkened (light) or lightened (dark) until it passes
+     AA as small text on its own tinted chip. The raw hues are for fills, marks
+     and charts; never for 12px labels. */
+  --color-forge-ink: var(--forge-ink);
+  --color-destructive-ink: var(--destructive-ink);
+  --color-spark-ink: var(--spark-ink);
+  --color-quench-ink: var(--quench-ink);
+  --color-iron: var(--iron);
+  --color-iron-foreground: var(--iron-foreground);
+  --color-iron-muted: var(--iron-muted);
+  --color-iron-border: var(--iron-border);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -35,8 +62,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-brand), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-brand), ui-monospace, monospace;
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -47,77 +77,152 @@
 }
 
 :root {
-  /* Warm off-white ground with pure-white cards. These used to be the same
-     value, so every card was invisible except for its hairline border — the
-     single biggest reason the app read as flat. */
-  --background: oklch(0.982 0.005 55);
-  --foreground: oklch(0.16 0.012 30);
+  /* Steel workbench + white plates. The ground is warm-biased but very low
+     chroma, so it reads as chosen rather than as a cream template. */
+  --background: oklch(0.966 0.005 60);
+  --foreground: oklch(0.17 0.012 35);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.16 0.012 30);
+  --card-foreground: oklch(0.17 0.012 35);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0.01 27);
-  --primary: oklch(0.59 0.25 27);
+  --popover-foreground: oklch(0.17 0.012 35);
+
+  /* One notch darker than the literal brand red. #FF2D2D under white text
+     measures 3.71:1 — below AA for button and badge labels. This passes at
+     4.53:1 and is indistinguishable side by side. `--ember` below keeps the
+     exact brand value for marks, rails and charts, which carry no small text. */
+  --primary: oklch(0.59 0.25 28);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.955 0.010 50);
-  --secondary-foreground: oklch(0.25 0.01 27);
-  --muted: oklch(0.955 0.008 55);
-  --muted-foreground: oklch(0.52 0.018 40);
-  --accent: oklch(0.950 0.014 50);
-  --accent-foreground: oklch(0.25 0.01 27);
-  --destructive: oklch(0.577 0.245 27.325);
+  --secondary: oklch(0.945 0.008 55);
+  --secondary-foreground: oklch(0.27 0.012 35);
+  --muted: oklch(0.945 0.006 58);
+  --muted-foreground: oklch(0.525 0.016 45);  /* Slag */
+  --accent: oklch(0.938 0.012 52);
+  --accent-foreground: oklch(0.27 0.012 35);
+
+  /* Deeper and cooler than the ember primary — the brand red is fixed, so
+     destructive has to separate itself by darkness as well as hue. */
+  --destructive: oklch(0.505 0.196 16);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.905 0.008 50);
-  --input: oklch(0.905 0.008 50);
-  --ring: oklch(0.59 0.25 27);
-  --chart-1: oklch(0.59 0.25 27);
-  --chart-2: oklch(0.62 0.22 40);
-  --chart-3: oklch(0.78 0.16 80);
-  --chart-4: oklch(0.65 0.15 240);
-  --chart-5: oklch(0.65 0.18 150);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.968 0.010 52);
-  --sidebar-foreground: oklch(0.145 0.01 27);
-  --sidebar-primary: oklch(0.59 0.25 27);
+  --destructive-ink: oklch(0.505 0.196 16);
+
+  --border: oklch(0.892 0.007 55);
+  --input: oklch(0.892 0.007 55);
+  --ring: oklch(0.633 0.258 28);
+  /* Bumped from 0.625rem. Larger radii on bigger surfaces is what separates
+     a current interface from a 2020 one — and it softens the plate metaphor
+     without costing any of its weight. */
+  --radius: 0.75rem;
+
+  /* ── The forge ─────────────────────────────────────────────────────── */
+  --ember: oklch(0.633 0.258 28);            /* #FF2D2D — identity, primary */
+  --forge: oklch(0.671 0.229 39);            /* #FF5A1F — live / hot */
+  --spark: oklch(0.803 0.165 78);            /* #FFB300 — unhandled attention */
+  --quench: oklch(0.585 0.098 192);          /* cooled metal — resolved / healthy */
+  --forge-ink: oklch(0.495 0.185 33);
+  --spark-ink: oklch(0.505 0.125 68);
+  --quench-ink: oklch(0.455 0.085 192);
+
+  /* The anvil. Dark in BOTH themes: in light mode it is the one heavy slab on
+     the bench, which is what gives the dashboard a first impression. */
+  --iron: oklch(0.185 0.014 45);
+  --iron-foreground: oklch(0.975 0.004 60);
+  --iron-muted: oklch(0.70 0.014 55);
+  --iron-border: oklch(1 0 0 / 12%);
+
+  /* Light from above on a metal plate: a crisp top highlight plus a soft
+     grounded shadow. This is the depth model for every surface. */
+  --shadow-plate:
+    inset 0 1px 0 0 oklch(1 0 0 / 0.9),
+    0 1px 2px -1px oklch(0.30 0.05 45 / 0.10),
+    0 4px 12px -6px oklch(0.30 0.05 45 / 0.14);
+  --shadow-plate-lifted:
+    inset 0 1px 0 0 oklch(1 0 0 / 0.9),
+    0 2px 4px -2px oklch(0.30 0.05 45 / 0.12),
+    0 12px 28px -12px oklch(0.45 0.12 40 / 0.28);
+
+  --chart-1: oklch(0.633 0.258 28);
+  --chart-2: oklch(0.671 0.229 39);
+  --chart-3: oklch(0.803 0.165 78);
+  --chart-4: oklch(0.585 0.098 192);
+  --chart-5: oklch(0.55 0.12 265);
+
+  --sidebar: oklch(0.185 0.014 45);
+  --sidebar-foreground: oklch(0.975 0.004 60);
+  --sidebar-primary: oklch(0.70 0.22 34);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.945 0.016 50);
-  --sidebar-accent-foreground: oklch(0.25 0.01 27);
-  --sidebar-border: oklch(0.905 0.008 50);
-  --sidebar-ring: oklch(0.59 0.25 27);
+  --sidebar-accent: oklch(1 0 0 / 7%);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.803 0.165 78);
 }
 
 .dark {
-  --background: oklch(0.145 0.014 35);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.195 0.015 35);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0.015 35);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.25 27);
+  --background: oklch(0.152 0.012 40);
+  --foreground: oklch(0.972 0.004 60);
+  --card: oklch(0.205 0.014 42);
+  --card-foreground: oklch(0.972 0.004 60);
+  --popover: oklch(0.222 0.014 42);
+  --popover-foreground: oklch(0.972 0.004 60);
+
+  /* Same AA constraint as light mode: the fill sits under white text, so its
+     lightness is bounded regardless of how dark the page ground is. */
+  --primary: oklch(0.595 0.245 29);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.25 0.01 27);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.255 0.016 35);
-  --muted-foreground: oklch(0.68 0.020 45);
-  --accent: oklch(0.30 0.01 27);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --secondary: oklch(0.262 0.012 40);
+  --secondary-foreground: oklch(0.972 0.004 60);
+  --muted: oklch(0.258 0.013 40);
+  --muted-foreground: oklch(0.705 0.018 50);
+  --accent: oklch(0.295 0.014 42);
+  --accent-foreground: oklch(0.972 0.004 60);
+
+  --destructive: oklch(0.615 0.205 18);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(1 0 0 / 10%);
+  /* The fill is bounded by white-text contrast; the ink is free to go lighter
+     so destructive text on its own tinted chip still clears AA. */
+  --destructive-ink: oklch(0.715 0.175 20);
+
+  --border: oklch(1 0 0 / 11%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.78 0.16 80);
-  --chart-1: oklch(0.65 0.25 27);
-  --chart-2: oklch(0.68 0.22 40);
-  --chart-3: oklch(0.82 0.16 80);
-  --chart-4: oklch(0.70 0.15 240);
-  --chart-5: oklch(0.70 0.18 150);
-  --sidebar: oklch(0.118 0.018 35);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.65 0.25 27);
+  --ring: oklch(0.803 0.165 78);
+
+  --ember: oklch(0.685 0.235 30);
+  --forge: oklch(0.715 0.205 42);
+  --spark: oklch(0.835 0.155 80);
+  --quench: oklch(0.685 0.095 190);
+  --forge-ink: oklch(0.785 0.155 50);
+  --spark-ink: oklch(0.858 0.142 82);
+  --quench-ink: oklch(0.785 0.082 190);
+
+  /* On a dark bench the anvil can't be darker than the ground or it vanishes —
+     it becomes the raised plate instead, still the heaviest thing on screen. */
+  --iron: oklch(0.238 0.018 44);
+  --iron-foreground: oklch(0.975 0.004 60);
+  --iron-muted: oklch(0.735 0.016 55);
+  --iron-border: oklch(1 0 0 / 10%);
+
+  --shadow-plate:
+    inset 0 1px 0 0 oklch(1 0 0 / 0.06),
+    0 1px 2px -1px oklch(0 0 0 / 0.5),
+    0 4px 14px -8px oklch(0 0 0 / 0.6);
+  --shadow-plate-lifted:
+    inset 0 1px 0 0 oklch(1 0 0 / 0.08),
+    0 2px 6px -2px oklch(0 0 0 / 0.5),
+    0 14px 32px -14px oklch(0 0 0 / 0.75);
+
+  --chart-1: oklch(0.685 0.235 30);
+  --chart-2: oklch(0.715 0.205 42);
+  --chart-3: oklch(0.835 0.155 80);
+  --chart-4: oklch(0.685 0.095 190);
+  --chart-5: oklch(0.66 0.13 268);
+
+  --sidebar: oklch(0.118 0.014 42);
+  --sidebar-foreground: oklch(0.972 0.004 60);
+  --sidebar-primary: oklch(0.72 0.215 34);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.25 0.01 27);
+  --sidebar-accent: oklch(1 0 0 / 7%);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.78 0.16 80);
+  --sidebar-ring: oklch(0.835 0.155 80);
 }
 
 @layer base {
@@ -127,17 +232,106 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* 17px root: the audience is business owners, not developers. Generous body
+     text is part of the accessibility story, not a stylistic flourish. */
   html {
     font-size: 17px;
     @apply font-sans;
   }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+/* ── Type roles ───────────────────────────────────────────────────────────
+   Archivo carries a width axis; pushing it slightly wide at heavy weights is
+   what makes headings read as stamped rather than as generic bold sans. */
+
+.type-display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+}
+
+/* Uppercase micro-labels: the stencil on the tool, not a heading. */
+.type-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Readouts: numbers as instrument values. Always tabular so columns align. */
+.type-readout {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────────
+   A plate is lit from above. Depth comes from lighting a material rather than
+   from a drop shadow under a rounded rectangle. */
+
+.plate {
+  box-shadow: var(--shadow-plate);
+}
+
+.plate-interactive {
+  box-shadow: var(--shadow-plate);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.plate-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-plate-lifted);
+  border-color: color-mix(in oklab, var(--ember) 32%, var(--border));
+}
+
+/* The anvil band. A single heat wash across the top edge — the metal is hot
+   where it was worked, and cools toward the base. */
+.anvil {
+  background-color: var(--iron);
+  background-image:
+    radial-gradient(
+      120% 150% at 88% -30%,
+      color-mix(in oklab, var(--forge) 34%, transparent) 0%,
+      color-mix(in oklab, var(--ember) 12%, transparent) 38%,
+      transparent 68%
+    );
+  color: var(--iron-foreground);
+}
+
+/* Hatched panel for empty states — the workbench surface showing through
+   where nothing has been made yet. */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--muted-foreground) 12%, transparent) 0px,
+    color-mix(in oklab, var(--muted-foreground) 12%, transparent) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* ── Heat ─────────────────────────────────────────────────────────────────
+   The one place motion is allowed to be expressive: a live agent breathes. */
+
+@keyframes foji-pulse-heat {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.86); }
+}
+
+.heat-live {
+  animation: foji-pulse-heat 2.4s ease-in-out infinite;
 }
 
 /* ── Motion ───────────────────────────────────────────────────────────────
-   The app had no animation at all, which is most of why it felt inert: every
-   view snapped into place with no sense of arrival. These are deliberately
-   small — enough to feel responsive, not enough to slow anyone down. All of it
-   collapses under prefers-reduced-motion. */
+   Deliberately small — enough that content arrives instead of appearing, not
+   enough to slow anyone down. All of it collapses under reduced-motion. */
 
 @keyframes foji-rise {
   from { opacity: 0; transform: translateY(6px); }
@@ -149,11 +343,9 @@
   to   { opacity: 1; }
 }
 
-/* Content arrives instead of appearing. */
 .foji-enter { animation: foji-rise 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .foji-enter-fade { animation: foji-fade 0.4s ease-out both; }
 
-/* Stagger for lists and card grids — the eye reads order rather than a slab. */
 .foji-stagger > * { animation: foji-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .foji-stagger > *:nth-child(1) { animation-delay: 0.02s; }
 .foji-stagger > *:nth-child(2) { animation-delay: 0.06s; }
@@ -162,20 +354,23 @@
 .foji-stagger > *:nth-child(5) { animation-delay: 0.18s; }
 .foji-stagger > *:nth-child(n + 6) { animation-delay: 0.22s; }
 
-/* Cards respond to the cursor: a hairline border alone gives no feedback. */
+/* Kept for compatibility with call sites that predate .plate-interactive. */
 .foji-lift {
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .foji-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px -10px oklch(0.45 0.14 40 / 0.30);
-  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow-plate-lifted);
+  border-color: color-mix(in oklab, var(--ember) 32%, var(--border));
 }
 
 @media (prefers-reduced-motion: reduce) {
   .foji-enter,
   .foji-enter-fade,
+  .heat-live,
   .foji-stagger > * { animation: none; }
-  .foji-lift { transition: none; }
-  .foji-lift:hover { transform: none; }
+  .foji-lift,
+  .plate-interactive { transition: none; }
+  .foji-lift:hover,
+  .plate-interactive:hover { transform: none; }
 }

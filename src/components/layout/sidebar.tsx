@@ -46,35 +46,61 @@ interface NavItem {
   hiddenForSuperAdmin?: boolean;
 }
 
-const MAIN_NAV: NavItem[] = [
-  { href: "/dashboard", icon: LayoutDashboard, labelKey: "nav.dashboard" },
-  { href: "/agents", icon: Bot, labelKey: "nav.agents" },
-  { href: "/inbox", icon: MessagesSquare, labelKey: "nav.inbox" },
-  { href: "/leads", icon: UserPlus, labelKey: "nav.leads" },
-  { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
-  { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },
-  { href: "/crm/pipeline", icon: KanbanSquare, labelKey: "nav.pipeline" },
-  { href: "/crm/tasks", icon: ListChecks, labelKey: "nav.tasks" },
-  { href: "/crm/reports", icon: BarChart3, labelKey: "nav.reports" },
+interface NavGroup {
+  labelKey?: string;
+  items: NavItem[];
+}
+
+/* Thirteen flat nav items is more than anyone scans — working memory holds
+   about 5–7 chunks, and an unlabelled list of 13 forces a full read every
+   time. Grouped by what the owner is trying to do (serve customers / manage
+   customers / run the account), each group lands inside that budget. */
+const NAV_GROUPS: NavGroup[] = [
   {
-    href: "/team",
-    icon: Users,
-    labelKey: "nav.team",
-    superAdminLabelKey: "superAdmin.platformTeam",
+    items: [{ href: "/dashboard", icon: LayoutDashboard, labelKey: "nav.dashboard" }],
   },
   {
-    href: "/billing",
-    icon: CreditCard,
-    labelKey: "nav.billing",
-    superAdminLabelKey: "superAdmin.manageSubscriptions",
+    labelKey: "nav.groups.service",
+    items: [
+      { href: "/agents", icon: Bot, labelKey: "nav.agents" },
+      { href: "/inbox", icon: MessagesSquare, labelKey: "nav.inbox" },
+      { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
+      { href: "/leads", icon: UserPlus, labelKey: "nav.leads" },
+    ],
   },
   {
-    href: "/settings",
-    icon: Settings,
-    labelKey: "nav.settings",
-    hiddenForSuperAdmin: true,
+    labelKey: "nav.groups.customers",
+    items: [
+      { href: "/crm/contacts", icon: Contact2, labelKey: "nav.contacts" },
+      { href: "/crm/pipeline", icon: KanbanSquare, labelKey: "nav.pipeline" },
+      { href: "/crm/tasks", icon: ListChecks, labelKey: "nav.tasks" },
+      { href: "/crm/reports", icon: BarChart3, labelKey: "nav.reports" },
+    ],
   },
-  { href: "/contact", icon: MessageSquare, labelKey: "nav.contact" },
+  {
+    labelKey: "nav.groups.account",
+    items: [
+      {
+        href: "/team",
+        icon: Users,
+        labelKey: "nav.team",
+        superAdminLabelKey: "superAdmin.platformTeam",
+      },
+      {
+        href: "/billing",
+        icon: CreditCard,
+        labelKey: "nav.billing",
+        superAdminLabelKey: "superAdmin.manageSubscriptions",
+      },
+      {
+        href: "/settings",
+        icon: Settings,
+        labelKey: "nav.settings",
+        hiddenForSuperAdmin: true,
+      },
+      { href: "/contact", icon: MessageSquare, labelKey: "nav.contact" },
+    ],
+  },
 ];
 
 const ADMIN_NAV: NavItem[] = [
@@ -108,15 +134,18 @@ function NavLink({
       href={`/${locale}${item.href}`}
       onClick={onNavigate}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl px-3 h-11 text-base font-medium transition-all duration-200",
+        /* The sidebar is iron in BOTH themes, so it must be styled from the
+           sidebar-* tokens — page tokens like `text-muted-foreground` would
+           put dark text on a dark ground in light mode. */
+        "group relative flex h-11 items-center gap-3 rounded-lg px-3 text-[0.95rem] font-medium transition-all duration-200",
         isCollapsed && "justify-center px-0",
         isActive
-          ? "bg-primary/10 text-primary shadow-sm"
-          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:translate-x-0.5"
+          ? "bg-sidebar-accent text-sidebar-foreground"
+          : "text-sidebar-foreground/60 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground hover:translate-x-0.5"
       )}
     >
       {isActive && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-primary" />
+        <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-sidebar-primary" />
       )}
       <item.icon className={cn("h-5 w-5 shrink-0", isCollapsed && "h-5 w-5")} />
       {!isCollapsed && <span>{label}</span>}
@@ -179,9 +208,10 @@ function SidebarContent({
       ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
       : user?.firstName?.[0]?.toUpperCase() ?? "?";
 
-  const visibleMainNav = MAIN_NAV.filter(
-    (item) => !(isSuperAdmin && item.hiddenForSuperAdmin)
-  );
+  const visibleGroups = NAV_GROUPS.map((g) => ({
+    ...g,
+    items: g.items.filter((item) => !(isSuperAdmin && item.hiddenForSuperAdmin)),
+  })).filter((g) => g.items.length > 0);
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -200,14 +230,14 @@ function SidebarContent({
             className="rounded-lg"
           />
           {!isCollapsed && (
-            <span className="text-lg font-bold tracking-tight">Foji AI</span>
+            <span className="type-display text-lg text-sidebar-foreground">Foji AI</span>
           )}
         </Link>
         {showToggle && !isCollapsed && (
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            className="h-8 w-8 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             onClick={onToggle}
           >
             <PanelLeftClose className="h-4 w-4" />
@@ -219,13 +249,13 @@ function SidebarContent({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground mt-2"
+                className="mt-2 h-8 w-8 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                 onClick={onToggle}
               >
                 <PanelLeftOpen className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right">Expand</TooltipContent>
+            <TooltipContent side="right">{t("nav.expandMenu")}</TooltipContent>
           </Tooltip>
         )}
       </div>
@@ -247,7 +277,7 @@ function SidebarContent({
               }
             }}
           >
-            <SelectTrigger className="h-9 w-full text-sm bg-sidebar-accent/50 border-sidebar-border">
+            <SelectTrigger className="h-9 w-full border-sidebar-border bg-sidebar-accent/60 text-sm text-sidebar-foreground">
               <SelectValue placeholder={t("emptyStates.noCompanyTitle")} />
             </SelectTrigger>
             <SelectContent>
@@ -274,7 +304,7 @@ function SidebarContent({
               window.location.reload();
             }}
           >
-            <SelectTrigger className="h-9 w-full text-sm bg-sidebar-accent/50 border-sidebar-border">
+            <SelectTrigger className="h-9 w-full border-sidebar-border bg-sidebar-accent/60 text-sm text-sidebar-foreground">
               <SelectValue placeholder={t("superAdmin.selectCompany")} />
             </SelectTrigger>
             <SelectContent>
@@ -290,20 +320,34 @@ function SidebarContent({
 
       {/* Main nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-3">
-        <div className="flex flex-col gap-1">
-          {visibleMainNav.map((item) => (
-            <NavLink
-              key={item.href}
-              item={item}
-              locale={locale}
-              isActive={isActive(item.href)}
-              isCollapsed={isCollapsed}
-              isSuperAdmin={isSuperAdmin}
-              onNavigate={onNavigate}
-              t={t}
-            />
-          ))}
-        </div>
+        {visibleGroups.map((group, gi) => (
+          <div key={group.labelKey ?? `group-${gi}`} className={cn(gi > 0 && "mt-5")}>
+            {group.labelKey &&
+              (isCollapsed ? (
+                // Collapsed: the label has nowhere to go, so the grouping is
+                // carried by a rule instead of disappearing entirely.
+                <div className="mx-2 mb-2 h-px bg-sidebar-border" />
+              ) : (
+                <p className="type-label mb-2 px-3 text-sidebar-foreground/40">
+                  {t(group.labelKey)}
+                </p>
+              ))}
+            <div className="flex flex-col gap-1">
+              {group.items.map((item) => (
+                <NavLink
+                  key={item.href}
+                  item={item}
+                  locale={locale}
+                  isActive={isActive(item.href)}
+                  isCollapsed={isCollapsed}
+                  isSuperAdmin={isSuperAdmin}
+                  onNavigate={onNavigate}
+                  t={t}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
 
         {/* Admin section */}
         {isSuperAdmin && (
@@ -311,8 +355,8 @@ function SidebarContent({
             <div className="mx-1 my-4 h-px bg-gradient-to-r from-transparent via-sidebar-border to-transparent" />
             {!isCollapsed && (
               <div className="mb-2 flex items-center gap-2 px-3">
-                <Shield className="h-3.5 w-3.5 text-primary" />
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-primary">
+                <Shield className="h-3.5 w-3.5 text-sidebar-primary" />
+                <span className="type-label text-sidebar-primary">
                   Admin
                 </span>
               </div>
@@ -340,20 +384,20 @@ function SidebarContent({
       <div className="p-3">
         <div
           className={cn(
-            "flex items-center gap-3 rounded-xl px-2 py-2 cursor-pointer transition-colors hover:bg-accent",
+            "flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-sidebar-accent",
             isCollapsed && "justify-center px-0"
           )}
           onClick={() => setSettingsOpen(true)}
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+          <div className="type-readout flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sidebar-primary/15 text-sm font-semibold text-sidebar-primary">
             {initials}
           </div>
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">
+              <p className="truncate text-sm font-medium text-sidebar-foreground">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="truncate text-xs text-muted-foreground flex items-center gap-1">
+              <p className="flex items-center gap-1 truncate text-xs text-sidebar-foreground/55">
                 {t("nav.settings")}
                 <ChevronRight className="h-3 w-3" />
               </p>
@@ -445,7 +489,7 @@ export function MobileHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
           height={24}
           className="rounded"
         />
-        <span className="font-bold">Foji AI</span>
+        <span className="type-display text-base">Foji AI</span>
       </div>
     </header>
   );

@@ -16,8 +16,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SkeletonRows } from "@/components/ui/skeleton";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { AnvilMark } from "@/components/shared/marks";
 import { toast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AudioPlayer } from "@/components/ui/audio-player";
 import { MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw, Paperclip, FileText, UserCheck } from "lucide-react";
 
 const LIST_POLL_MS = 10_000;
@@ -55,7 +58,7 @@ function MessageContent({ message: m }: { message: InboxMessage }) {
   if (m.mediaUrl && type === "audio") {
     return (
       <span className="block space-y-1">
-        <audio controls src={m.mediaUrl} className="max-w-full" />
+        <AudioPlayer src={m.mediaUrl} />
         {caption && <span className="block">{caption}</span>}
       </span>
     );
@@ -199,15 +202,16 @@ export default function InboxPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("inbox.title")}</h1>
-          <p className="text-muted-foreground">{t("inbox.description")}</p>
-        </div>
-        <Button variant="outline" size="sm" onClick={loadConversations}>
-          <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("inbox.refresh")}
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow={t("inbox.eyebrow")}
+        title={t("inbox.title")}
+        description={t("inbox.description")}
+        action={
+          <Button variant="outline" size="sm" onClick={loadConversations}>
+            <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("inbox.refresh")}
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
         {/* Conversation list — hidden on mobile once a thread is open */}
@@ -216,10 +220,12 @@ export default function InboxPage() {
             {conversations === null ? (
               <div className="p-3"><SkeletonRows rows={6} /></div>
             ) : conversations.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 py-16 text-center">
-                <MessageCircle className="h-9 w-9 text-muted-foreground/40" />
-                <p className="text-sm font-medium">{t("inbox.empty")}</p>
-                <p className="max-w-[15rem] text-xs text-muted-foreground">{t("inbox.emptyHint")}</p>
+              /* The list column is only 340px, so the full EmptyState would
+                 crowd it — same materials, compact arrangement. */
+              <div className="hatch relative flex flex-col items-start gap-2 px-5 py-14">
+                <AnvilMark className="h-10 w-10 text-muted-foreground/40" lit={false} />
+                <p className="type-display mt-1 text-base">{t("inbox.empty")}</p>
+                <p className="text-xs leading-relaxed text-muted-foreground">{t("inbox.emptyHint")}</p>
               </div>
             ) : (
               <ul className="max-h-[70vh] divide-y overflow-y-auto">
@@ -228,16 +234,32 @@ export default function InboxPage() {
                     <button
                       type="button"
                       onClick={() => openConversation(c)}
-                      className={`flex w-full flex-col items-start gap-1 px-3 py-3 text-left transition-colors hover:bg-accent/50 ${
+                      className={`relative flex w-full flex-col items-start gap-1 py-3 pl-5 pr-3 text-left transition-colors hover:bg-accent/50 ${
                         selectedId === c.id ? "bg-accent" : ""
                       }`}
                     >
+                      {/* An unanswered conversation is the hottest thing in the
+                          app — it is a customer waiting. The stripe reads before
+                          any of the text does. */}
+                      {c.unreadCount > 0 && (
+                        <span
+                          className="absolute inset-y-2 left-0 w-[3px] rounded-r-full bg-spark"
+                          aria-hidden="true"
+                        />
+                      )}
                       <div className="flex w-full items-center gap-2">
-                        <span className="truncate text-sm font-medium">
+                        <span
+                          className={`truncate text-sm ${
+                            c.unreadCount > 0 ? "font-semibold" : "font-medium"
+                          }`}
+                        >
                           {c.contactName || c.contactWaId}
                         </span>
                         {c.unreadCount > 0 && (
-                          <Badge className="ml-auto h-5 min-w-5 justify-center px-1.5 tabular-nums">
+                          <Badge
+                            variant="attention"
+                            className="type-readout ml-auto h-5 min-w-5 justify-center px-1.5"
+                          >
                             {c.unreadCount}
                           </Badge>
                         )}
@@ -246,14 +268,16 @@ export default function InboxPage() {
                         {c.lastMessagePreview || t("inbox.mediaPreview")}
                       </span>
                       <span className="flex w-full flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
-                        {format.dateTime(new Date(c.lastMessageAt), { dateStyle: "short", timeStyle: "short" })}
+                        <span className="type-readout">
+                          {format.dateTime(new Date(c.lastMessageAt), { dateStyle: "short", timeStyle: "short" })}
+                        </span>
                         {c.assignedUserName && (
                           <span className="inline-flex items-center gap-0.5">
                             <UserCheck className="h-3 w-3" /> {c.assignedUserName}
                           </span>
                         )}
                         {!c.canReplyFreeform && (
-                          <span className="inline-flex items-center gap-0.5 text-amber-600 dark:text-amber-400">
+                          <span className="inline-flex items-center gap-0.5 text-spark-ink">
                             <Clock className="h-3 w-3" /> {t("inbox.windowClosedShort")}
                           </span>
                         )}
@@ -359,7 +383,7 @@ export default function InboxPage() {
                 {/* Reply */}
                 <div className="border-t p-3">
                   {windowClosed ? (
-                    <div className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+                    <div className="flex items-start gap-2 rounded-md border border-spark/40 bg-spark/10 p-3 text-xs text-spark-ink">
                       <Clock className="mt-0.5 h-4 w-4 shrink-0" />
                       <span>{t("inbox.windowClosed")}</span>
                     </div>
