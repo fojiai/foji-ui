@@ -341,10 +341,20 @@
     "roles": {
       "owner": "Owner",
       "admin": "Admin",
-      "user": "User"
+      "user": "User",
+      "superAdmin": "Super admin"
     },
     "empty": "No team members yet",
-    "invitePending": "Invite pending"
+    "invitePending": "Invite pending",
+    "eyebrow": "Account",
+    "description": "Who has access to this workspace.",
+    "emptyHint": "Invite administrators to help manage the platform.",
+    "pendingInvitations": "Pending invitations",
+    "inviteExpired": "Expired",
+    "inviteExpiresOn": "Expires {date}",
+    "inviteSent": "Invitation sent",
+    "revoke": "Revoke",
+    "revokeConfirm": "Revoke the invitation for {email}?"
   },
   "billing": {
     "title": "Billing",
@@ -376,7 +386,12 @@
       "starter": "Starter",
       "professional": "Professional",
       "scale": "Scale"
-    }
+    },
+    "eyebrow": "Account",
+    "description": "Your plan, your usage and the options available.",
+    "yourPlan": "Your plan",
+    "popular": "Most chosen",
+    "perMonth": "/mo"
   },
   "settings": {
     "title": "Settings",
@@ -385,7 +400,15 @@
     "companySlug": "Slug",
     "logo": "Logo",
     "danger": "Danger zone",
-    "deleteCompany": "Delete company"
+    "deleteCompany": "Delete company",
+    "eyebrow": "Account",
+    "description": "Your workspace details.",
+    "adminOnlyTitle": "Platform settings",
+    "slugImmutable": "The slug cannot be changed after creation.",
+    "dangerHint": "These actions are irreversible.",
+    "deleteConfirmTitle": "Delete {name}?",
+    "deleteConfirmBody": "This permanently deletes the workspace, every agent, all files and the conversation history. It cannot be undone.",
+    "deleteConfirmAction": "Delete permanently"
   },
   "profile": {
     "title": "My Profile",

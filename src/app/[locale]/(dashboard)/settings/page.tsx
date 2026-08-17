@@ -6,9 +6,9 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Shield, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { NoCompanyState } from "@/components/shared/empty-state";
+import { EmptyState, NoCompanyState } from "@/components/shared/empty-state";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
 import { toast } from "@/hooks/use-toast";
 
 // ─── Super Admin: Redirect to Admin panel ────────────────────────────────────
@@ -29,23 +30,20 @@ function SuperAdminSettingsView() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
-      <Card>
-        <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-            <Shield className="h-7 w-7 text-primary" />
-          </div>
-          <p className="text-muted-foreground max-w-sm">
-            {t("superAdmin.platformSettings")}
-          </p>
+      <PageHeader eyebrow={t("settings.eyebrow")} title={t("settings.title")} />
+      <EmptyState
+        eyebrow={t("emptyStates.eyebrowAdmin")}
+        title={t("settings.adminOnlyTitle")}
+        description={t("superAdmin.platformSettings")}
+        action={
           <Button asChild>
             <Link href={`/${locale}/admin`}>
               {t("superAdmin.goToAdmin")}
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
-        </CardContent>
-      </Card>
+        }
+      />
     </div>
   );
 }
@@ -105,7 +103,7 @@ function RegularSettingsView() {
   if (!company) {
     return (
       <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+        <PageHeader eyebrow={t("settings.eyebrow")} title={t("settings.title")} />
         <NoCompanyState />
       </div>
     );
@@ -113,12 +111,16 @@ function RegularSettingsView() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+      <PageHeader
+        eyebrow={t("settings.eyebrow")}
+        title={t("settings.title")}
+        description={t("settings.description")}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Card>
+        <Card className="plate">
           <CardHeader>
-            <CardTitle className="text-base">{t("settings.company")}</CardTitle>
+            <CardTitle className="type-display text-base">{t("settings.company")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -128,7 +130,7 @@ function RegularSettingsView() {
             <div className="space-y-2">
               <Label>{t("settings.companySlug")}</Label>
               <Input value={company.slug} readOnly className="bg-muted text-muted-foreground cursor-not-allowed" />
-              <p className="text-xs text-muted-foreground">Slug cannot be changed after creation.</p>
+              <p className="text-xs text-muted-foreground">{t("settings.slugImmutable")}</p>
             </div>
             <div className="space-y-2">
               <Label>{t("common.description")}</Label>
@@ -145,10 +147,14 @@ function RegularSettingsView() {
 
       <Separator />
 
-      <Card className="border-destructive/50">
+      {/* The one place destructive is allowed to show as a surface: a section
+          whose only content is an irreversible action. */}
+      <Card className="plate border-destructive/40">
         <CardHeader>
-          <CardTitle className="text-base text-destructive">{t("settings.danger")}</CardTitle>
-          <CardDescription>These actions are irreversible.</CardDescription>
+          <CardTitle className="type-display text-base text-destructive-ink">
+            {t("settings.danger")}
+          </CardTitle>
+          <CardDescription>{t("settings.dangerHint")}</CardDescription>
         </CardHeader>
         <CardContent>
           <AlertDialog>
@@ -157,15 +163,13 @@ function RegularSettingsView() {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete {company.name}?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete your workspace, all agents, files, and conversation history. This cannot be undone.
-                </AlertDialogDescription>
+                <AlertDialogTitle>{t("settings.deleteConfirmTitle", { name: company.name })}</AlertDialogTitle>
+                <AlertDialogDescription>{t("settings.deleteConfirmBody")}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                 <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                  Delete permanently
+                  {t("settings.deleteConfirmAction")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

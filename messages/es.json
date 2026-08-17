@@ -341,10 +341,20 @@
     "roles": {
       "owner": "Propietario",
       "admin": "Administrador",
-      "user": "Usuario"
+      "user": "Usuario",
+      "superAdmin": "Super admin"
     },
     "empty": "Sin miembros aún",
-    "invitePending": "Invitación pendiente"
+    "invitePending": "Invitación pendiente",
+    "eyebrow": "Cuenta",
+    "description": "Quién tiene acceso a este espacio de trabajo.",
+    "emptyHint": "Invita administradores para ayudar a gestionar la plataforma.",
+    "pendingInvitations": "Invitaciones pendientes",
+    "inviteExpired": "Expirada",
+    "inviteExpiresOn": "Expira el {date}",
+    "inviteSent": "Invitación enviada",
+    "revoke": "Revocar",
+    "revokeConfirm": "¿Revocar la invitación de {email}?"
   },
   "billing": {
     "title": "Facturación",
@@ -376,7 +386,12 @@
       "starter": "Starter",
       "professional": "Professional",
       "scale": "Scale"
-    }
+    },
+    "eyebrow": "Cuenta",
+    "description": "Tu plan, tu consumo y las opciones disponibles.",
+    "yourPlan": "Tu plan",
+    "popular": "El más elegido",
+    "perMonth": "/mes"
   },
   "settings": {
     "title": "Configuración",
@@ -385,7 +400,15 @@
     "companySlug": "Slug",
     "logo": "Logo",
     "danger": "Zona de peligro",
-    "deleteCompany": "Eliminar empresa"
+    "deleteCompany": "Eliminar empresa",
+    "eyebrow": "Cuenta",
+    "description": "Datos de tu espacio de trabajo.",
+    "adminOnlyTitle": "Configuración de la plataforma",
+    "slugImmutable": "El slug no se puede cambiar después de la creación.",
+    "dangerHint": "Estas acciones son irreversibles.",
+    "deleteConfirmTitle": "¿Eliminar {name}?",
+    "deleteConfirmBody": "Esto elimina permanentemente el espacio de trabajo, todos los agentes, los archivos y el historial de conversaciones. No se puede deshacer.",
+    "deleteConfirmAction": "Eliminar permanentemente"
   },
   "profile": {
     "title": "Mi Perfil",

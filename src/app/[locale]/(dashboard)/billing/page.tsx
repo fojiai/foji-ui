@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import {
-  AlertTriangle, CheckCircle2, Clock, CreditCard, ExternalLink, XCircle,
+  AlertTriangle, Check, Clock, ExternalLink,
   Search, ChevronLeft, ChevronRight, Building2, User, Plus, Trash2, Eye,
 } from "lucide-react";
 import Link from "next/link";
@@ -27,6 +27,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Progress } from "@/components/ui/progress";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
 
 // ─── Super Admin: Manage All Subscriptions ───────────────────────────────────
@@ -169,7 +171,7 @@ function SuperAdminSubscriptionsView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("superAdmin.manageSubscriptions")}</h1>
+          <h1 className="type-display text-[1.9rem] sm:text-[2.15rem]">{t("superAdmin.manageSubscriptions")}</h1>
           <p className="text-muted-foreground mt-1">{total} companies</p>
         </div>
         <Button onClick={() => { customPlanForm.reset(); setCustomPlanOpen(true); }}>
@@ -194,13 +196,13 @@ function SuperAdminSubscriptionsView() {
       {/* Company list */}
       <div className="space-y-2">
         {companies.length === 0 ? (
-          <Card>
+          <Card className="plate">
             <CardContent className="py-10 text-center text-muted-foreground">
               No companies found.
             </CardContent>
           </Card>
         ) : companies.map((c) => (
-          <Card key={c.id} className="hover:shadow-md transition-shadow">
+          <Card key={c.id} className="plate-interactive">
             <CardContent className="flex items-center justify-between py-4">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-muted">
@@ -381,23 +383,13 @@ function SuperAdminSubscriptionsView() {
 
 // ─── Regular Billing View (tenant-scoped) ────────────────────────────────────
 
-function statusVariant(status: string): "default" | "success" | "warning" | "destructive" | "outline" {
+/** Subscription status on the heat scale: running, waiting on the user, cold. */
+function statusHeat(status: string): "live" | "attention" | "cool" | "idle" {
   switch (status) {
-    case "active": return "success";
-    case "trialing": return "warning";
-    case "past_due": return "destructive";
-    case "canceled":
-    case "unpaid": return "outline";
-    default: return "default";
-  }
-}
-
-function statusIcon(status: string) {
-  switch (status) {
-    case "active": return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-    case "trialing": return <Clock className="h-4 w-4 text-yellow-500" />;
-    case "past_due": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    default: return <XCircle className="h-4 w-4 text-muted-foreground" />;
+    case "active": return "cool";
+    case "trialing": return "attention";
+    case "past_due": return "attention";
+    default: return "idle";
   }
 }
 
@@ -408,17 +400,31 @@ function UsageBar({ label, used, limit }: { label: string; used: number; limit: 
     <div className="space-y-1">
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">
+        <span className="type-readout font-medium">
           {used.toLocaleString()} {unlimited ? "" : `/ ${limit.toLocaleString()}`}
         </span>
       </div>
-      {!unlimited && <Progress value={pct} className={pct >= 90 ? "bg-red-100 [&>div]:bg-red-500" : ""} />}
+      {/* Near the ceiling is the one thing here waiting on the user, so it is
+          the only bar allowed to run hot. Below that the bar is iron: the
+          default ember-on-ember/20 track read as a nearly-full red bar even at
+          20% used, which is both decoration and a misleading one. */}
+      {!unlimited && (
+        <Progress
+          value={pct}
+          className={
+            pct >= 90
+              ? "bg-spark/25 [&>div]:bg-spark"
+              : "bg-muted [&>div]:bg-muted-foreground/70"
+          }
+        />
+      )}
     </div>
   );
 }
 
 function RegularBillingView() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId } = useAuth();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
@@ -509,41 +515,41 @@ function RegularBillingView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">{t("billing.title")}</h1>
-        {subscription?.hasStripeSubscription && (
-          <Button variant="outline" onClick={openPortal} disabled={portalLoading}>
-            {portalLoading ? (
-              <LoadingSpinner size="sm" />
-            ) : (
-              <>
-                <ExternalLink className="mr-1 h-4 w-4" /> {t("billing.manageBilling")}
-              </>
-            )}
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        eyebrow={t("billing.eyebrow")}
+        title={t("billing.title")}
+        description={t("billing.description")}
+        action={
+          subscription?.hasStripeSubscription && (
+            <Button variant="outline" onClick={openPortal} disabled={portalLoading}>
+              {portalLoading ? (
+                <LoadingSpinner size="sm" />
+              ) : (
+                <>
+                  <ExternalLink className="mr-1 h-4 w-4" /> {t("billing.manageBilling")}
+                </>
+              )}
+            </Button>
+          )
+        }
+      />
 
       {subscription?.status === "trialing" && trialDaysLeft !== null && (
-        <Card className="border-yellow-400 bg-yellow-50 dark:bg-yellow-950/20">
-          <CardContent className="flex items-center gap-3 py-4">
-            <Clock className="h-5 w-5 shrink-0 text-yellow-600" />
-            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-              {t("billing.trialBanner", { days: trialDaysLeft })}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="flex items-center gap-3 rounded-xl border border-spark/40 bg-spark/10 p-4">
+          <Clock className="h-5 w-5 shrink-0 text-spark-ink" />
+          <p className="text-sm font-medium text-spark-ink">
+            {t("billing.trialBanner", { days: trialDaysLeft })}
+          </p>
+        </div>
       )}
 
       {subscription?.status === "past_due" && (
-        <Card className="border-red-400 bg-red-50 dark:bg-red-950/20">
-          <CardContent className="flex items-center gap-3 py-4">
-            <AlertTriangle className="h-5 w-5 shrink-0 text-red-600" />
-            <p className="text-sm font-medium text-red-800 dark:text-red-200">
-              {t("billing.pastDueBanner")}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="flex items-center gap-3 rounded-xl border border-destructive/40 bg-destructive/10 p-4">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-destructive-ink" />
+          <p className="text-sm font-medium text-destructive-ink">
+            {t("billing.pastDueBanner")}
+          </p>
+        </div>
       )}
 
       {subscription && plan && (
@@ -553,16 +559,19 @@ function RegularBillingView() {
               <CardTitle className="text-base">{t("billing.currentPlan")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center gap-2">
-                {statusIcon(subscription.status)}
-                <span className="text-lg font-semibold">{plan.name}</span>
-                <Badge variant={statusVariant(subscription.status) as any}>
-                  {t(`billing.status.${subscription.status}` as any, { fallback: subscription.status })}
-                </Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="type-display text-lg">{plan.name}</span>
+                <HeatStatus
+                  level={statusHeat(subscription.status)}
+                  label={t(`billing.status.${subscription.status}` as any, { fallback: subscription.status })}
+                />
               </div>
               {subscription.currentPeriodEnd && (
                 <p className="text-xs text-muted-foreground">
-                  {t("billing.periodEnd")}: {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
+                  {t("billing.periodEnd")}:{" "}
+                  <span className="type-readout">
+                    {format.dateTime(new Date(subscription.currentPeriodEnd), { dateStyle: "short" })}
+                  </span>
                 </p>
               )}
             </CardContent>
@@ -595,65 +604,79 @@ function RegularBillingView() {
       )}
 
       <div>
-        <h2 className="mb-4 text-lg font-semibold">{t("billing.availablePlans")}</h2>
+        <h2 className="type-label mb-4 text-muted-foreground">{t("billing.availablePlans")}</h2>
         <div className="grid gap-6 sm:grid-cols-3">
-          {plans.map((p) => (
-            <Card key={p.id} className="relative hover:shadow-md transition-shadow">
-              {p.slug === "professional" && (
+          {plans.map((p) => {
+            const isCurrent = subscription?.plan?.id === p.id;
+            return (
+            <Card
+              key={p.id}
+              className={`plate-interactive relative ${isCurrent ? "border-primary/50" : ""}`}
+            >
+              {isCurrent && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary px-3">Popular</Badge>
+                  <Badge className="px-3">{t("billing.yourPlan")}</Badge>
+                </div>
+              )}
+              {!isCurrent && p.slug === "professional" && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <Badge variant="secondary" className="px-3">{t("billing.popular")}</Badge>
                 </div>
               )}
               <CardHeader className="text-center">
-                <CardTitle>{p.name}</CardTitle>
+                <CardTitle className="type-display">{p.name}</CardTitle>
                 <CardDescription>
-                  <span className="text-3xl font-bold text-foreground">{p.currency === "BRL" ? "R$" : "$"}{p.monthlyPrice}</span>
-                  <span className="text-muted-foreground">/mo</span>
+                  <span className="type-readout text-3xl font-semibold text-foreground">
+                    {p.currency === "BRL" ? "R$" : "$"}{p.monthlyPrice}
+                  </span>
+                  <span className="text-muted-foreground">{t("billing.perMonth")}</span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
-                    <CreditCard className="h-4 w-4 text-primary" />
-                    {p.maxAgents} {t("agents.title")}
+                    <Check className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span className="type-readout">{p.maxAgents}</span> {t("agents.title")}
                   </li>
                   {p.maxConversationsPerMonth > 0 && (
                     <li className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-primary" />
-                      {p.maxConversationsPerMonth.toLocaleString()} {t("billing.conversationsPerMonth")}
+                      <Check className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <span className="type-readout">{p.maxConversationsPerMonth.toLocaleString()}</span>{" "}
+                      {t("billing.conversationsPerMonth")}
                     </li>
                   )}
                   {p.maxConversationsPerMonth === 0 && (
                     <li className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-primary" />
+                      <Check className="h-4 w-4 shrink-0 text-muted-foreground" />
                       {t("billing.unlimitedConversations")}
                     </li>
                   )}
                   {p.hasWhatsApp && (
                     <li className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-primary" />
+                      <Check className="h-4 w-4 shrink-0 text-muted-foreground" />
                       WhatsApp
                     </li>
                   )}
                   {p.hasEscalationContacts && (
                     <li className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-primary" />
+                      <Check className="h-4 w-4 shrink-0 text-muted-foreground" />
                       {t("agents.escalation.title")}
                     </li>
                   )}
                 </ul>
                 <Button
                   className="w-full"
-                  variant={subscription?.plan?.id === p.id ? "secondary" : p.slug === "professional" ? "default" : "outline"}
+                  variant={isCurrent ? "secondary" : p.slug === "professional" ? "default" : "outline"}
                   onClick={() => subscribe(p.id)}
-                  disabled={checkoutLoading === p.id || subscription?.plan?.id === p.id}
+                  disabled={checkoutLoading === p.id || isCurrent}
                 >
                   {checkoutLoading === p.id && <LoadingSpinner size="sm" className="mr-2" />}
                   {getPlanButtonLabel(p)}
                 </Button>
               </CardContent>
             </Card>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

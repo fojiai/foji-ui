@@ -11,24 +11,40 @@ import {
 import { useAuth } from "@/components/providers/auth-provider";
 import { crmAnalyticsApi, subscriptionsApi, type CrmSummary, apiErrorMessage } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { PageLoader } from "@/components/shared/loading-spinner";
+import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
-import { Lock, TrendingUp, Timer, Wallet, Target, AlertTriangle } from "lucide-react";
+import { TrendingUp, Timer, Wallet, Target } from "lucide-react";
 
 /**
- * Chart colors. Teal carries neutral/positive magnitude, red is reserved for
- * lost deals. The obvious green/red pair fails colorblind separation
- * (deutan ΔE 5.0) — this pair clears every check in both light and dark.
+ * Chart colors come from the theme tokens, never literals — a hardcoded hex
+ * cannot follow the theme, so every chart here was drawn in light-mode colours
+ * even in dark mode. chart-4 is the cooled teal that carries neutral/positive
+ * magnitude; chart-1 is the ember red, reserved for lost deals. That pairing
+ * survives colorblind separation, which the obvious green/red does not
+ * (deutan ΔE 5.0).
  */
-const WON = "#0D9488";
-const LOST = "#DC2626";
-const MAGNITUDE = "#0D9488";
+const WON = "var(--chart-4)";
+const LOST = "var(--chart-1)";
+const MAGNITUDE = "var(--chart-4)";
+
+/** Shared axis/tooltip styling, matching the dashboard chart. */
+const AXIS_TICK = { fontSize: 11, fill: "var(--muted-foreground)", fontFamily: "var(--font-mono)" };
+const TOOLTIP_STYLE = {
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: "10px",
+  fontSize: 12,
+  boxShadow: "var(--shadow-plate-lifted)",
+};
+const TOOLTIP_LABEL_STYLE = { color: "var(--foreground)", fontWeight: 600 };
 
 export default function CrmReportsPage() {
   const t = useTranslations();
@@ -108,19 +124,22 @@ export default function CrmReportsPage() {
   if (!hasCrm) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.reports.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.reports.description")}</p>
-        </div>
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <Lock className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.locked.title")}</p>
-            <Button asChild className="mt-2">
+        <PageHeader
+          eyebrow={t("crm.eyebrow")}
+          title={t("crm.reports.title")}
+          description={t("crm.reports.description")}
+        />
+        <EmptyState
+          tone="warn"
+          eyebrow={t("emptyStates.eyebrowBilling")}
+          title={t("crm.locked.title")}
+          description={t("crm.locked.description")}
+          action={
+            <Button asChild>
               <Link href={`/${locale}/billing`}>{t("crm.locked.upgrade")}</Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        />
       </div>
     );
   }
@@ -130,23 +149,27 @@ export default function CrmReportsPage() {
   const hasClosed = data.wonDeals + data.lostDeals > 0;
 
   return (
-    <div className={`space-y-6 ${isFetching ? "opacity-60 transition-opacity" : ""}`}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.reports.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.reports.description")}</p>
-        </div>
-        <Select value={days} onValueChange={changeRange}>
-          <SelectTrigger className="w-[190px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="30">{t("crm.reports.last30")}</SelectItem>
-            <SelectItem value="90">{t("crm.reports.last90")}</SelectItem>
-            <SelectItem value="365">{t("crm.reports.last365")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="space-y-6" aria-busy={isFetching}>
+      <PageHeader
+        eyebrow={t("crm.eyebrow")}
+        title={t("crm.reports.title")}
+        description={t("crm.reports.description")}
+        action={
+          <>
+            {isFetching && <LoadingSpinner size="sm" />}
+            <Select value={days} onValueChange={changeRange}>
+              <SelectTrigger className="w-[190px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="30">{t("crm.reports.last30")}</SelectItem>
+                <SelectItem value="90">{t("crm.reports.last90")}</SelectItem>
+                <SelectItem value="365">{t("crm.reports.last365")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </>
+        }
+      />
 
       {/* Headline numbers — these are stat tiles, not charts. */}
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -177,16 +200,16 @@ export default function CrmReportsPage() {
       </div>
 
       {/* Tasks strip */}
-      <div className="flex flex-wrap items-center gap-3 rounded-lg border p-3 text-sm">
-        <span className="text-muted-foreground">{t("crm.reports.tasksLabel")}</span>
-        <Badge variant="outline" className="tabular-nums">
+      <div className="plate flex flex-wrap items-center gap-3 rounded-xl border bg-card p-3 text-sm">
+        <span className="type-label text-muted-foreground">{t("crm.reports.tasksLabel")}</span>
+        <span className="type-readout text-muted-foreground">
           {t("crm.tasks.openCount", { count: data.openTasks })}
-        </Badge>
+        </span>
         {data.overdueTasks > 0 && (
-          <Badge variant="destructive" className="gap-1 tabular-nums">
-            <AlertTriangle className="h-3 w-3" />
-            {t("crm.tasks.overdueCount", { count: data.overdueTasks })}
-          </Badge>
+          <HeatStatus
+            level="attention"
+            label={t("crm.tasks.overdueCount", { count: data.overdueTasks })}
+          />
         )}
         <span className="ml-auto text-muted-foreground">
           {t("crm.reports.contactsSummary", { total: data.totalContacts, added: data.newContacts })}
@@ -196,7 +219,7 @@ export default function CrmReportsPage() {
       {/* Funnel — magnitude by ordered stage. Single hue; values labelled directly. */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("crm.reports.funnelTitle")}</CardTitle>
+          <CardTitle className="type-display text-base">{t("crm.reports.funnelTitle")}</CardTitle>
           <CardDescription>{t("crm.reports.funnelHint")}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -206,25 +229,26 @@ export default function CrmReportsPage() {
             <div className="h-[280px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={funnelData} layout="vertical" margin={{ left: 8, right: 24, top: 4, bottom: 4 }}>
-                  <CartesianGrid horizontal={false} stroke="currentColor" className="text-muted-foreground/15" />
+                  <CartesianGrid horizontal={false} stroke="var(--border)" />
                   <XAxis
                     type="number"
                     tickFormatter={(v) => money(Number(v))}
-                    tick={{ fontSize: 11 }}
-                    stroke="currentColor"
-                    className="text-muted-foreground"
+                    tick={AXIS_TICK}
+                    tickLine={false}
+                    axisLine={false}
                   />
                   <YAxis
                     type="category"
                     dataKey="name"
                     width={110}
-                    tick={{ fontSize: 12 }}
-                    stroke="currentColor"
-                    className="text-muted-foreground"
+                    tick={AXIS_TICK}
+                    tickLine={false}
+                    axisLine={false}
                   />
                   <Tooltip
-                    cursor={{ fill: "currentColor", className: "text-muted-foreground/10" }}
-                    contentStyle={{ borderRadius: 8, fontSize: 12 }}
+                    cursor={{ fill: "var(--muted)" }}
+                    contentStyle={TOOLTIP_STYLE}
+                    labelStyle={TOOLTIP_LABEL_STYLE}
                     formatter={(v: number, _n, item) => [
                       `${money(v)} · ${t("crm.reports.dealsCount", { count: item?.payload?.count ?? 0 })}`,
                       t("crm.reports.openPipeline"),
@@ -241,7 +265,7 @@ export default function CrmReportsPage() {
       {/* Won vs lost over time — two series, so a legend is always present. */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("crm.reports.outcomesTitle")}</CardTitle>
+          <CardTitle className="type-display text-base">{t("crm.reports.outcomesTitle")}</CardTitle>
           <CardDescription>{t("crm.reports.outcomesHint")}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -252,14 +276,23 @@ export default function CrmReportsPage() {
               <div className="h-[260px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyData} margin={{ left: 0, right: 8, top: 4, bottom: 4 }}>
-                    <CartesianGrid vertical={false} stroke="currentColor" className="text-muted-foreground/15" />
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="currentColor" className="text-muted-foreground" />
-                    <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="currentColor" className="text-muted-foreground" />
+                    <CartesianGrid vertical={false} stroke="var(--border)" />
+                    <XAxis dataKey="name" tick={AXIS_TICK} tickLine={false} axisLine={false} />
+                    <YAxis allowDecimals={false} tick={AXIS_TICK} tickLine={false} axisLine={false} />
                     <Tooltip
-                      cursor={{ fill: "currentColor", className: "text-muted-foreground/10" }}
-                      contentStyle={{ borderRadius: 8, fontSize: 12 }}
+                      cursor={{ fill: "var(--muted)" }}
+                      contentStyle={TOOLTIP_STYLE}
+                      labelStyle={TOOLTIP_LABEL_STYLE}
                     />
-                    <Legend wrapperStyle={{ fontSize: 12 }} />
+                    {/* Recharts tints the legend *label* with the series colour, which put
+                        teal text on a white plate at 3.99:1. The swatch carries the
+                        colour; the label goes back to body text. */}
+                    <Legend
+                      wrapperStyle={{ fontSize: 12 }}
+                      formatter={(value: string) => (
+                        <span style={{ color: "var(--foreground)" }}>{value}</span>
+                      )}
+                    />
                     <Bar dataKey="won" name={t("crm.dealStatuses.Won")} fill={WON} radius={[4, 4, 0, 0]} maxBarSize={26} />
                     <Bar dataKey="lost" name={t("crm.dealStatuses.Lost")} fill={LOST} radius={[4, 4, 0, 0]} maxBarSize={26} />
                   </BarChart>
@@ -267,7 +300,7 @@ export default function CrmReportsPage() {
               </div>
 
               {/* Table view — identity never depends on color alone. */}
-              <div className="mt-4 rounded-md border">
+              <div className="mt-4 overflow-hidden rounded-xl border">
                 <Table>
                   <TableHeader>
                     <TableRow className="hover:bg-transparent">
@@ -280,8 +313,8 @@ export default function CrmReportsPage() {
                     {monthlyData.map((m) => (
                       <TableRow key={m.name}>
                         <TableCell className="font-medium">{m.name}</TableCell>
-                        <TableCell className="text-right tabular-nums">{m.won}</TableCell>
-                        <TableCell className="text-right tabular-nums">{m.lost}</TableCell>
+                        <TableCell className="type-readout text-right">{m.won}</TableCell>
+                        <TableCell className="type-readout text-right">{m.lost}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -295,7 +328,7 @@ export default function CrmReportsPage() {
       {/* Where contacts come from */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("crm.reports.sourcesTitle")}</CardTitle>
+          <CardTitle className="type-display text-base">{t("crm.reports.sourcesTitle")}</CardTitle>
           <CardDescription>{t("crm.reports.sourcesHint")}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -305,12 +338,13 @@ export default function CrmReportsPage() {
             <div className="h-[240px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={sourceData} layout="vertical" margin={{ left: 8, right: 24, top: 4, bottom: 4 }}>
-                  <CartesianGrid horizontal={false} stroke="currentColor" className="text-muted-foreground/15" />
-                  <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11 }} stroke="currentColor" className="text-muted-foreground" />
-                  <YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 12 }} stroke="currentColor" className="text-muted-foreground" />
+                  <CartesianGrid horizontal={false} stroke="var(--border)" />
+                  <XAxis type="number" allowDecimals={false} tick={AXIS_TICK} tickLine={false} axisLine={false} />
+                  <YAxis type="category" dataKey="name" width={110} tick={AXIS_TICK} tickLine={false} axisLine={false} />
                   <Tooltip
-                    cursor={{ fill: "currentColor", className: "text-muted-foreground/10" }}
-                    contentStyle={{ borderRadius: 8, fontSize: 12 }}
+                    cursor={{ fill: "var(--muted)" }}
+                    contentStyle={TOOLTIP_STYLE}
+                    labelStyle={TOOLTIP_LABEL_STYLE}
                     formatter={(v: number) => [v, t("crm.reports.contacts")]}
                   />
                   <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={20}>
@@ -334,13 +368,13 @@ function StatTile({
   icon: React.ReactNode; label: string; value: string; hint: string;
 }) {
   return (
-    <Card>
+    <Card className="plate">
       <CardContent className="py-4">
         <div className="flex items-center gap-2 text-muted-foreground">
           {icon}
-          <span className="text-xs uppercase tracking-wide">{label}</span>
+          <span className="type-label">{label}</span>
         </div>
-        <p className="mt-2 text-2xl font-bold tabular-nums">{value}</p>
+        <p className="type-readout mt-2 text-2xl font-semibold">{value}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
       </CardContent>
     </Card>

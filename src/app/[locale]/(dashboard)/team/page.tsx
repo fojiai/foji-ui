@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { Plus, Trash2, Crown, Shield, User, CheckCircle2, Clock } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
+import { Plus, Trash2, Crown, Shield, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,11 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState, NoCompanyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
 
 // ─── Shared types ────────────────────────────────────────────────────────────
@@ -43,6 +45,7 @@ type AdminInviteForm = z.infer<typeof adminInviteSchema>;
 
 function SuperAdminTeamView() {
   const t = useTranslations();
+  const format = useFormatter();
   const [invitations, setInvitations] = useState<SystemAdminInvitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -94,59 +97,62 @@ function SuperAdminTeamView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("superAdmin.platformTeam")}</h1>
-          <p className="text-muted-foreground mt-1">{t("admin.invitations.title")}</p>
-        </div>
-        <Button onClick={() => { reset(); setDialogOpen(true); }}>
-          <Plus className="mr-1 h-4 w-4" /> {t("superAdmin.inviteAdmin")}
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow={t("emptyStates.eyebrowAdmin")}
+        title={t("superAdmin.platformTeam")}
+        description={t("admin.invitations.title")}
+        action={
+          <Button onClick={() => { reset(); setDialogOpen(true); }}>
+            <Plus className="mr-1 h-4 w-4" /> {t("superAdmin.inviteAdmin")}
+          </Button>
+        }
+      />
 
       {invitations.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            {t("team.empty")}
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={t("team.empty")}
+          description={t("team.emptyHint")}
+        />
       ) : (
-        <div className="space-y-2">
+        <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
           {invitations.map((inv) => {
             const accepted = !!inv.acceptedAt;
             const expired = !accepted && new Date(inv.expiresAt) < new Date();
             return (
-              <Card key={inv.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="flex items-center justify-between py-4">
-                  <div className="flex items-center gap-3">
-                    {accepted ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                    ) : (
-                      <Clock className="h-5 w-5 text-amber-500" />
-                    )}
+              <div key={inv.id} className="flex items-center justify-between gap-3 p-4">
+                  <div className="flex min-w-0 items-center gap-3">
                     <div>
                       <p className="font-medium">{inv.email}</p>
                       <p className="text-xs text-muted-foreground">
                         {accepted
-                          ? `${t("admin.invitations.accepted")} · ${new Date(inv.acceptedAt!).toLocaleDateString()}`
+                          ? `${t("admin.invitations.accepted")} · ${format.dateTime(new Date(inv.acceptedAt!), { dateStyle: "short" })}`
                           : expired
-                          ? "Expired"
-                          : `${t("admin.invitations.pending")} · Expires ${new Date(inv.expiresAt).toLocaleDateString()}`}
+                          ? t("team.inviteExpired")
+                          : t("team.inviteExpiresOn", {
+                              date: format.dateTime(new Date(inv.expiresAt), { dateStyle: "short" }),
+                            })}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-2">
+                    {/* Role is a category, so it stays iron. */}
                     <Badge variant="secondary" className="gap-1">
                       <Shield className="h-3 w-3" />
-                      Super Admin
+                      {t("team.roles.superAdmin")}
                     </Badge>
-                    <Badge variant={accepted ? "success" : expired ? "outline" : "warning"}>
-                      {accepted
-                        ? t("admin.invitations.accepted")
-                        : expired
-                        ? "Expired"
-                        : t("admin.invitations.pending")}
-                    </Badge>
+                    {/* One device for the invitation state — the icon and the
+                        badge used to say the same thing side by side. */}
+                    <HeatStatus
+                      level={accepted ? "cool" : "attention"}
+                      label={
+                        accepted
+                          ? t("admin.invitations.accepted")
+                          : expired
+                          ? t("team.inviteExpired")
+                          : t("admin.invitations.pending")
+                      }
+                    />
                     {!accepted && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -158,7 +164,7 @@ function SuperAdminTeamView() {
                           <AlertDialogHeader>
                             <AlertDialogTitle>{t("common.confirm")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Revoke invitation for {inv.email}?
+                              {t("team.revokeConfirm", { email: inv.email })}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
@@ -171,8 +177,7 @@ function SuperAdminTeamView() {
                       </AlertDialog>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -224,6 +229,7 @@ const ROLE_ICON: Record<string, React.ElementType> = {
 
 function RegularTeamView() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId, user } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
   const [invites, setInvites] = useState<Invite[]>([]);
@@ -260,7 +266,7 @@ function RegularTeamView() {
         method: "POST",
         body: JSON.stringify(data),
       });
-      toast({ title: "Invitation sent" });
+      toast({ title: t("team.inviteSent") });
       reset();
       setDialogOpen(false);
       await load();
@@ -288,68 +294,71 @@ function RegularTeamView() {
   if (!activeCompanyId) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">{t("team.title")}</h1>
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            {t("onboarding.createCompany")}
-          </CardContent>
-        </Card>
+        <PageHeader eyebrow={t("team.eyebrow")} title={t("team.title")} />
+        <NoCompanyState />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">{t("team.title")}</h1>
-        {isAdmin && (
-          <Button size="sm" onClick={() => { reset(); setDialogOpen(true); }}>
-            <Plus className="mr-1 h-4 w-4" /> {t("team.invite")}
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        eyebrow={t("team.eyebrow")}
+        title={t("team.title")}
+        description={t("team.description")}
+        action={
+          isAdmin && (
+            <Button onClick={() => { reset(); setDialogOpen(true); }}>
+              <Plus className="mr-1 h-4 w-4" /> {t("team.invite")}
+            </Button>
+          )
+        }
+      />
 
-      <div className="space-y-2">
+      <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
         {members.map((member) => {
           const Icon = ROLE_ICON[member.role] ?? User;
           return (
-            <Card key={member.userId} className="hover:shadow-md transition-shadow">
-              <CardContent className="flex items-center justify-between py-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                    {member.firstName[0]}
-                  </div>
-                  <div>
-                    <p className="font-medium">{member.firstName} {member.lastName}</p>
-                    <p className="text-xs text-muted-foreground">{member.email}</p>
-                  </div>
+            <div key={member.userId} className="flex items-center justify-between gap-3 p-4">
+              <div className="flex min-w-0 items-center gap-3">
+                {/* Iron, not ember: an initial is an identifier, not a state. */}
+                <div className="type-readout flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border bg-muted text-sm font-semibold text-muted-foreground">
+                  {member.firstName[0]}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="gap-1">
-                    <Icon className="h-3 w-3" />
-                    {t(`team.roles.${member.role}`)}
-                  </Badge>
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{member.firstName} {member.lastName}</p>
+                  <p className="truncate text-xs text-muted-foreground">{member.email}</p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              {/* Roles are categories, not heat. */}
+              <Badge variant="secondary" className="shrink-0 gap-1">
+                <Icon className="h-3 w-3" />
+                {t(`team.roles.${member.role}`)}
+              </Badge>
+            </div>
           );
         })}
       </div>
 
       {invites.length > 0 && (
         <div className="space-y-2">
-          <p className="text-sm font-medium text-muted-foreground">Pending invitations</p>
+          <p className="type-label text-muted-foreground">{t("team.pendingInvitations")}</p>
+          {/* The card used to sit at 70% opacity, which pushed the muted
+              metadata under AA. Pending-ness is the spark chip's job. */}
+          <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
           {invites.map((inv) => (
-            <Card key={inv.id} className="opacity-70">
-              <CardContent className="flex items-center justify-between py-4">
-                <div>
-                  <p className="text-sm font-medium">{inv.email}</p>
+              <div key={inv.id} className="flex items-center justify-between gap-3 p-4">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{inv.email}</p>
                   <p className="text-xs text-muted-foreground">
-                    {t(`team.roles.${inv.role}`)} · Expires {new Date(inv.expiresAt).toLocaleDateString()}
+                    {t(`team.roles.${inv.role}`)} ·{" "}
+                    {t("team.inviteExpiresOn", {
+                      date: format.dateTime(new Date(inv.expiresAt), { dateStyle: "short" }),
+                    })}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="warning">{t("team.invitePending")}</Badge>
+                <div className="flex shrink-0 items-center gap-2">
+                  <HeatStatus level="attention" label={t("team.invitePending")} />
                   {isOwner && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -360,19 +369,26 @@ function RegularTeamView() {
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>{t("common.confirm")}</AlertDialogTitle>
-                          <AlertDialogDescription>Revoke invitation for {inv.email}?</AlertDialogDescription>
+                          <AlertDialogDescription>
+                            {t("team.revokeConfirm", { email: inv.email })}
+                          </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => removeInvitation(inv.id)}>Revoke</AlertDialogAction>
+                          <AlertDialogAction
+                          onClick={() => removeInvitation(inv.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          {t("team.revoke")}
+                        </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
           ))}
+          </div>
         </div>
       )}
 
