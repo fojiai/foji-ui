@@ -138,7 +138,11 @@
       "refreshSuccess": "Token refreshed.",
       "refreshFailed": "Meta refused the refresh — the customer must reconnect.",
       "tokenExpires": "Token expires {date}",
-      "tokenPermanent": "Permanent token (no expiry)"
+      "tokenPermanent": "Permanent token (no expiry)",
+      "billingIssue": "Payment pending at Meta",
+      "billingIssueHint": "Meta has blocked your messages because this WhatsApp Business account has no valid payment method. Add a card in Meta Business Manager and delivery resumes on its own.",
+      "openBilling": "Open Meta billing",
+      "paymentReminder": "One last step: add a payment method in Meta Business Manager. Without it, Meta will not deliver your messages."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",

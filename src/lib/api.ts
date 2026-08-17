@@ -183,6 +183,8 @@ export interface Agent {
   /** True when Meta rejected our token — the owner has to reconnect. */
   whatsAppNeedsReconnect?: boolean;
   whatsAppTokenExpiresAt?: string | null;
+  /** Meta is refusing to deliver: the WABA has no usable payment method (131042). */
+  whatsAppBillingIssue?: boolean;
   supportWhatsAppNumber?: string;
   salesWhatsAppNumber?: string;
   supportEmail?: string;

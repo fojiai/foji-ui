@@ -692,7 +692,25 @@ export default function AgentDetailPage() {
                           number, and the server does the token exchange, webhook
                           subscription and number registration. The manual fields
                           below are an escape hatch, not the path. */}
-                      {agent.whatsAppNeedsReconnect ? (
+                      {agent.whatsAppBillingIssue ? (
+                        /* A different dead end from a dead token, with a
+                           different fix — reconnecting here changes nothing. */
+                        <div className="space-y-2 rounded-xl border border-spark/40 bg-spark/10 p-3">
+                          <HeatStatus level="attention" label={t("agents.whatsapp.billingIssue")} />
+                          <p className="text-xs text-spark-ink">
+                            {t("agents.whatsapp.billingIssueHint")}
+                          </p>
+                          <Button variant="outline" size="sm" asChild>
+                            <a
+                              href="https://business.facebook.com/billing_hub/payment_settings"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {t("agents.whatsapp.openBilling")}
+                            </a>
+                          </Button>
+                        </div>
+                      ) : agent.whatsAppNeedsReconnect ? (
                         /* The whole point of tracking this: a dead connection
                            says so instead of looking like a quiet day. */
                         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-spark/40 bg-spark/10 p-3">
@@ -716,6 +734,11 @@ export default function AgentDetailPage() {
                             <HeatStatus level="live" label={t("agents.whatsapp.connected")} />
                             <p className="type-readout mt-1 text-xs text-muted-foreground">
                               {agent.whatsAppPhoneNumberId}
+                            </p>
+                            {/* The single most common reason a fresh connection
+                                delivers nothing, and Meta gives no warning. */}
+                            <p className="mt-2 max-w-md text-xs text-muted-foreground">
+                              {t("agents.whatsapp.paymentReminder")}
                             </p>
                           </div>
                           {activeCompanyId && (
