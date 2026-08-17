@@ -20,6 +20,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { PhoneInput } from "@/components/shared/phone-input";
 import { toast } from "@/hooks/use-toast";
 
@@ -82,7 +85,7 @@ function normalizeLanguage(val: string): string {
 function SectionHeading({ title, description }: { title: string; description: string }) {
   return (
     <div className="pt-4 first:pt-0">
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-primary">{title}</h2>
+      <h2 className="type-label text-foreground">{title}</h2>
       <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
       <div className="mt-2 border-b border-border" />
     </div>
@@ -343,19 +346,20 @@ export default function AgentDetailPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/agents"><ArrowLeft className="h-4 w-4" /></Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{agent.name}</h1>
-            <Badge variant={agent.isActive ? "success" : "outline"} className="mt-0.5">
-              {agent.isActive ? t("agents.status.active") : t("agents.status.inactive")}
-            </Badge>
-          </div>
-        </div>
-      </div>
+      <Button variant="ghost" size="sm" asChild className="-ml-2">
+        <Link href="/agents"><ArrowLeft className="mr-1 h-4 w-4" />{t("common.back")}</Link>
+      </Button>
+      <PageHeader
+        eyebrow={t("agents.eyebrow")}
+        title={agent.name}
+        description={agent.description || undefined}
+        action={
+          <HeatStatus
+            level={agent.isActive ? "live" : "idle"}
+            label={agent.isActive ? t("agents.status.active") : t("agents.status.inactive")}
+          />
+        }
+      />
 
       <Tabs defaultValue="settings">
         <TabsList className="w-full">
@@ -372,9 +376,9 @@ export default function AgentDetailPage() {
               title={t("agents.sections.setup")}
               description={t("agents.sections.setupHint")}
             />
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base">{t("agents.basicInfo")}</CardTitle>
+                <CardTitle className="type-display text-base">{t("agents.basicInfo")}</CardTitle>
                 <CardDescription>{t("agents.basicInfoHint")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -434,9 +438,9 @@ export default function AgentDetailPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base">{t("agents.detail.prompts")}</CardTitle>
+                <CardTitle className="type-display text-base">{t("agents.detail.prompts")}</CardTitle>
                 <CardDescription>{t("agents.systemPromptHint")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -464,10 +468,10 @@ export default function AgentDetailPage() {
             />
 
             {/* Welcome Message */}
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4 text-primary" />
+                <CardTitle className="type-display text-base flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4 text-muted-foreground" />
                   {t("agents.welcomeMessage.title")}
                 </CardTitle>
                 <CardDescription>{t("agents.welcomeMessage.hint")}</CardDescription>
@@ -482,10 +486,10 @@ export default function AgentDetailPage() {
             </Card>
 
             {/* Lead Capture */}
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <UserPlus className="h-4 w-4 text-primary" />
+                <CardTitle className="type-display text-base flex items-center gap-2">
+                  <UserPlus className="h-4 w-4 text-muted-foreground" />
                   {t("agents.leadCapture.title")}
                 </CardTitle>
                 <CardDescription>{t("agents.leadCapture.hint")}</CardDescription>
@@ -513,10 +517,10 @@ export default function AgentDetailPage() {
             </Card>
 
             {/* Human Handoff */}
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <PhoneForwarded className="h-4 w-4 text-primary" />
+                <CardTitle className="type-display text-base flex items-center gap-2">
+                  <PhoneForwarded className="h-4 w-4 text-muted-foreground" />
                   {t("agents.handoff.title")}
                 </CardTitle>
                 <CardDescription>{t("agents.handoff.hint")}</CardDescription>
@@ -560,9 +564,9 @@ export default function AgentDetailPage() {
             </Card>
 
             {/* Conversation Starters */}
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base">{t("agents.starters.title")}</CardTitle>
+                <CardTitle className="type-display text-base">{t("agents.starters.title")}</CardTitle>
                 <CardDescription>{t("agents.starters.hint")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -589,10 +593,10 @@ export default function AgentDetailPage() {
             </Card>
 
             {/* Widget Appearance */}
-            <Card>
+            <Card className="plate">
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Palette className="h-4 w-4 text-primary" />
+                <CardTitle className="type-display text-base flex items-center gap-2">
+                  <Palette className="h-4 w-4 text-muted-foreground" />
                   {t("agents.appearance.title")}
                 </CardTitle>
                 <CardDescription>{t("agents.appearance.hint")}</CardDescription>
@@ -650,9 +654,9 @@ export default function AgentDetailPage() {
             />
 
             {subscription?.plan?.hasWhatsApp ? (
-              <Card>
+              <Card className="plate">
                 <CardHeader>
-                  <CardTitle className="text-base">{t("agents.whatsapp.title")}</CardTitle>
+                  <CardTitle className="type-display text-base">{t("agents.whatsapp.title")}</CardTitle>
                   <CardDescription>{t("agents.whatsapp.modeHint")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -722,9 +726,9 @@ export default function AgentDetailPage() {
             )}
 
             {subscription?.plan?.hasEscalationContacts ? (
-              <Card>
+              <Card className="plate">
                 <CardHeader>
-                  <CardTitle className="text-base">{t("agents.escalation.title")}</CardTitle>
+                  <CardTitle className="type-display text-base">{t("agents.escalation.title")}</CardTitle>
                   <p className="text-xs text-muted-foreground">{t("agents.escalation.hint")}</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -770,9 +774,9 @@ export default function AgentDetailPage() {
 
             {/* ── Google Calendar ─────────────────────────────────────── */}
             {subscription?.plan?.hasGoogleCalendar ? (
-              <Card>
+              <Card className="plate">
                 <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2">
+                  <CardTitle className="type-display text-base flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     {t("agents.calendar.title")}
                   </CardTitle>
@@ -782,7 +786,7 @@ export default function AgentDetailPage() {
                   {agent.calendarConnected ? (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="h-2 w-2 rounded-full bg-green-500 inline-block shrink-0" />
+                        <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-quench" />
                         {t("agents.calendar.connectedAs", { email: agent.calendarGoogleEmail ?? "" })}
                       </div>
                       <AlertDialog>
@@ -900,22 +904,21 @@ export default function AgentDetailPage() {
           </AlertDialog>
 
           {files.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center gap-2 py-12 text-center">
-                <Paperclip className="h-8 w-8 text-muted-foreground/40" />
-                <p className="text-sm text-muted-foreground">{t("files.empty")}</p>
-              </CardContent>
-            </Card>
+            <EmptyState
+              eyebrow={t("emptyStates.eyebrowNothingYet")}
+              title={t("files.empty")}
+              description={t("files.emptyHint")}
+            />
           ) : (
-            <div className="space-y-2">
+            <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
               {files.map((file) => (
-                <Card key={file.id}>
-                  <CardContent className="flex items-center justify-between py-4">
-                    <div className="flex items-center gap-3">
-                      <Paperclip className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm font-medium">{file.fileName}</p>
-                        <p className="text-xs text-muted-foreground">
+                <div key={file.id}>
+                  <div className="flex items-center justify-between gap-3 p-4">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">{file.fileName}</p>
+                        <p className="type-readout text-xs text-muted-foreground">
                           {(file.fileSizeBytes / 1024 / 1024).toFixed(2)} MB
                         </p>
                       </div>
@@ -946,8 +949,8 @@ export default function AgentDetailPage() {
                         </AlertDialogContent>
                       </AlertDialog>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -957,7 +960,7 @@ export default function AgentDetailPage() {
         <TabsContent value="embed" className="mt-4 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("agents.embedCode")}</CardTitle>
+              <CardTitle className="type-display text-base">{t("agents.embedCode")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="relative">
@@ -980,7 +983,7 @@ export default function AgentDetailPage() {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle className="text-base">{t("agents.detail.agentToken")}</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="type-display text-base">{t("agents.detail.agentToken")}</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
                 <Input readOnly value={agent.agentToken} className="font-mono text-xs" />
@@ -1021,7 +1024,7 @@ export default function AgentDetailPage() {
         <TabsContent value="test" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("agents.detail.testTitle")}</CardTitle>
+              <CardTitle className="type-display text-base">{t("agents.detail.testTitle")}</CardTitle>
               <CardDescription>{t("agents.detail.testDescription")}</CardDescription>
             </CardHeader>
             <CardContent>

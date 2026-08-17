@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
 import { MergeDialog } from "@/components/crm/merge-dialog";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -63,6 +64,7 @@ const TIMELINE_ICON: Record<string, React.ComponentType<{ className?: string }>>
 
 export default function ContactDetailPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId } = useAuth();
   const params = useParams();
   const locale = (params.locale as string) ?? "pt-br";
@@ -227,30 +229,37 @@ export default function ContactDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href={`/${locale}/crm/contacts`}><ArrowLeft className="h-4 w-4" /></Link>
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold tracking-tight">{contact.name || t("crm.contacts.anonymous")}</h1>
-          <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" asChild className="-ml-2">
+        <Link href={`/${locale}/crm/contacts`}>
+          <ArrowLeft className="mr-1 h-4 w-4" />{t("common.back")}
+        </Link>
+      </Button>
+      <PageHeader
+        eyebrow={t("crm.eyebrow")}
+        title={contact.name || t("crm.contacts.anonymous")}
+        action={
+          <>
+            {/* Status is a category here, not heat — a contact being
+                "Qualified" is not something waiting on the user. */}
             <Badge variant="outline">{t(`crm.statuses.${contact.status}`)}</Badge>
-            {contact.ownerName && <span className="text-xs text-muted-foreground">{contact.ownerName}</span>}
-          </div>
-        </div>
-        <Button variant="outline" onClick={openEmail}>
-          <Mail className="mr-2 h-4 w-4" /> {t("crm.email.compose")}
-        </Button>
-      </div>
+            {contact.ownerName && (
+              <span className="text-xs text-muted-foreground">{contact.ownerName}</span>
+            )}
+            <Button variant="outline" onClick={openEmail}>
+              <Mail className="mr-2 h-4 w-4" /> {t("crm.email.compose")}
+            </Button>
+          </>
+        }
+      />
 
       {contact.needsReviewDuplicate && (
-        <div className="flex flex-wrap items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+        <div className="flex flex-wrap items-start gap-2 rounded-xl border border-spark/40 bg-spark/10 p-3 text-sm text-spark-ink">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <span className="flex-1 min-w-[12rem]">{t("crm.contacts.duplicateWarning")}</span>
           <Button
             size="sm"
             variant="outline"
-            className="border-amber-400 bg-transparent text-amber-900 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/40"
+            className="border-spark/50 bg-transparent text-spark-ink hover:bg-spark/15"
             onClick={() => setMergeOpen(true)}
           >
             {t("crm.merge.review")}
@@ -371,15 +380,17 @@ export default function ContactDetailPage() {
                     const Icon = TIMELINE_ICON[item.type] ?? Briefcase;
                     return (
                       <div key={i} className="flex items-start gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                          <Icon className="h-4 w-4 text-primary" />
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border bg-muted text-muted-foreground">
+                          <Icon className="h-4 w-4" />
                         </div>
                         <div className="space-y-0.5">
                           <p className="text-sm font-medium">{timelineLabel(item)}</p>
                           {item.type === "handoff" && item.detail && (
                             <p className="text-xs italic text-muted-foreground">&ldquo;{item.detail}&rdquo;</p>
                           )}
-                          <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleString()}</p>
+                          <p className="type-readout text-xs text-muted-foreground">
+                            {format.dateTime(new Date(item.timestamp), { dateStyle: "short", timeStyle: "short" })}
+                          </p>
                         </div>
                       </div>
                     );

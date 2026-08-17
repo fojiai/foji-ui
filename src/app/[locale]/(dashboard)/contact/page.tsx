@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,6 +16,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { LoadingSpinner, PageLoader } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -36,6 +39,7 @@ interface ContactSubmission {
 
 function SuperAdminContactView() {
   const t = useTranslations();
+  const format = useFormatter();
   const [contacts, setContacts] = useState<ContactSubmission[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -107,12 +111,12 @@ function SuperAdminContactView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("contact.adminTitle")}</h1>
-          <p className="text-muted-foreground mt-1">{total} {t("contact.submissions")}</p>
-        </div>
-        <div className="flex gap-2">
+      <PageHeader
+        eyebrow={t("emptyStates.eyebrowAdmin")}
+        title={t("contact.adminTitle")}
+        description={t("contact.submissionsCount", { count: total })}
+        action={
+          <>
           <Button
             variant={!showResolved ? "default" : "outline"}
             size="sm"
@@ -127,20 +131,20 @@ function SuperAdminContactView() {
           >
             <Check className="mr-1 h-4 w-4" /> {t("contact.resolved")}
           </Button>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       {contacts.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            <MessageSquare className="mx-auto h-8 w-8 mb-3 opacity-50" />
-            <p>{showResolved ? t("contact.noResolved") : t("contact.noOpen")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={showResolved ? t("contact.noResolved") : t("contact.noOpen")}
+          description={t("contact.emptyHint")}
+        />
       ) : (
         <div className="space-y-3">
           {contacts.map((c) => (
-            <Card key={c.id} className="hover:shadow-md transition-shadow">
+            <Card key={c.id} className="plate-interactive">
               <CardContent className="py-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
@@ -151,11 +155,16 @@ function SuperAdminContactView() {
                       <span className="font-medium text-sm">{c.subject}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {c.name} ({c.email}) · {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString()}
+                      {c.name} ({c.email}) ·{" "}
+                      <span className="type-readout">
+                        {format.dateTime(new Date(c.createdAt), { dateStyle: "short", timeStyle: "short" })}
+                      </span>
                     </p>
                     <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{c.message}</p>
                     {c.adminNotes && (
-                      <p className="text-xs text-primary mt-1">Note: {c.adminNotes}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {t("contact.note")}: {c.adminNotes}
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -184,7 +193,10 @@ function SuperAdminContactView() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} of {total}
+            <span className="type-readout">
+              {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)}
+            </span>{" "}
+            / <span className="type-readout">{total}</span>
           </p>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
@@ -205,7 +217,10 @@ function SuperAdminContactView() {
               <DialogHeader>
                 <DialogTitle>{selected.subject}</DialogTitle>
                 <p className="text-sm text-muted-foreground">
-                  {selected.name} ({selected.email}) · {new Date(selected.createdAt).toLocaleString()}
+                  {selected.name} ({selected.email}) ·{" "}
+                  <span className="type-readout">
+                    {format.dateTime(new Date(selected.createdAt), { dateStyle: "short", timeStyle: "short" })}
+                  </span>
                 </p>
               </DialogHeader>
 
@@ -257,6 +272,7 @@ type FormData = z.infer<typeof formSchema>;
 
 function RegularContactView() {
   const t = useTranslations("contact");
+  const format = useFormatter();
   const tc = useTranslations("common");
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -292,29 +308,23 @@ function RegularContactView() {
   if (sent) {
     return (
       <div className="mx-auto max-w-lg">
-        <Card>
-          <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-              <CheckCircle2 className="h-7 w-7 text-emerald-600" />
-            </div>
-            <div>
-              <p className="text-lg font-semibold">{t("successTitle")}</p>
-              <p className="text-sm text-muted-foreground mt-1">{t("successDescription")}</p>
-            </div>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("sentEyebrow")}
+          title={t("successTitle")}
+          description={t("successDescription")}
+        />
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Card>
+        <Card className="plate">
           <CardHeader>
-            <CardTitle className="text-base">{t("formTitle")}</CardTitle>
+            <CardTitle className="type-display text-base">{t("formTitle")}</CardTitle>
             <CardDescription>{t("formDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -344,8 +354,8 @@ function RegularContactView() {
 
             <div className="space-y-2">
               <Label>{t("message")}</Label>
-              <textarea
-                className="flex min-h-[140px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              <Textarea
+                className="min-h-[140px]"
                 placeholder={t("messagePlaceholder")}
                 {...register("message")}
                 aria-invalid={!!errors.message}

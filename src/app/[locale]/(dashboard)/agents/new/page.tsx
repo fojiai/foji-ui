@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
 import { NoPlanState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 
@@ -60,11 +61,11 @@ function StepHeader({ n, title, description }: { n: number; title: string; descr
   return (
     <CardHeader>
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+        <span className="type-readout mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-semibold text-muted-foreground">
           {n}
         </span>
         <div>
-          <CardTitle className="text-base">{title}</CardTitle>
+          <CardTitle className="type-display text-base">{title}</CardTitle>
           {description && <CardDescription className="mt-1">{description}</CardDescription>}
         </div>
       </div>
@@ -121,12 +122,10 @@ export default function NewAgentPage() {
   if (showNoPlan) {
     return (
       <div className="mx-auto max-w-2xl space-y-6">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="../agents"><ArrowLeft className="h-4 w-4" /></Link>
-          </Button>
-          <h1 className="text-3xl font-bold tracking-tight">{t("agents.create")}</h1>
-        </div>
+        <Button variant="ghost" size="sm" asChild className="-ml-2">
+          <Link href="../agents"><ArrowLeft className="mr-1 h-4 w-4" />{t("common.back")}</Link>
+        </Button>
+        <PageHeader eyebrow={t("agents.eyebrow")} title={t("agents.create")} />
         <NoPlanState />
       </div>
     );
@@ -134,18 +133,20 @@ export default function NewAgentPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="../agents"><ArrowLeft className="h-4 w-4" /></Link>
-        </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{t("agents.create")}</h1>
-      </div>
+      <Button variant="ghost" size="sm" asChild className="-ml-2">
+        <Link href="../agents"><ArrowLeft className="mr-1 h-4 w-4" />{t("common.back")}</Link>
+      </Button>
+      <PageHeader
+        eyebrow={t("agents.eyebrow")}
+        title={t("agents.create")}
+        description={t("agents.createDescription")}
+      />
 
-      {/* How it works */}
-      <Card className="border-primary/20 bg-primary/5">
+      {/* How it works. Iron: an explainer is not a state, so it gets no tint. */}
+      <Card className="plate">
         <CardContent className="py-4">
           <div className="flex gap-3">
-            <Info className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <Info className="h-5 w-5 shrink-0 mt-0.5 text-muted-foreground" />
             <div className="space-y-2 text-sm">
               <p className="font-medium">{t("agents.howItWorks.title")}</p>
               <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
@@ -160,7 +161,7 @@ export default function NewAgentPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Basic info */}
-        <Card>
+        <Card className="plate">
           <StepHeader n={1} title={t("agents.basicInfo")} description={t("agents.basicInfoHint")} />
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -204,14 +205,12 @@ export default function NewAgentPage() {
         </Card>
 
         {/* System prompt with examples */}
-        <Card>
+        <Card className="plate">
           <StepHeader n={2} title={t("agents.systemPrompt")} description={t("agents.systemPromptHint")} />
           <CardContent className="space-y-4">
             {/* Example prompt buttons */}
             <div className="space-y-2">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                {t("agents.examplePrompts")}
-              </p>
+              <p className="type-label text-muted-foreground">{t("agents.examplePrompts")}</p>
               <div className="flex flex-wrap gap-2">
                 {currentExamples.map((ex, i) => (
                   <Button
@@ -230,8 +229,8 @@ export default function NewAgentPage() {
             </div>
 
             <div className="space-y-2">
-              <textarea
-                className="flex min-h-[140px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              <Textarea
+                className="min-h-[140px]"
                 placeholder={t("agents.systemPromptPlaceholder")}
                 {...register("systemPrompt")}
                 aria-invalid={!!errors.systemPrompt}
@@ -257,9 +256,9 @@ export default function NewAgentPage() {
 
         {/* Files hint — deliberately prominent: people look for the upload here
             and get confused when it only exists after the agent is created. */}
-        <Card className="border-accent/40 bg-accent/5">
+        <Card className="plate">
           <CardContent className="flex items-start gap-3 py-4">
-            <FileText className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+            <FileText className="h-5 w-5 shrink-0 mt-0.5 text-muted-foreground" />
             <div>
               <p className="text-sm font-bold">{t("agents.filesHint.title")}</p>
               <p className="mt-1 text-sm font-medium text-foreground">{t("agents.filesHint.description")}</p>

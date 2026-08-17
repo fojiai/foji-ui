@@ -11,10 +11,11 @@ import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
 import { PasswordRequirements } from "@/components/shared/password-requirements";
 import { passwordSchema as pwSchema } from "@/lib/validations/password";
 import { toast } from "@/hooks/use-toast";
@@ -86,11 +87,18 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("profile.title")}</h1>
+      <PageHeader
+        eyebrow={t("profile.eyebrow")}
+        title={t("profile.title")}
+        description={t("profile.description")}
+      />
 
       <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
-        <Card>
-          <CardHeader><CardTitle className="text-base">{t("profile.personalInfo")}</CardTitle></CardHeader>
+        <Card className="plate">
+          <CardHeader>
+            <CardTitle className="type-display text-base">{t("profile.personalInfo")}</CardTitle>
+            <CardDescription>{t("profile.personalInfoHint")}</CardDescription>
+          </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -115,8 +123,11 @@ export default function ProfilePage() {
         </Card>
       </form>
 
-      <Card>
-        <CardHeader><CardTitle className="text-base">{t("profile.preferences")}</CardTitle></CardHeader>
+      <Card className="plate">
+        <CardHeader>
+          <CardTitle className="type-display text-base">{t("profile.preferences")}</CardTitle>
+          <CardDescription>{t("profile.preferencesHint")}</CardDescription>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <Label>{t("profile.darkMode")}</Label>
@@ -145,8 +156,11 @@ export default function ProfilePage() {
       </Card>
 
       <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}>
-        <Card>
-          <CardHeader><CardTitle className="text-base">{t("profile.changePassword")}</CardTitle></CardHeader>
+        <Card className="plate">
+          <CardHeader>
+            <CardTitle className="type-display text-base">{t("profile.changePassword")}</CardTitle>
+            <CardDescription>{t("profile.changePasswordHint")}</CardDescription>
+          </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>{t("profile.currentPassword")}</Label>

@@ -287,7 +287,8 @@
       "channelsHint": "Where the agent works and where conversations go."
     },
     "eyebrow": "Your agents",
-    "liveSummary": "{active} of {total} live right now"
+    "liveSummary": "{active} of {total} live right now",
+    "createDescription": "An agent answers your customers using the documents and instructions you give it."
   },
   "handoffs": {
     "title": "Human Handoffs",
@@ -331,7 +332,8 @@
     "deleteDescription": "Remove {fileName} from this agent?",
     "confirmUploadTitle": "Upload file?",
     "confirmUploadDescription": "Upload {fileName} ({fileSize} MB) for processing? The file will be extracted and made available to the agent.",
-    "processingComplete": "File processing complete"
+    "processingComplete": "File processing complete",
+    "emptyHint": "Upload PDFs, DOCX, PPTX or XLSX for the agent to learn from."
   },
   "team": {
     "title": "Team",
@@ -425,7 +427,12 @@
       "light": "Light",
       "dark": "Dark",
       "system": "System"
-    }
+    },
+    "eyebrow": "Account",
+    "description": "Your details, preferences and password.",
+    "personalInfoHint": "How your name appears to your team.",
+    "preferencesHint": "Theme and language for this account.",
+    "changePasswordHint": "Use a password you don't use anywhere else."
   },
   "admin": {
     "title": "Administration",
@@ -702,7 +709,12 @@
     "noResolved": "No resolved submissions.",
     "viewDetails": "Details",
     "adminNotesLabel": "Admin Notes",
-    "adminNotesPlaceholder": "Internal notes about this submission..."
+    "adminNotesPlaceholder": "Internal notes about this submission...",
+    "submissionsCount": "{count} messages",
+    "emptyHint": "Messages sent through the support form show up here.",
+    "note": "Note",
+    "eyebrow": "Support",
+    "sentEyebrow": "Sent"
   },
   "crm": {
     "locked": {

@@ -287,7 +287,8 @@
       "channelsHint": "Onde o agente atende e para onde as conversas vão."
     },
     "eyebrow": "Seus agentes",
-    "liveSummary": "{active} de {total} no ar agora"
+    "liveSummary": "{active} de {total} no ar agora",
+    "createDescription": "Um agente responde seus clientes com base nos documentos e instruções que você der a ele."
   },
   "handoffs": {
     "title": "Atendimentos Humanos",
@@ -331,7 +332,8 @@
     "deleteDescription": "Remover {fileName} deste agente?",
     "confirmUploadTitle": "Enviar arquivo?",
     "confirmUploadDescription": "Enviar {fileName} ({fileSize} MB) para processamento? O arquivo será extraído e disponibilizado ao agente.",
-    "processingComplete": "Processamento de arquivos concluído"
+    "processingComplete": "Processamento de arquivos concluído",
+    "emptyHint": "Envie PDFs, DOCX, PPTX ou XLSX para o agente aprender com eles."
   },
   "team": {
     "title": "Equipe",
@@ -425,7 +427,12 @@
       "light": "Claro",
       "dark": "Escuro",
       "system": "Sistema"
-    }
+    },
+    "eyebrow": "Conta",
+    "description": "Seus dados, preferências e senha.",
+    "personalInfoHint": "Como seu nome aparece para a equipe.",
+    "preferencesHint": "Tema e idioma desta conta.",
+    "changePasswordHint": "Use uma senha que você não usa em outro lugar."
   },
   "admin": {
     "title": "Administração",
@@ -702,7 +709,12 @@
     "noResolved": "Nenhuma mensagem resolvida.",
     "viewDetails": "Detalhes",
     "adminNotesLabel": "Notas do Admin",
-    "adminNotesPlaceholder": "Notas internas sobre esta mensagem..."
+    "adminNotesPlaceholder": "Notas internas sobre esta mensagem...",
+    "submissionsCount": "{count} mensagens",
+    "emptyHint": "Mensagens enviadas pelo formulário de suporte aparecem aqui.",
+    "note": "Nota",
+    "eyebrow": "Suporte",
+    "sentEyebrow": "Enviado"
   },
   "crm": {
     "locked": {
