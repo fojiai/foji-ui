@@ -24,7 +24,7 @@ export const DIAL_CODES = [
 
 export const DEFAULT_DIAL = "55";
 
-/** Split "+5585981560609" into its dial code and the national number. */
+/** Split "+5511900000000" into its dial code and the national number. */
 export function splitPhone(value?: string | null): { dial: string; number: string } {
   const digits = (value ?? "").replace(/\D/g, "");
   if (!digits) return { dial: DEFAULT_DIAL, number: "" };

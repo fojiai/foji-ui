@@ -548,7 +548,7 @@ export default function AgentDetailPage() {
                         <PhoneInput
                         value={watch("handoffNotifyWhatsApp")}
                         onChange={(v) => setValue("handoffNotifyWhatsApp", v)}
-                        placeholder="85 98156-0609"
+                        placeholder="11 90000-0000"
                       />
                       </div>
                     </div>
@@ -856,7 +856,7 @@ export default function AgentDetailPage() {
                       <PhoneInput
                         value={watch("supportWhatsAppNumber")}
                         onChange={(v) => setValue("supportWhatsAppNumber", v)}
-                        placeholder="85 98156-0609"
+                        placeholder="11 90000-0000"
                       />
                     </div>
                     <div className="space-y-2">
@@ -864,7 +864,7 @@ export default function AgentDetailPage() {
                       <PhoneInput
                         value={watch("salesWhatsAppNumber")}
                         onChange={(v) => setValue("salesWhatsAppNumber", v)}
-                        placeholder="85 98156-0609"
+                        placeholder="11 90000-0000"
                       />
                     </div>
                     <div className="space-y-2">

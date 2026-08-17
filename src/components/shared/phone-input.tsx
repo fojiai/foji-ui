@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DIAL_CODES, joinPhone, splitPhone } from "@/lib/phone";
 
 export interface PhoneInputProps {
-  /** Full E.164 value, e.g. "+5585981560609". */
+  /** Full E.164 value, e.g. "+5511900000000". */
   value?: string | null;
   onChange: (value: string) => void;
   placeholder?: string;
