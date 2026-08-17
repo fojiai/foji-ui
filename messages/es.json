@@ -1066,5 +1066,30 @@
     "errorDescription": "Este enlace no es válido o ha expirado. Regístrate de nuevo para recibir otro.",
     "signIn": "Iniciar sesión",
     "backToSignIn": "Volver al inicio de sesión"
+  },
+  "dataDeletion": {
+    "title": "Eliminación de datos",
+    "lastUpdated": "Última actualización: Agosto 2026",
+    "intro": "Esta página explica cómo eliminar los datos que Foji AI guarda sobre ti o sobre tu empresa. Puedes hacerlo tú mismo en cualquier momento, o pedírnoslo.",
+    "selfService": {
+      "title": "1. Eliminarlo tú mismo",
+      "content": "Inicia sesión y ve a Configuración → Zona de peligro → Eliminar empresa.\n\nDebes ser el propietario del espacio de trabajo y confirmar escribiendo el nombre de la empresa. La eliminación es inmediata y no se puede deshacer."
+    },
+    "byRequest": {
+      "title": "2. Solicitar la eliminación por correo",
+      "content": "Si no puedes acceder a tu cuenta, escribe a suporte@fojiai.com desde tu dirección registrada solicitando la eliminación de tus datos.\n\nPodemos pedir información adicional para confirmar que la cuenta es tuya antes de eliminar nada."
+    },
+    "whatIsDeleted": {
+      "title": "3. Qué se elimina",
+      "content": "— Tu cuenta y tus datos de acceso\n— Los agentes creados y su configuración\n— Los documentos que subiste\n— El historial de conversaciones del widget y de WhatsApp\n— Contactos, negocios, tareas y demás datos del CRM\n— La conexión con WhatsApp y con Google Calendar"
+    },
+    "whatIsKept": {
+      "title": "4. Qué puede conservarse",
+      "content": "Los registros de facturación se conservan durante el plazo exigido por la legislación fiscal brasileña, incluso tras eliminar la cuenta. Contienen solo datos de facturación, no el contenido de tus conversaciones ni documentos.\n\nLos registros técnicos pueden permanecer brevemente en copias de seguridad antes de sobrescribirse."
+    },
+    "contact": {
+      "title": "5. Dudas",
+      "content": "Para cualquier duda sobre tus datos, escribe a suporte@fojiai.com."
+    }
   }
 }

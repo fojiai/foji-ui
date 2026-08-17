@@ -21,6 +21,7 @@ export default function PublicLayout({
             <Link href="/legal" className="hover:text-foreground transition-colors">Legal</Link>
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link href="/refund" className="hover:text-foreground transition-colors">Refund</Link>
+            <Link href="/data-deletion" className="hover:text-foreground transition-colors">Data</Link>
             <Link href="/login" className="text-primary hover:underline font-medium">Login</Link>
           </nav>
         </div>
@@ -39,6 +40,7 @@ export default function PublicLayout({
             <Link href="/legal" className="hover:text-foreground transition-colors">Legal</Link>
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link href="/refund" className="hover:text-foreground transition-colors">Refund</Link>
+            <Link href="/data-deletion" className="hover:text-foreground transition-colors">Data</Link>
           </nav>
         </div>
       </footer>

@@ -1066,5 +1066,30 @@
     "errorDescription": "This link is invalid or has expired. Sign up again to get a new one.",
     "signIn": "Sign in",
     "backToSignIn": "Back to sign in"
+  },
+  "dataDeletion": {
+    "title": "Data deletion",
+    "lastUpdated": "Last updated: August 2026",
+    "intro": "This page explains how to delete the data Foji AI holds about you or your company. You can do it yourself at any time, or ask us to do it.",
+    "selfService": {
+      "title": "1. Deleting it yourself",
+      "content": "Sign in and go to Settings → Danger zone → Delete company.\n\nYou must be the workspace owner and confirm by typing the company name. Deletion is immediate and cannot be undone."
+    },
+    "byRequest": {
+      "title": "2. Requesting deletion by email",
+      "content": "If you cannot access your account, email suporte@fojiai.com from your registered address asking for your data to be deleted.\n\nWe may ask for additional information to confirm the account is yours before deleting anything."
+    },
+    "whatIsDeleted": {
+      "title": "3. What gets deleted",
+      "content": "— Your account and sign-in details\n— The agents you created and their settings\n— The documents you uploaded\n— Widget and WhatsApp conversation history\n— Contacts, deals, tasks and the rest of your CRM data\n— The WhatsApp and Google Calendar connections"
+    },
+    "whatIsKept": {
+      "title": "4. What may be kept",
+      "content": "Billing records and invoices are retained for the period required by Brazilian tax law, even after an account is deleted. Those records contain billing data only, not the content of your conversations or documents.\n\nTechnical logs may remain briefly in backups before being overwritten."
+    },
+    "contact": {
+      "title": "5. Questions",
+      "content": "For any question about your data, write to suporte@fojiai.com."
+    }
   }
 }

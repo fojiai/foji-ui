@@ -1066,5 +1066,30 @@
     "errorDescription": "Este link é inválido ou expirou. Cadastre-se novamente para receber um novo.",
     "signIn": "Entrar",
     "backToSignIn": "Voltar para o login"
+  },
+  "dataDeletion": {
+    "title": "Exclusão de dados",
+    "lastUpdated": "Última atualização: Agosto 2026",
+    "intro": "Esta página explica como excluir os dados que a Foji AI mantém sobre você ou sobre sua empresa. Você pode fazer isso sozinho, a qualquer momento, ou pedir para nós.",
+    "selfService": {
+      "title": "1. Excluindo você mesmo",
+      "content": "Entre na sua conta e vá em Configurações → Zona de perigo → Excluir empresa.\n\nVocê precisa ser o proprietário do espaço de trabalho e confirmar digitando o nome da empresa. A exclusão é imediata e não pode ser desfeita."
+    },
+    "byRequest": {
+      "title": "2. Pedindo a exclusão por e-mail",
+      "content": "Se você não consegue acessar sua conta, envie um e-mail para suporte@fojiai.com a partir do endereço cadastrado, pedindo a exclusão dos seus dados.\n\nPodemos pedir informações adicionais para confirmar que a conta é sua antes de excluir qualquer coisa."
+    },
+    "whatIsDeleted": {
+      "title": "3. O que é excluído",
+      "content": "— Sua conta e seus dados de acesso\n— Os agentes criados e suas configurações\n— Os documentos que você enviou\n— O histórico de conversas do widget e do WhatsApp\n— Contatos, negócios, tarefas e demais dados do CRM\n— A conexão com o WhatsApp e com o Google Agenda"
+    },
+    "whatIsKept": {
+      "title": "4. O que pode ser mantido",
+      "content": "Registros de cobrança e notas fiscais são mantidos pelo prazo exigido pela legislação fiscal brasileira, mesmo após a exclusão da conta. Esses registros contêm apenas dados de faturamento, não o conteúdo das suas conversas ou documentos.\n\nRegistros técnicos (logs) podem permanecer por um período curto em backups antes de serem sobrescritos."
+    },
+    "contact": {
+      "title": "5. Dúvidas",
+      "content": "Para qualquer dúvida sobre seus dados, escreva para suporte@fojiai.com."
+    }
   }
 }

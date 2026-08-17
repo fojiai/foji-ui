@@ -17,6 +17,7 @@ const PUBLIC_PATHS = [
   "/legal",
   "/privacy",
   "/refund",
+  "/data-deletion",
 ];
 
 function isPublicPath(pathname: string): boolean {
