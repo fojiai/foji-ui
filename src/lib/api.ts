@@ -150,6 +150,17 @@ export interface UserCompanyItem {
 export const companiesApi = {
   /** Returns all companies the current user belongs to. */
   mine: () => apiFetch<UserCompanyItem[]>("/api/companies/mine"),
+
+  /**
+   * Permanently deletes a company and everything under it. Owner only —
+   * the API enforces this and returns 403 otherwise.
+   *
+   * The caller must end the session afterwards: the company list lives in the
+   * JWT, and there is no refresh endpoint, so the token still names a company
+   * that no longer exists.
+   */
+  delete: (companyId: number) =>
+    apiFetch<void>(`/api/companies/${companyId}`, { method: "DELETE" }),
 };
 
 // ─── Agents ──────────────────────────────────────────────────────────────────

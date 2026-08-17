@@ -408,7 +408,9 @@
     "dangerHint": "Estas acciones son irreversibles.",
     "deleteConfirmTitle": "¿Eliminar {name}?",
     "deleteConfirmBody": "Esto elimina permanentemente el espacio de trabajo, todos los agentes, los archivos y el historial de conversaciones. No se puede deshacer.",
-    "deleteConfirmAction": "Eliminar permanentemente"
+    "deleteConfirmAction": "Eliminar permanentemente",
+    "deleteConfirmPrompt": "Para confirmar, escribe {name} abajo:",
+    "deleteSuccess": "Empresa eliminada. Tu sesión ha finalizado."
   },
   "profile": {
     "title": "Mi Perfil",

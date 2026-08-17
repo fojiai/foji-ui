@@ -10,7 +10,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { EmptyState, NoCompanyState } from "@/components/shared/empty-state";
 import { useAuth } from "@/components/providers/auth-provider";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, companiesApi, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,10 +68,33 @@ function RegularSettingsView() {
   const t = useTranslations();
   const params = useParams();
   const locale = (params?.locale as string) ?? "pt-br";
-  const { activeCompanyId } = useAuth();
+  const { activeCompanyId, user, logout } = useAuth();
   const [company, setCompany] = useState<CompanyData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmName, setConfirmName] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const isOwner =
+    user?.companies?.find((c) => c.companyId === activeCompanyId)?.role === "owner";
+  const canDelete = confirmName.trim() === company?.name.trim();
+
+  async function deleteCompany() {
+    if (!activeCompanyId || !canDelete) return;
+    setIsDeleting(true);
+    try {
+      await companiesApi.delete(activeCompanyId);
+      toast({ title: t("settings.deleteSuccess") });
+      // The company list is baked into the JWT and there is no refresh
+      // endpoint, so the token still names a workspace that no longer exists.
+      // Ending the session is the only way back to a consistent state.
+      logout();
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
+      setIsDeleting(false);
+    }
+  }
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -147,35 +170,64 @@ function RegularSettingsView() {
 
       <Separator />
 
-      {/* The one place destructive is allowed to show as a surface: a section
-          whose only content is an irreversible action. */}
-      <Card className="plate border-destructive/40">
-        <CardHeader>
-          <CardTitle className="type-display text-base text-destructive-ink">
-            {t("settings.danger")}
-          </CardTitle>
-          <CardDescription>{t("settings.dangerHint")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">{t("settings.deleteCompany")}</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t("settings.deleteConfirmTitle", { name: company.name })}</AlertDialogTitle>
-                <AlertDialogDescription>{t("settings.deleteConfirmBody")}</AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-                <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                  {t("settings.deleteConfirmAction")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </CardContent>
-      </Card>
+      {/* Owners only. The API returns 403 for anyone else, so showing the
+          control to an admin would just be a button that always fails. */}
+      {isOwner && (
+        <Card className="plate border-destructive/40">
+          <CardHeader>
+            <CardTitle className="type-display text-base text-destructive-ink">
+              {t("settings.danger")}
+            </CardTitle>
+            <CardDescription>{t("settings.dangerHint")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AlertDialog
+              open={deleteOpen}
+              onOpenChange={(open) => { setDeleteOpen(open); if (!open) setConfirmName(""); }}
+            >
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">{t("settings.deleteCompany")}</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t("settings.deleteConfirmTitle", { name: company.name })}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>{t("settings.deleteConfirmBody")}</AlertDialogDescription>
+                </AlertDialogHeader>
+
+                {/* Type-to-confirm. This deletes every agent, file and
+                    conversation with no undo, so a single click is too cheap
+                    a gesture for it. */}
+                <div className="space-y-2">
+                  <Label htmlFor="delete-confirm">
+                    {t("settings.deleteConfirmPrompt", { name: company.name })}
+                  </Label>
+                  <Input
+                    id="delete-confirm"
+                    value={confirmName}
+                    onChange={(e) => setConfirmName(e.target.value)}
+                    autoComplete="off"
+                    aria-invalid={confirmName.length > 0 && !canDelete}
+                  />
+                </div>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isDeleting}>{t("common.cancel")}</AlertDialogCancel>
+                  <AlertDialogAction
+                    disabled={!canDelete || isDeleting}
+                    onClick={(e) => { e.preventDefault(); deleteCompany(); }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isDeleting && <LoadingSpinner size="sm" className="mr-2" />}
+                    {t("settings.deleteConfirmAction")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

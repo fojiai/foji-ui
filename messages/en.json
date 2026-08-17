@@ -408,7 +408,9 @@
     "dangerHint": "These actions are irreversible.",
     "deleteConfirmTitle": "Delete {name}?",
     "deleteConfirmBody": "This permanently deletes the workspace, every agent, all files and the conversation history. It cannot be undone.",
-    "deleteConfirmAction": "Delete permanently"
+    "deleteConfirmAction": "Delete permanently",
+    "deleteConfirmPrompt": "To confirm, type {name} below:",
+    "deleteSuccess": "Company deleted. Your session has ended."
   },
   "profile": {
     "title": "My Profile",
