@@ -1011,5 +1011,19 @@
     "seek": "Avanzar o retroceder",
     "speed": "Velocidad de reproducción",
     "unavailable": "Audio no disponible"
+  },
+  "brand": {
+    "tagline": "Forja tu inteligencia"
+  },
+  "verifyEmail": {
+    "eyebrow": "Confirmación",
+    "loadingTitle": "Confirmando tu correo",
+    "loadingDescription": "Un momento — estamos activando tu cuenta.",
+    "successTitle": "Correo confirmado",
+    "successDescription": "Tu cuenta está activa. Inicia sesión para empezar.",
+    "errorTitle": "No pudimos confirmarlo",
+    "errorDescription": "Este enlace no es válido o ha expirado. Regístrate de nuevo para recibir otro.",
+    "signIn": "Iniciar sesión",
+    "backToSignIn": "Volver al inicio de sesión"
   }
 }

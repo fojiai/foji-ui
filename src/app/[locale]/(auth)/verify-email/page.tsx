@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import Image from "next/image";
-import { CheckCircle2, XCircle } from "lucide-react";
 import { authApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export default function VerifyEmailPage() {
+  const t = useTranslations();
   const params = useSearchParams();
   const token = params.get("token") ?? "";
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
@@ -23,40 +23,46 @@ export default function VerifyEmailPage() {
       .catch(() => setStatus("error"));
   }, [token]);
 
+  // Waiting and success are both good news, so they stay warm — only a dead
+  // link is styled as a failure.
+  if (status === "error") {
+    return (
+      <div className="w-full max-w-lg">
+        <EmptyState
+          tone="stop"
+          eyebrow={t("verifyEmail.eyebrow")}
+          title={t("verifyEmail.errorTitle")}
+          description={t("verifyEmail.errorDescription")}
+          action={
+            <Button asChild>
+              <Link href="/login">{t("verifyEmail.backToSignIn")}</Link>
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
   return (
-    <Card className="w-full max-w-md text-center">
-      <CardHeader>
-        <div className="mx-auto mb-4">
-          {status === "loading" ? (
-            <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
-          ) : status === "success" ? (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
-              <CheckCircle2 className="h-6 w-6 text-emerald-500" />
-            </div>
+    <div className="w-full max-w-lg">
+      <EmptyState
+        eyebrow={t("verifyEmail.eyebrow")}
+        title={status === "loading" ? t("verifyEmail.loadingTitle") : t("verifyEmail.successTitle")}
+        description={
+          status === "loading"
+            ? t("verifyEmail.loadingDescription")
+            : t("verifyEmail.successDescription")
+        }
+        action={
+          status === "loading" ? (
+            <LoadingSpinner size="sm" />
           ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
-              <XCircle className="h-6 w-6 text-destructive" />
-            </div>
-          )}
-        </div>
-        <CardTitle>
-          {status === "loading" && "Verifying your email…"}
-          {status === "success" && "Email verified!"}
-          {status === "error" && "Verification failed"}
-        </CardTitle>
-        <CardDescription>
-          {status === "loading" && <LoadingSpinner size="sm" />}
-          {status === "success" && "Your account is now active. Sign in to get started."}
-          {status === "error" && "The link is invalid or has expired. Request a new one by signing up again."}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {status !== "loading" && (
-          <Button asChild className="w-full">
-            <Link href="/login">{status === "success" ? "Sign in" : "Back to sign in"}</Link>
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+            <Button asChild>
+              <Link href="/login">{t("verifyEmail.signIn")}</Link>
+            </Button>
+          )
+        }
+      />
+    </div>
   );
 }

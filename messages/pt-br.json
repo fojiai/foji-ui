@@ -1011,5 +1011,19 @@
     "seek": "Avançar ou retroceder",
     "speed": "Velocidade de reprodução",
     "unavailable": "Áudio indisponível"
+  },
+  "brand": {
+    "tagline": "Forje sua inteligência"
+  },
+  "verifyEmail": {
+    "eyebrow": "Confirmação",
+    "loadingTitle": "Confirmando seu e-mail",
+    "loadingDescription": "Só um instante — estamos ativando sua conta.",
+    "successTitle": "E-mail confirmado",
+    "successDescription": "Sua conta está ativa. Entre para começar.",
+    "errorTitle": "Não conseguimos confirmar",
+    "errorDescription": "Este link é inválido ou expirou. Cadastre-se novamente para receber um novo.",
+    "signIn": "Entrar",
+    "backToSignIn": "Voltar para o login"
   }
 }

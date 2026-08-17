@@ -139,13 +139,23 @@ export default function OnboardingPage() {
 
   return (
     <div className="w-full max-w-2xl">
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <div className="mx-auto mb-4">
-          <Image src="/logo-icon.png" alt="Foji AI" width={80} height={80} className="mx-auto rounded-lg" priority />
-        </div>
-        <h1 className="text-3xl font-bold text-white">{t("onboarding.welcome")}</h1>
-        <p className="mt-1 text-zinc-400">{t("onboarding.welcomeSubtitle")}</p>
+      {/* The anvil band. The only place outside the dashboard it appears —
+          this is the first thing a new customer sees after signing up, so it
+          is worth spending the brand here. */}
+      <div className="anvil mb-8 overflow-hidden rounded-2xl border border-iron-border px-8 py-9 text-center">
+        <Image
+          src="/logo-icon.png"
+          alt="Foji AI"
+          width={64}
+          height={64}
+          className="mx-auto rounded-lg"
+          priority
+        />
+        <h1 className="type-display mt-4 text-[1.9rem] text-iron-foreground sm:text-[2.15rem]">
+          {t("onboarding.welcome")}
+        </h1>
+        <p className="type-label mt-3 text-iron-muted">{t("brand.tagline")}</p>
+        <p className="mt-3 text-sm text-iron-muted">{t("onboarding.welcomeSubtitle")}</p>
       </div>
 
       {/* Step indicator */}
@@ -154,25 +164,25 @@ export default function OnboardingPage() {
           <div key={s} className="flex items-center gap-3">
             <div
               className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors",
+                "type-readout flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors",
                 step === s
-                  ? "bg-primary text-white"
+                  ? "bg-primary text-primary-foreground"
                   : i < (step === "plan" ? 1 : 0)
-                  ? "bg-emerald-500 text-white"
-                  : "bg-zinc-800 text-zinc-400"
+                  ? "bg-quench text-white"
+                  : "border bg-muted text-muted-foreground"
               )}
             >
               {i < (step === "plan" ? 1 : 0) ? <Check className="h-4 w-4" /> : i + 1}
             </div>
-            {i < 1 && <div className="h-px w-12 bg-zinc-700" />}
+            {i < 1 && <div className="h-px w-12 bg-border" />}
           </div>
         ))}
       </div>
 
       {step === "company" && (
-        <Card>
+        <Card className="plate">
           <CardHeader>
-            <CardTitle>{t("onboarding.createCompany")}</CardTitle>
+            <CardTitle className="type-display">{t("onboarding.createCompany")}</CardTitle>
             <CardDescription>{t("onboarding.workspaceDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -190,7 +200,7 @@ export default function OnboardingPage() {
                 <Label>{t("onboarding.companySlug")}</Label>
                 <div className={cn(
                   "flex items-center rounded-md border bg-muted",
-                  slugStatus === "taken" ? "border-destructive" : slugStatus === "available" ? "border-emerald-500" : "border-input"
+                  slugStatus === "taken" ? "border-destructive" : slugStatus === "available" ? "border-quench" : "border-input"
                 )}>
                   <span className="px-3 py-2 text-sm text-muted-foreground">foji.ai/</span>
                   <Input
@@ -204,7 +214,7 @@ export default function OnboardingPage() {
                       <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                     )}
                     {slugStatus === "available" && (
-                      <Check className="h-4 w-4 text-emerald-500" />
+                      <Check className="h-4 w-4 text-quench-ink" />
                     )}
                     {slugStatus === "taken" && (
                       <X className="h-4 w-4 text-destructive" />
@@ -215,7 +225,7 @@ export default function OnboardingPage() {
                   <p className="text-xs text-destructive">{t("onboarding.slugTaken")}</p>
                 )}
                 {slugStatus === "available" && (
-                  <p className="text-xs text-emerald-500">{t("onboarding.slugAvailable")}</p>
+                  <p className="text-xs text-quench-ink">{t("onboarding.slugAvailable")}</p>
                 )}
                 {errors.slug && slugStatus !== "taken" && (
                   <p className="text-xs text-destructive">
@@ -282,7 +292,7 @@ export default function OnboardingPage() {
             ))}
           </div>
           <div className="flex gap-3">
-            <Button variant="ghost" className="flex-1 text-zinc-400" onClick={() => router.push("/dashboard")}>
+            <Button variant="ghost" className="flex-1 text-muted-foreground" onClick={() => router.push("/dashboard")}>
               {t("onboarding.skipForNow")}
             </Button>
             <Button className="flex-1" onClick={onPlanSubmit} disabled={isLoading}>

@@ -1011,5 +1011,19 @@
     "seek": "Seek",
     "speed": "Playback speed",
     "unavailable": "Audio unavailable"
+  },
+  "brand": {
+    "tagline": "Forge your intelligence"
+  },
+  "verifyEmail": {
+    "eyebrow": "Confirmation",
+    "loadingTitle": "Confirming your email",
+    "loadingDescription": "One moment — we are activating your account.",
+    "successTitle": "Email confirmed",
+    "successDescription": "Your account is active. Sign in to get started.",
+    "errorTitle": "We couldn't confirm it",
+    "errorDescription": "This link is invalid or has expired. Sign up again to get a new one.",
+    "signIn": "Sign in",
+    "backToSignIn": "Back to sign in"
   }
 }

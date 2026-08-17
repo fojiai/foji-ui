@@ -120,11 +120,13 @@ export function UserSettingsModal({
       <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+            {/* Page tokens, not sidebar-*: this renders in a portal over the
+                page ground even though it opens from the dark sidebar. */}
+            <div className="type-readout flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-muted text-base font-semibold text-muted-foreground">
               {initials}
             </div>
-            <div>
-              <DialogTitle className="text-left">
+            <div className="min-w-0">
+              <DialogTitle className="type-display text-left">
                 {user?.firstName} {user?.lastName}
               </DialogTitle>
               <p className="text-sm text-muted-foreground">{user?.email}</p>
@@ -134,7 +136,7 @@ export function UserSettingsModal({
 
         {/* Appearance */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          <h3 className="type-label text-muted-foreground">
             {t("userSettings.appearance")}
           </h3>
 
@@ -177,7 +179,7 @@ export function UserSettingsModal({
 
         {/* Edit name */}
         <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          <h3 className="type-label text-muted-foreground">
             {t("userSettings.editName")}
           </h3>
           <div className="grid grid-cols-2 gap-3">
