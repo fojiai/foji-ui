@@ -130,7 +130,9 @@
       "connectSuccess": "WhatsApp connected!",
       "connectCancelled": "Connection cancelled.",
       "connectIncomplete": "The connection did not finish. Try again and select a number all the way through.",
-      "manualSetup": "Manual setup (advanced)"
+      "manualSetup": "Manual setup (advanced)",
+      "needsReconnect": "Reconnection needed",
+      "needsReconnectHint": "WhatsApp disconnected and is not receiving messages. Click to reconnect — it takes one click."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",

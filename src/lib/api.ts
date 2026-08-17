@@ -180,6 +180,9 @@ export interface Agent {
   whatsAppPhoneNumberId?: string;
   hasWhatsAppToken?: boolean;
   whatsAppMode?: string;
+  /** True when Meta rejected our token — the owner has to reconnect. */
+  whatsAppNeedsReconnect?: boolean;
+  whatsAppTokenExpiresAt?: string | null;
   supportWhatsAppNumber?: string;
   salesWhatsAppNumber?: string;
   supportEmail?: string;

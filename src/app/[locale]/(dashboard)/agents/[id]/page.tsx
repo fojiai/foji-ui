@@ -690,7 +690,25 @@ export default function AgentDetailPage() {
                           number, and the server does the token exchange, webhook
                           subscription and number registration. The manual fields
                           below are an escape hatch, not the path. */}
-                      {agent.hasWhatsAppToken ? (
+                      {agent.whatsAppNeedsReconnect ? (
+                        /* The whole point of tracking this: a dead connection
+                           says so instead of looking like a quiet day. */
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-spark/40 bg-spark/10 p-3">
+                          <div className="min-w-0">
+                            <HeatStatus level="attention" label={t("agents.whatsapp.needsReconnect")} />
+                            <p className="mt-1 text-xs text-spark-ink">
+                              {t("agents.whatsapp.needsReconnectHint")}
+                            </p>
+                          </div>
+                          {activeCompanyId && (
+                            <ConnectWhatsAppButton
+                              companyId={activeCompanyId}
+                              agentId={agentId}
+                              onConnected={() => loadAgent()}
+                            />
+                          )}
+                        </div>
+                      ) : agent.hasWhatsAppToken ? (
                         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/40 p-3">
                           <div className="min-w-0">
                             <HeatStatus level="live" label={t("agents.whatsapp.connected")} />
