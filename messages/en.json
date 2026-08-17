@@ -122,7 +122,15 @@
       "modeLabel": "Who replies",
       "modeHint": "Choose whether the AI answers on its own or your team answers from the inbox.",
       "modeAgent": "AI agent",
-      "modeInbox": "My team (inbox)"
+      "modeInbox": "My team (inbox)",
+      "connectButton": "Connect my WhatsApp",
+      "connectTitle": "Connect your WhatsApp in one click",
+      "connectDescription": "Pick your number inside WhatsApp itself and you are done. We handle the rest — no token, no developer panel.",
+      "connected": "Connected",
+      "connectSuccess": "WhatsApp connected!",
+      "connectCancelled": "Connection cancelled.",
+      "connectIncomplete": "The connection did not finish. Try again and select a number all the way through.",
+      "manualSetup": "Manual setup (advanced)"
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",

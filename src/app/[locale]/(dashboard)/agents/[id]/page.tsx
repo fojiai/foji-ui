@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
+import { ConnectWhatsAppButton } from "@/components/agents/connect-whatsapp-button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { HeatStatus } from "@/components/shared/heat";
 import { PhoneInput } from "@/components/shared/phone-input";
@@ -685,30 +686,76 @@ export default function AgentDetailPage() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
-                        <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
-                        <Input
-                          {...register("whatsAppPhoneNumberId")}
-                          placeholder="123456789012345"
-                          inputMode="numeric"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="flex items-center gap-2">
-                          {t("agents.whatsapp.accessToken")}
-                          <Badge variant={agent.hasWhatsAppToken ? "success" : "outline"}>
-                            {agent.hasWhatsAppToken ? t("agents.whatsapp.tokenSet") : t("agents.whatsapp.tokenNotSet")}
-                          </Badge>
-                        </Label>
-                        <p className="text-xs text-muted-foreground">{t("agents.whatsapp.accessTokenHint")}</p>
-                        <Input
-                          {...register("whatsAppAccessToken")}
-                          type="password"
-                          autoComplete="off"
-                          placeholder={agent.hasWhatsAppToken ? "••••••••••••••••" : "EAAG..."}
-                        />
-                      </div>
+                      {/* The whole point: one button. Meta's popup collects the
+                          number, and the server does the token exchange, webhook
+                          subscription and number registration. The manual fields
+                          below are an escape hatch, not the path. */}
+                      {agent.hasWhatsAppToken ? (
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/40 p-3">
+                          <div className="min-w-0">
+                            <HeatStatus level="live" label={t("agents.whatsapp.connected")} />
+                            <p className="type-readout mt-1 text-xs text-muted-foreground">
+                              {agent.whatsAppPhoneNumberId}
+                            </p>
+                          </div>
+                          {activeCompanyId && (
+                            <ConnectWhatsAppButton
+                              companyId={activeCompanyId}
+                              agentId={agentId}
+                              onConnected={() => loadAgent()}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        activeCompanyId && (
+                          <div className="space-y-2 rounded-xl border bg-muted/40 p-4">
+                            <p className="text-sm font-medium">{t("agents.whatsapp.connectTitle")}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {t("agents.whatsapp.connectDescription")}
+                            </p>
+                            <ConnectWhatsAppButton
+                              companyId={activeCompanyId}
+                              agentId={agentId}
+                              onConnected={() => loadAgent()}
+                            />
+                          </div>
+                        )
+                      )}
+
+                      {/* Manual setup, collapsed. Only needed when Embedded
+                          Signup is unavailable, or for a number that is already
+                          on someone else's Business Manager. */}
+                      <details className="rounded-xl border p-3">
+                        <summary className="cursor-pointer text-sm font-medium text-muted-foreground">
+                          {t("agents.whatsapp.manualSetup")}
+                        </summary>
+                        <div className="mt-4 space-y-4">
+                          <div className="space-y-2">
+                            <Label>{t("agents.whatsapp.phoneNumberId")}</Label>
+                            <p className="text-xs text-muted-foreground">{t("agents.whatsapp.phoneNumberHint")}</p>
+                            <Input
+                              {...register("whatsAppPhoneNumberId")}
+                              placeholder="123456789012345"
+                              inputMode="numeric"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="flex items-center gap-2">
+                              {t("agents.whatsapp.accessToken")}
+                              <Badge variant={agent.hasWhatsAppToken ? "success" : "outline"}>
+                                {agent.hasWhatsAppToken ? t("agents.whatsapp.tokenSet") : t("agents.whatsapp.tokenNotSet")}
+                              </Badge>
+                            </Label>
+                            <p className="text-xs text-muted-foreground">{t("agents.whatsapp.accessTokenHint")}</p>
+                            <Input
+                              {...register("whatsAppAccessToken")}
+                              type="password"
+                              autoComplete="off"
+                              placeholder={agent.hasWhatsAppToken ? "••••••••••••••••" : "EAAG..."}
+                            />
+                          </div>
+                        </div>
+                      </details>
                     </div>
                   )}
                 </CardContent>

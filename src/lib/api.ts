@@ -252,6 +252,37 @@ export const agentsApi = {
     }),
 };
 
+// ─── WhatsApp onboarding (Embedded Signup) ───────────────────────────────────
+
+export interface WhatsAppOnboardingConfig {
+  enabled: boolean;
+  appId: string | null;
+  configId: string | null;
+  graphVersion: string;
+}
+
+export const whatsAppOnboardingApi = {
+  /** App id + Facebook Login config id. Both are public values. */
+  config: () => apiFetch<WhatsAppOnboardingConfig>("/api/whatsapp/onboarding/config"),
+
+  /**
+   * Hands Meta's short-lived code to the server, which exchanges it for a
+   * business token, subscribes the WABA to our webhooks and registers the
+   * number. The code dies in ~30s, so call this immediately.
+   */
+  complete: (data: {
+    companyId: number;
+    agentId: number;
+    code: string;
+    wabaId: string;
+    phoneNumberId: string;
+  }) =>
+    apiFetch<{ phoneNumberId: string; displayPhoneNumber: string | null; wabaId: string }>(
+      "/api/whatsapp/onboarding/complete",
+      { method: "POST", body: JSON.stringify(data) }
+    ),
+};
+
 // ─── Handoffs ─────────────────────────────────────────────────────────────────
 
 export const handoffsApi = {

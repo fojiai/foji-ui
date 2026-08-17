@@ -122,7 +122,15 @@
       "modeLabel": "Quién responde",
       "modeHint": "Elige si la IA responde sola o si tu equipo responde desde la bandeja.",
       "modeAgent": "Agente de IA",
-      "modeInbox": "Mi equipo (bandeja)"
+      "modeInbox": "Mi equipo (bandeja)",
+      "connectButton": "Conectar mi WhatsApp",
+      "connectTitle": "Conecta tu WhatsApp en un clic",
+      "connectDescription": "Eliges tu número dentro del propio WhatsApp y listo. Nosotros hacemos el resto — sin token, sin panel de desarrollador.",
+      "connected": "Conectado",
+      "connectSuccess": "¡WhatsApp conectado!",
+      "connectCancelled": "Conexión cancelada.",
+      "connectIncomplete": "La conexión no se completó. Vuelve a intentarlo y selecciona un número hasta el final.",
+      "manualSetup": "Configuración manual (avanzado)"
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",
