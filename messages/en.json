@@ -142,7 +142,25 @@
       "billingIssue": "Payment pending at Meta",
       "billingIssueHint": "Meta has blocked your messages because this WhatsApp Business account has no valid payment method. Add a card in Meta Business Manager and delivery resumes on its own.",
       "openBilling": "Open Meta billing",
-      "paymentReminder": "One last step: add a payment method in Meta Business Manager. Without it, Meta will not deliver your messages."
+      "paymentReminder": "One last step: add a payment method in Meta Business Manager. Without it, Meta will not deliver your messages.",
+      "guide": {
+        "eyebrow": "Step by step",
+        "title": "How to connect your WhatsApp",
+        "beforeTitle": "Before you start, have ready:",
+        "before1": "A mobile number that can receive an SMS or a call right now.",
+        "before2": "Your business's Facebook login (Meta creates one on the spot if you don't have it).",
+        "before3": "A credit card — Meta bills you for messages directly, not through Foji.",
+        "numberWarning": "About the number: it cannot be in use in the WhatsApp app (regular or Business) on a phone. If it is, delete that account in the app first or the connection will fail. Many people use a fresh SIM just for this.",
+        "step1": "Click \"Connect my WhatsApp\". A window from Meta itself opens.",
+        "step2": "Sign in with your Facebook account and pick (or create) your business profile.",
+        "step3": "Enter the number that will answer your customers and confirm the code sent by SMS or call.",
+        "step4": "Keep clicking continue until the window closes on its own.",
+        "step5": "Add a card in Meta Business Manager.",
+        "step5Hint": "Without a card Meta simply does not deliver your messages — and it does not warn you. This is the number one cause of \"I connected it and nothing works\".",
+        "step6": "Message that number from another phone and watch the agent reply.",
+        "step6Hint": "If nothing comes back within a few seconds, come back here: this page will tell you what's missing.",
+        "closing": "If anything goes wrong, this page shows exactly what the problem is and what to do. You never need a developer panel or to copy any code."
+      }
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",

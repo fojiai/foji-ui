@@ -142,7 +142,25 @@
       "billingIssue": "Pago pendiente en Meta",
       "billingIssueHint": "Meta bloqueó tus mensajes porque esta cuenta de WhatsApp Business no tiene un método de pago válido. Agrega una tarjeta en el Administrador Comercial de Meta y el envío se reanuda solo.",
       "openBilling": "Abrir pagos en Meta",
-      "paymentReminder": "Último paso: agrega un método de pago en el Administrador Comercial de Meta. Sin eso, Meta no entregará tus mensajes."
+      "paymentReminder": "Último paso: agrega un método de pago en el Administrador Comercial de Meta. Sin eso, Meta no entregará tus mensajes.",
+      "guide": {
+        "eyebrow": "Paso a paso",
+        "title": "Cómo conectar tu WhatsApp",
+        "beforeTitle": "Antes de empezar, ten a mano:",
+        "before1": "Un número de móvil que pueda recibir un SMS o una llamada ahora mismo.",
+        "before2": "El acceso de Facebook de tu empresa (si no lo tienes, Meta lo crea al momento).",
+        "before3": "Una tarjeta de crédito — Meta te cobra los mensajes directamente, no a través de Foji.",
+        "numberWarning": "Ojo con el número: no puede estar en uso en la aplicación de WhatsApp (ni la normal ni Business) en un móvil. Si lo está, borra esa cuenta en la aplicación antes de continuar o la conexión fallará. Mucha gente usa un SIM nuevo solo para esto.",
+        "step1": "Haz clic en \"Conectar mi WhatsApp\". Se abrirá una ventana de la propia Meta.",
+        "step2": "Inicia sesión con tu cuenta de Facebook y elige (o crea) el perfil de tu empresa.",
+        "step3": "Escribe el número que atenderá a tus clientes y confirma el código que llegue por SMS o llamada.",
+        "step4": "Sigue pulsando continuar hasta que la ventana se cierre sola.",
+        "step5": "Agrega una tarjeta en el Administrador Comercial de Meta.",
+        "step5Hint": "Sin tarjeta Meta sencillamente no entrega tus mensajes — y no avisa. Es la causa número uno de \"lo conecté y no funciona\".",
+        "step6": "Envía un mensaje desde otro móvil a ese número y mira cómo responde el agente.",
+        "step6Hint": "Si no responde en unos segundos, vuelve aquí: esta pantalla te dirá qué falta.",
+        "closing": "Si algo sale mal, esta página muestra exactamente cuál es el problema y qué hacer. Nunca necesitas un panel de desarrollador ni copiar ningún código."
+      }
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",

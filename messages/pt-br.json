@@ -142,7 +142,25 @@
       "billingIssue": "Pagamento pendente na Meta",
       "billingIssueHint": "A Meta bloqueou o envio das suas mensagens porque a conta do WhatsApp Business não tem uma forma de pagamento válida. Adicione um cartão no Gerenciador de Negócios da Meta — as mensagens voltam a sair sozinhas.",
       "openBilling": "Abrir pagamentos na Meta",
-      "paymentReminder": "Último passo: adicione uma forma de pagamento no Gerenciador de Negócios da Meta. Sem isso, a Meta não entrega suas mensagens."
+      "paymentReminder": "Último passo: adicione uma forma de pagamento no Gerenciador de Negócios da Meta. Sem isso, a Meta não entrega suas mensagens.",
+      "guide": {
+        "eyebrow": "Passo a passo",
+        "title": "Como conectar seu WhatsApp",
+        "beforeTitle": "Antes de começar, tenha em mãos:",
+        "before1": "Um número de celular que possa receber SMS ou ligação agora.",
+        "before2": "O login do Facebook da sua empresa (se não tiver, a Meta cria na hora).",
+        "before3": "Um cartão de crédito — a Meta cobra as mensagens direto de você, não pela Foji.",
+        "numberWarning": "Atenção ao número: ele não pode estar sendo usado no aplicativo do WhatsApp (nem o comum, nem o Business) no celular. Se estiver, apague a conta dele no aplicativo antes de continuar — senão a conexão falha. Muita gente usa um chip novo só para isso.",
+        "step1": "Clique no botão \"Conectar meu WhatsApp\". Vai abrir uma janela da própria Meta.",
+        "step2": "Entre com sua conta do Facebook e escolha (ou crie) o perfil da sua empresa.",
+        "step3": "Digite o número que vai atender seus clientes e confirme o código que chegar por SMS ou ligação.",
+        "step4": "Vá clicando em continuar até a janela fechar sozinha.",
+        "step5": "Adicione um cartão no Gerenciador de Negócios da Meta.",
+        "step5Hint": "Sem cartão a Meta simplesmente não entrega suas mensagens — e não avisa. É o motivo número 1 de \"conectei e não funciona\".",
+        "step6": "Mande uma mensagem de outro celular para esse número e veja o agente responder.",
+        "step6Hint": "Se não responder em alguns segundos, volte aqui: a tela vai dizer o que está faltando.",
+        "closing": "Se algo der errado, esta página mostra exatamente qual é o problema e o que fazer. Você não precisa mexer em painel de desenvolvedor nem copiar nenhum código."
+      }
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",

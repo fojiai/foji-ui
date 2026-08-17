@@ -22,6 +22,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
 import { ConnectWhatsAppButton } from "@/components/agents/connect-whatsapp-button";
+import { WhatsAppSetupGuide } from "@/components/agents/whatsapp-setup-guide";
 import { EmptyState } from "@/components/shared/empty-state";
 import { HeatStatus } from "@/components/shared/heat";
 import { PhoneInput } from "@/components/shared/phone-input";
@@ -751,16 +752,19 @@ export default function AgentDetailPage() {
                         </div>
                       ) : (
                         activeCompanyId && (
-                          <div className="space-y-2 rounded-xl border bg-muted/40 p-4">
-                            <p className="text-sm font-medium">{t("agents.whatsapp.connectTitle")}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("agents.whatsapp.connectDescription")}
-                            </p>
-                            <ConnectWhatsAppButton
-                              companyId={activeCompanyId}
-                              agentId={agentId}
-                              onConnected={() => loadAgent()}
-                            />
+                          <div className="space-y-4">
+                            <div className="space-y-2 rounded-xl border bg-muted/40 p-4">
+                              <p className="text-sm font-medium">{t("agents.whatsapp.connectTitle")}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {t("agents.whatsapp.connectDescription")}
+                              </p>
+                              <ConnectWhatsAppButton
+                                companyId={activeCompanyId}
+                                agentId={agentId}
+                                onConnected={() => loadAgent()}
+                              />
+                            </div>
+                            <WhatsAppSetupGuide />
                           </div>
                         )
                       )}
