@@ -1,6 +1,4 @@
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
 
 export default function RefundPage() {
   const t = useTranslations("refund");
@@ -11,29 +9,28 @@ export default function RefundPage() {
   ] as const;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground mt-2">{t("lastUpdated")}</p>
-      </div>
+    /* A document, not a dashboard screen: constrained measure, generous
+       leading, no cards. 34rem lands around 68 characters at this size. */
+    <article className="mx-auto max-w-[34rem] pb-16">
+      <header>
+        <h1 className="type-display text-[1.9rem] sm:text-[2.15rem]">{t("title")}</h1>
+        <p className="type-readout mt-2 text-sm text-muted-foreground">{t("lastUpdated")}</p>
+      </header>
 
-      <Card className="border-yellow-400/50 bg-yellow-50/50 dark:bg-yellow-950/10">
-        <CardContent className="flex items-start gap-3 py-4">
-          <AlertTriangle className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
-          <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">{t("summary")}</p>
-        </CardContent>
-      </Card>
+      {/* The one flagged passage on these pages: the summary a customer needs
+          before they read the rest. Kept as a rule, not a tinted card. */}
+      <p className="mt-6 border-l-2 border-border pl-4 leading-[1.75] text-foreground">
+        {t("summary")}
+      </p>
 
       {sections.map((key) => (
-        <Card key={key}>
-          <CardHeader>
-            <CardTitle className="text-lg">{t(`${key}.title`)}</CardTitle>
-          </CardHeader>
-          <CardContent className="prose prose-sm dark:prose-invert max-w-none">
-            <p className="whitespace-pre-line text-muted-foreground">{t(`${key}.content`)}</p>
-          </CardContent>
-        </Card>
+        <section key={key} className="mt-10 first:mt-8">
+          <h2 className="type-display text-lg">{t(`${key}.title`)}</h2>
+          <p className="mt-3 whitespace-pre-line leading-[1.75] text-muted-foreground">
+            {t(`${key}.content`)}
+          </p>
+        </section>
       ))}
-    </div>
+    </article>
   );
 }
