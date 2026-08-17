@@ -490,7 +490,8 @@
       "quickSetupHint": "Click a provider to add its credentials.",
       "empty": "No API keys configured yet.",
       "deleteConfirm": "Remove the credential \"{key}\"? The AI provider will stop working until reconfigured."
-    }
+    },
+    "totalUsers": "Total users"
   },
   "onboarding": {
     "createCompany": "Create your company",

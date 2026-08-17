@@ -490,7 +490,8 @@
       "quickSetupHint": "Clique em um provedor para adicionar suas credenciais.",
       "empty": "Nenhuma chave de API configurada.",
       "deleteConfirm": "Remover a credencial \"{key}\"? O provedor de IA parará de funcionar até ser reconfigurado."
-    }
+    },
+    "totalUsers": "Usuários"
   },
   "onboarding": {
     "createCompany": "Criar sua empresa",

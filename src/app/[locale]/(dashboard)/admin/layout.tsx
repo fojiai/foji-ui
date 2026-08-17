@@ -42,9 +42,9 @@ export default function AdminLayout({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t("admin.title")}</h1>
-      </div>
+      {/* Internal tooling: the same system, deliberately turned down. No
+          eyebrow rule, no anvil band — nothing that says "brand" here. */}
+      <h1 className="type-display text-[1.9rem] sm:text-[2.15rem]">{t("admin.title")}</h1>
 
       {/* Sub-nav */}
       <nav className="flex gap-1 border-b pb-0">
@@ -57,9 +57,11 @@ export default function AdminLayout({
               key={tab.href}
               href={tab.href}
               className={cn(
-                "flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-2 border-b-2 px-3 py-2 text-sm font-medium transition-colors",
+                // Current tab reads through weight and a neutral rule rather
+                // than brand colour — admin gets no ember.
                 active
-                  ? "border-primary text-primary"
+                  ? "border-foreground text-foreground"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               )}
             >

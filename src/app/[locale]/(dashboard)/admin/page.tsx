@@ -30,20 +30,20 @@ export default function AdminPage() {
 
   const cards = [
     { label: t("admin.companies.title"), value: stats?.totalCompanies ?? 0, icon: Building2 },
-    { label: "Total Users", value: stats?.totalUsers ?? 0, icon: Users },
+    { label: t("admin.totalUsers"), value: stats?.totalUsers ?? 0, icon: Users },
     { label: t("agents.title"), value: stats?.totalAgents ?? 0, icon: Bot },
   ];
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       {cards.map((card) => (
-        <Card key={card.label}>
+        <Card key={card.label} className="plate">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{card.label}</CardTitle>
+            <CardTitle className="type-label text-muted-foreground">{card.label}</CardTitle>
             <card.icon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{card.value}</p>
+            <p className="type-readout text-3xl font-semibold">{card.value}</p>
           </CardContent>
         </Card>
       ))}

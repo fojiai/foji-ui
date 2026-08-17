@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { ArrowLeft, Building2, User, Pencil, Trash2, CalendarClock, Lock, Globe } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -40,6 +40,7 @@ type NotesForm = z.infer<typeof notesSchema>;
 
 export default function AdminCompanyDetailPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const params = useParams();
   const companyId = Number(params.id);
 
@@ -133,16 +134,17 @@ export default function AdminCompanyDetailPage() {
           <Link href="/admin/companies"><ArrowLeft className="h-4 w-4" /></Link>
         </Button>
         <div className="flex items-center gap-3 min-w-0">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+          {/* No brand heat in admin — iron avatar. */}
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border bg-muted text-muted-foreground">
             {company.accountType === "Individual"
-              ? <User className="h-5 w-5 text-primary" />
-              : <Building2 className="h-5 w-5 text-primary" />
+              ? <User className="h-5 w-5" />
+              : <Building2 className="h-5 w-5" />
             }
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold truncate">{company.name}</h1>
+            <h1 className="type-display truncate text-xl">{company.name}</h1>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-muted-foreground">{company.slug}</span>
+              <span className="type-readout text-xs text-muted-foreground">{company.slug}</span>
               <Badge variant={company.accountType === "Individual" ? "secondary" : "outline"} className="text-xs">
                 {company.accountType === "Individual" ? "Pessoa Física" : "Pessoa Jurídica"}
               </Badge>
@@ -153,8 +155,8 @@ export default function AdminCompanyDetailPage() {
 
       {/* Account info */}
       <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <CardHeader className="pb-3"><CardTitle className="text-sm">Account Info</CardTitle></CardHeader>
+        <Card className="plate">
+          <CardHeader className="pb-3"><CardTitle className="type-display text-sm">Account Info</CardTitle></CardHeader>
           <CardContent className="space-y-2 text-sm">
             {company.tradeName && (
               <div className="flex justify-between">
@@ -178,7 +180,7 @@ export default function AdminCompanyDetailPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Created</span>
-              <span>{new Date(company.createdAt).toLocaleDateString()}</span>
+              <span className="type-readout">{format.dateTime(new Date(company.createdAt), { dateStyle: "short" })}</span>
             </div>
             {company.stripeCustomerId && (
               <div className="flex justify-between">
@@ -190,10 +192,10 @@ export default function AdminCompanyDetailPage() {
         </Card>
 
         {/* Subscription */}
-        <Card>
+        <Card className="plate">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm">Subscription</CardTitle>
+              <CardTitle className="type-display text-sm">Subscription</CardTitle>
               <Button size="sm" onClick={() => {
                 if (company.currentPlanId) assignForm.setValue("planId", company.currentPlanId);
                 assignForm.setValue("adminNotes", company.subscriptionAdminNotes ?? "");
@@ -228,7 +230,7 @@ export default function AdminCompanyDetailPage() {
                     <span className="text-muted-foreground">Period end</span>
                     <span className="flex items-center gap-1">
                       <CalendarClock className="h-3 w-3" />
-                      {new Date(company.subscriptionPeriodEnd).toLocaleDateString()}
+                      <span className="type-readout">{format.dateTime(new Date(company.subscriptionPeriodEnd), { dateStyle: "short" })}</span>
                     </span>
                   </div>
                 )}
@@ -277,10 +279,10 @@ export default function AdminCompanyDetailPage() {
       </div>
 
       {/* Admin notes */}
-      <Card>
+      <Card className="plate">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm">Admin Notes</CardTitle>
+            <CardTitle className="type-display text-sm">Admin Notes</CardTitle>
             {!editingNotes && (
               <Button variant="ghost" size="sm" onClick={() => setEditingNotes(true)}>
                 <Pencil className="mr-1 h-3 w-3" /> Edit

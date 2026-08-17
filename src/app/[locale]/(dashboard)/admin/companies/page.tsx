@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { EmptyState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 
 const createSchema = z.object({
@@ -113,14 +114,19 @@ export default function AdminCompaniesPage() {
 
       {isLoading ? <PageLoader /> : (
         <>
-          <div className="space-y-2">
+          <div className="space-y-2" id="admin-company-list">
             {companies.length === 0 ? (
-              <Card><CardContent className="py-10 text-center text-muted-foreground">No companies found.</CardContent></Card>
-            ) : companies.map((c) => (
-              <Card key={c.id} className="hover:border-primary/40 transition-colors">
-                <CardContent className="flex items-center justify-between py-4">
+              <EmptyState
+                eyebrow="Nothing yet"
+                title="No companies found"
+                description="No account matches this search."
+              />
+            ) : (
+            <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
+              {companies.map((c) => (
+                <div key={c.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-muted">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border bg-muted">
                       {c.accountType === "Individual"
                         ? <User className="h-4 w-4 text-muted-foreground" />
                         : <Building2 className="h-4 w-4 text-muted-foreground" />
@@ -137,15 +143,15 @@ export default function AdminCompaniesPage() {
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {c.slug} · {c.ownerEmail}
-                        {c.cpfCnpj && ` · ${c.cpfCnpj}`}
+                        <span className="type-readout">{c.slug}</span> · {c.ownerEmail}
+                        {c.cpfCnpj && <> · <span className="type-readout">{c.cpfCnpj}</span></>}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0 ml-4">
                     <div className="text-right hidden sm:block">
                       {c.hasActiveSubscription ? (
-                        <Badge variant="success">{c.currentPlanName}</Badge>
+                        <Badge variant="secondary">{c.currentPlanName}</Badge>
                       ) : (
                         <Badge variant="outline">No plan</Badge>
                       )}
@@ -154,16 +160,18 @@ export default function AdminCompaniesPage() {
                       <Link href={`admin/companies/${c.id}`}>Manage</Link>
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              ))}
+            </div>
+            )}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} of {total}
+                Showing <span className="type-readout">{(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)}</span> of{" "}
+                <span className="type-readout">{total}</span>
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
