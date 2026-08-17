@@ -1,18 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useAuth } from "@/components/providers/auth-provider";
 import { leadsApi, agentsApi, type Lead, type Agent, apiErrorMessage } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageLoader } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 import { UserPlus, Mail, Phone } from "lucide-react";
 
 export default function LeadsPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId } = useAuth();
 
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -55,15 +57,16 @@ export default function LeadsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("leads.title")}</h1>
-          <p className="text-muted-foreground">{t("leads.description")}</p>
-        </div>
-        <Badge variant="outline" className="text-sm">
-          {leads.length} {t("leads.total")}
-        </Badge>
-      </div>
+      <PageHeader
+        eyebrow={t("leads.eyebrow")}
+        title={t("leads.title")}
+        description={t("leads.description")}
+        action={
+          <span className="type-readout text-sm text-muted-foreground">
+            {leads.length} <span className="font-sans">{t("leads.total")}</span>
+          </span>
+        }
+      />
 
       <div className="flex items-center gap-3">
         <Select value={selectedAgent} onValueChange={handleAgentFilter}>
@@ -80,45 +83,47 @@ export default function LeadsPage() {
       </div>
 
       {leads.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <UserPlus className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("leads.empty")}</p>
-            <p className="text-xs text-muted-foreground max-w-sm">{t("leads.emptyHint")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={t("leads.empty")}
+          description={t("leads.emptyHint")}
+        />
       ) : (
-        <div className="space-y-2">
+        <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
           {leads.map((lead) => (
-            <Card key={lead.id}>
-              <CardContent className="flex items-start justify-between py-4">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <UserPlus className="h-4 w-4 text-primary" />
+            <div key={lead.id} className="flex items-start justify-between gap-3 p-4">
+              <div className="flex min-w-0 items-start gap-4">
+                {/* Neutral by design: a lead is a record, not a live state, so
+                    the fire palette stays out of it. */}
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border bg-muted text-muted-foreground">
+                  <UserPlus className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 space-y-1">
+                  <p className="font-medium">{lead.name || t("leads.anonymous")}</p>
+                  <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                    {lead.email && (
+                      <span className="flex min-w-0 items-center gap-1">
+                        <Mail className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{lead.email}</span>
+                      </span>
+                    )}
+                    {lead.phone && (
+                      <span className="flex items-center gap-1">
+                        <Phone className="h-3.5 w-3.5 shrink-0" />
+                        <span className="type-readout">{lead.phone}</span>
+                      </span>
+                    )}
                   </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">{lead.name || t("leads.anonymous")}</p>
-                    <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                      {lead.email && (
-                        <span className="flex items-center gap-1">
-                          <Mail className="h-3.5 w-3.5" /> {lead.email}
-                        </span>
-                      )}
-                      {lead.phone && (
-                        <span className="flex items-center gap-1">
-                          <Phone className="h-3.5 w-3.5" /> {lead.phone}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Badge variant="outline" className="text-xs">{lead.agentName}</Badge>
-                      <span>{new Date(lead.createdAt).toLocaleString()}</span>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="outline">{lead.agentName}</Badge>
+                    <span className="type-readout">
+                      {format.dateTime(new Date(lead.createdAt), { dateStyle: "short", timeStyle: "short" })}
+                    </span>
                   </div>
                 </div>
-                <Badge variant="secondary" className="shrink-0 capitalize">{lead.source}</Badge>
-              </CardContent>
-            </Card>
+              </div>
+              <Badge variant="secondary" className="shrink-0 capitalize">{lead.source}</Badge>
+            </div>
           ))}
         </div>
       )}

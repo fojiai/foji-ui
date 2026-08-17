@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useAuth } from "@/components/providers/auth-provider";
 import { handoffsApi, agentsApi, type HandoffEvent, type Agent, apiErrorMessage } from "@/lib/api";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageLoader } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
-import { PhoneForwarded, Mail, CheckCircle2, Clock } from "lucide-react";
+import { PhoneForwarded } from "lucide-react";
 
 export default function HandoffsPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const { activeCompanyId } = useAuth();
 
   const [handoffs, setHandoffs] = useState<HandoffEvent[]>([]);
@@ -51,19 +54,29 @@ export default function HandoffsPage() {
     }
   }
 
+  const pendingCount = handoffs.filter((h) => !h.notificationSent).length;
+
   if (isLoading) return <PageLoader />;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("handoffs.title")}</h1>
-          <p className="text-muted-foreground">{t("handoffs.description")}</p>
-        </div>
-        <Badge variant="outline" className="text-sm">
-          {handoffs.length} {t("handoffs.total")}
-        </Badge>
-      </div>
+      <PageHeader
+        eyebrow={t("handoffs.eyebrow")}
+        title={t("handoffs.title")}
+        description={t("handoffs.description")}
+        action={
+          pendingCount > 0 ? (
+            <HeatStatus
+              level="attention"
+              label={t("handoffs.pendingCount", { count: pendingCount })}
+            />
+          ) : (
+            <span className="type-readout text-sm text-muted-foreground">
+              {handoffs.length} <span className="font-sans">{t("handoffs.total")}</span>
+            </span>
+          )
+        }
+      />
 
       <div className="flex items-center gap-3">
         <Select value={selectedAgent} onValueChange={handleAgentFilter}>
@@ -80,47 +93,44 @@ export default function HandoffsPage() {
       </div>
 
       {handoffs.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <PhoneForwarded className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("handoffs.empty")}</p>
-            <p className="text-xs text-muted-foreground max-w-sm">{t("handoffs.emptyHint")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={t("handoffs.empty")}
+          description={t("handoffs.emptyHint")}
+        />
       ) : (
-        <div className="space-y-2">
+        <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
           {handoffs.map((h) => (
-            <Card key={h.id}>
-              <CardContent className="flex items-start justify-between py-4">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <PhoneForwarded className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="space-y-1">
-                    {h.userMessage && (
-                      <p className="text-sm text-muted-foreground italic">"{h.userMessage}"</p>
-                    )}
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Badge variant="outline" className="text-xs">{h.agentName}</Badge>
-                      <span>{new Date(h.createdAt).toLocaleString()}</span>
-                      <span className="font-mono opacity-60">#{h.sessionId.slice(0, 8)}</span>
-                    </div>
-                  </div>
+            <div key={h.id} className="flex items-start justify-between gap-3 p-4">
+              <div className="flex min-w-0 items-start gap-4">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border bg-muted text-muted-foreground">
+                  <PhoneForwarded className="h-4 w-4" />
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {h.notificationSent ? (
-                    <Badge variant="success" className="gap-1">
-                      <CheckCircle2 className="h-3 w-3" /> {t("handoffs.notified")}
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="gap-1">
-                      <Clock className="h-3 w-3" /> {t("handoffs.pending")}
-                    </Badge>
+                <div className="min-w-0 space-y-1">
+                  {h.userMessage && (
+                    <p className="text-sm italic text-muted-foreground">&ldquo;{h.userMessage}&rdquo;</p>
                   )}
-                  <Badge variant="secondary" className="capitalize">{h.source}</Badge>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="outline">{h.agentName}</Badge>
+                    <span className="type-readout">
+                      {format.dateTime(new Date(h.createdAt), { dateStyle: "short", timeStyle: "short" })}
+                    </span>
+                    {/* No extra opacity here: muted-foreground is already the
+                        quiet tier, and 60% on top of it drops below AA. */}
+                    <span className="type-readout">#{h.sessionId.slice(0, 8)}</span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                {/* One device for one fact: the dot and its label carry whether
+                    this was notified. An icon-plus-badge said it twice. */}
+                <HeatStatus
+                  level={h.notificationSent ? "cool" : "attention"}
+                  label={h.notificationSent ? t("handoffs.notified") : t("handoffs.pending")}
+                />
+                <Badge variant="secondary" className="capitalize">{h.source}</Badge>
+              </div>
+            </div>
           ))}
         </div>
       )}

@@ -298,7 +298,9 @@
     "empty": "Nenhuma solicitação de atendimento humano ainda",
     "emptyHint": "Ative a transferência para humano nas configurações do agente para receber solicitações.",
     "notified": "Notificado",
-    "pending": "Pendente"
+    "pending": "Pendente",
+    "eyebrow": "Atendimento",
+    "pendingCount": "{count} pendentes"
   },
   "leads": {
     "title": "Leads",
@@ -308,7 +310,8 @@
     "allAgents": "Todos os agentes",
     "empty": "Nenhum lead capturado ainda",
     "emptyHint": "Ative a captura de leads nas configurações do agente para começar a coletar contatos.",
-    "anonymous": "Anônimo"
+    "anonymous": "Anônimo",
+    "eyebrow": "Captura"
   },
   "files": {
     "title": "Arquivos",
@@ -767,7 +770,9 @@
       "deals": "negócios",
       "moved": "Negócio movido",
       "created": "Negócio criado",
-      "goToContacts": "Ir para Contatos"
+      "goToContacts": "Ir para Contatos",
+      "drag": "Arrastar negócio",
+      "mixedCurrencies": "Moedas diferentes nesta coluna"
     },
     "tasks": {
       "title": "Tarefas",

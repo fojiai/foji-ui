@@ -10,7 +10,6 @@ import {
   type CrmTask, type Contact, type CompanyMember, type CrmTaskInput,
   apiErrorMessage,
 } from "@/lib/api";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,9 +24,12 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
 import {
-  ListChecks, Plus, Lock, Trash2, Check, RotateCcw, AlertTriangle,
+  Plus, Trash2, Check, RotateCcw,
   Phone, Users, Presentation, MapPin, CornerUpRight, Mail, MessageCircle, CircleDot, CalendarPlus,
 } from "lucide-react";
 import { TASK_TYPES, googleCalendarUrl } from "@/lib/task-types";
@@ -208,20 +210,22 @@ export default function TasksPage() {
   if (!hasCrm) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.tasks.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.tasks.description")}</p>
-        </div>
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <Lock className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.locked.title")}</p>
-            <p className="max-w-md text-xs text-muted-foreground">{t("crm.locked.description")}</p>
-            <Button asChild className="mt-2">
+        <PageHeader
+          eyebrow={t("crm.eyebrow")}
+          title={t("crm.tasks.title")}
+          description={t("crm.tasks.description")}
+        />
+        <EmptyState
+          tone="warn"
+          eyebrow={t("emptyStates.eyebrowBilling")}
+          title={t("crm.locked.title")}
+          description={t("crm.locked.description")}
+          action={
+            <Button asChild>
               <Link href={`/${locale}/billing`}>{t("crm.locked.upgrade")}</Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        />
       </div>
     );
   }
@@ -229,11 +233,14 @@ export default function TasksPage() {
   function TaskRow({ task, overdue }: { task: CrmTask; overdue: boolean }) {
     const done = task.status === "Done";
     return (
-      <div
-        className={`flex items-start justify-between gap-3 rounded-lg border bg-card p-3 transition-colors ${
-          done ? "opacity-60" : ""
-        } ${overdue ? "border-destructive/40" : ""}`}
-      >
+      /* No per-row tint for overdue: the bucket heading above already says
+         "atrasadas" and the due date below runs hot. Three devices for one
+         fact is the redundant encoding the design rules call out. */
+      /* The row used to fade to 60% when done. Measured, that puts the already-
+         muted metadata at 2.45:1 in light mode — no opacity below 1.0 keeps it
+         at AA. The done state is carried by the struck-through, muted title,
+         the reopen button and the "concluídas" bucket, which is plenty. */
+      <div className="flex items-start justify-between gap-3 p-3">
         <div className="flex min-w-0 items-start gap-3">
           <Button
             variant="outline"
@@ -245,7 +252,9 @@ export default function TasksPage() {
             {done ? <RotateCcw className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
           </Button>
           <div className="min-w-0 space-y-1">
-            <p className={`text-sm font-medium ${done ? "line-through" : ""}`}>{task.title}</p>
+            <p className={`text-sm font-medium ${done ? "text-muted-foreground line-through" : ""}`}>
+              {task.title}
+            </p>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <Badge variant="outline" className="gap-1 text-[10px]">
                 {(() => {
@@ -272,7 +281,7 @@ export default function TasksPage() {
               )}
               {task.assigneeName && <span>· {task.assigneeName}</span>}
               {task.dueAt && (
-                <span className={overdue ? "font-medium text-destructive" : ""}>
+                <span className={`type-readout ${overdue ? "font-semibold text-spark-ink" : ""}`}>
                   · {format.dateTime(new Date(task.dueAt), { dateStyle: "short" })}
                 </span>
               )}
@@ -280,10 +289,9 @@ export default function TasksPage() {
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <Badge
-            variant={task.priority === "High" ? "destructive" : task.priority === "Low" ? "secondary" : "outline"}
-            className="text-[10px]"
-          >
+          {/* Only High burns. Normal and Low are iron — if every priority were
+              tinted, none of them would mean anything. */}
+          <Badge variant={task.priority === "High" ? "attention" : task.priority === "Low" ? "secondary" : "outline"}>
             {t(`crm.tasks.priorities.${task.priority}`)}
           </Badge>
           {task.dueAt && !done && (
@@ -337,26 +345,27 @@ export default function TasksPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.tasks.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.tasks.description")}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          {buckets.overdue.length > 0 && (
-            <Badge variant="destructive" className="gap-1">
-              <AlertTriangle className="h-3 w-3" />
-              {t("crm.tasks.overdueCount", { count: buckets.overdue.length })}
-            </Badge>
-          )}
-          <Badge variant="outline" className="tabular-nums">
-            {t("crm.tasks.openCount", { count: openCount })}
-          </Badge>
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="mr-1 h-4 w-4" /> {t("crm.tasks.new")}
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow={t("crm.eyebrow")}
+        title={t("crm.tasks.title")}
+        description={t("crm.tasks.description")}
+        action={
+          <>
+            {buckets.overdue.length > 0 && (
+              <HeatStatus
+                level="attention"
+                label={t("crm.tasks.overdueCount", { count: buckets.overdue.length })}
+              />
+            )}
+            <span className="type-readout text-sm text-muted-foreground">
+              {t("crm.tasks.openCount", { count: openCount })}
+            </span>
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="mr-1 h-4 w-4" /> {t("crm.tasks.new")}
+            </Button>
+          </>
+        }
+      />
 
       <div className="flex flex-wrap items-center gap-3">
         <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); fetchTasks({ status: v }); }}>
@@ -385,13 +394,16 @@ export default function TasksPage() {
       {isFetching ? (
         <SkeletonRows rows={5} />
       ) : tasks.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <ListChecks className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.tasks.empty")}</p>
-            <p className="max-w-sm text-xs text-muted-foreground">{t("crm.tasks.emptyHint")}</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          eyebrow={t("emptyStates.eyebrowNothingYet")}
+          title={t("crm.tasks.empty")}
+          description={t("crm.tasks.emptyHint")}
+          action={
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="mr-1 h-4 w-4" /> {t("crm.tasks.new")}
+            </Button>
+          }
+        />
       ) : (
         <div className="space-y-6">
           {BUCKET_ORDER.map((key) => {
@@ -401,17 +413,17 @@ export default function TasksPage() {
               <section key={key} className="space-y-2">
                 <div className="flex items-center gap-2">
                   <h2
-                    className={`text-sm font-semibold uppercase tracking-wide ${
-                      key === "overdue" ? "text-destructive" : "text-muted-foreground"
+                    className={`type-label ${
+                      key === "overdue" ? "text-spark-ink" : "text-muted-foreground"
                     }`}
                   >
                     {t(`crm.tasks.buckets.${key}`)}
                   </h2>
-                  <span className="rounded bg-muted px-1.5 text-xs text-muted-foreground tabular-nums">
+                  <span className="type-readout rounded bg-muted px-1.5 text-xs text-muted-foreground">
                     {items.length}
                   </span>
                 </div>
-                <div className="space-y-2">
+                <div className="plate divide-y overflow-hidden rounded-xl border bg-card">
                   {items.map((task) => (
                     <TaskRow key={task.id} task={task} overdue={key === "overdue"} />
                   ))}

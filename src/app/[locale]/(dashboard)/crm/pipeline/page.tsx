@@ -14,8 +14,6 @@ import {
   type Board, type DealCard, type Contact, type CompanyMember, type CreateDealInput,
   apiErrorMessage,
 } from "@/lib/api";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -23,8 +21,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
+import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
-import { Plus, Lock, GripVertical, Settings2 } from "lucide-react";
+import { Plus, GripVertical, Settings2 } from "lucide-react";
 import { StageManager } from "@/components/crm/stage-manager";
 import { pipelineApi, type Pipeline } from "@/lib/api";
 
@@ -48,7 +48,15 @@ function columnCurrency(deals: DealCard[]): { code: string; mixed: boolean } {
   return { code: first, mixed: codes.size > 1 };
 }
 
-function DealCardItem({ deal, locale }: { deal: DealCard; locale: string }) {
+function DealCardItem({
+  deal,
+  locale,
+  dragLabel,
+}: {
+  deal: DealCard;
+  locale: string;
+  dragLabel: string;
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: deal.id });
   const style = transform
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, opacity: isDragging ? 0.5 : 1 }
@@ -57,7 +65,7 @@ function DealCardItem({ deal, locale }: { deal: DealCard; locale: string }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="rounded-lg border bg-card p-3 shadow-sm"
+      className="plate rounded-xl border bg-card p-3"
     >
       <div className="flex items-start justify-between gap-2">
         <Link
@@ -69,13 +77,17 @@ function DealCardItem({ deal, locale }: { deal: DealCard; locale: string }) {
         <button
           {...listeners}
           {...attributes}
-          aria-label="Drag"
+          aria-label={dragLabel}
           className="cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
         >
           <GripVertical className="h-4 w-4" />
         </button>
       </div>
-      <p className="mt-1 text-sm font-semibold text-primary">{formatMoney(deal.value, deal.currency, locale)}</p>
+      {/* Money is a number, not a state. It used to be ember on every card,
+          which spent the brand colour on the most repeated element on screen. */}
+      <p className="type-readout mt-1 text-sm font-semibold">
+        {formatMoney(deal.value, deal.currency, locale)}
+      </p>
       {deal.contactName && <p className="mt-0.5 text-xs text-muted-foreground">{deal.contactName}</p>}
       {deal.ownerName && <p className="text-xs text-muted-foreground">{deal.ownerName}</p>}
     </div>
@@ -83,27 +95,34 @@ function DealCardItem({ deal, locale }: { deal: DealCard; locale: string }) {
 }
 
 function StageColumn({
-  stageId, name, total, currency, mixed, locale, count, children,
+  stageId, name, total, currency, mixed, locale, count, mixedLabel, children,
 }: {
   stageId: number; name: string; total: number; currency: string; mixed: boolean;
-  locale: string; count: number; children: React.ReactNode;
+  locale: string; count: number; mixedLabel: string; children: React.ReactNode;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: stageId });
   return (
+    /* The drop target is the one place ember belongs on this board: it marks
+       what is live under the cursor, right now, and vanishes on release. */
     <div
       ref={setNodeRef}
-      className={`flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 p-3 ${isOver ? "ring-2 ring-primary" : ""}`}
+      className={`flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 p-3 transition-colors ${
+        isOver ? "border-primary/50 ring-2 ring-primary/40" : ""
+      }`}
     >
-      <div className="mb-3 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-sm font-semibold">
-          {name}
-          <span className="rounded bg-muted px-1.5 text-xs font-normal text-muted-foreground tabular-nums">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <span className="flex min-w-0 items-center gap-1.5">
+          <span className="type-label truncate text-foreground">{name}</span>
+          <span className="type-readout rounded bg-muted px-1.5 text-xs text-muted-foreground">
             {count}
           </span>
         </span>
-        <Badge variant="outline" className="text-xs tabular-nums" title={mixed ? "Mixed currencies" : undefined}>
+        <span
+          className="type-readout shrink-0 text-xs text-muted-foreground"
+          title={mixed ? mixedLabel : undefined}
+        >
           {mixed ? "~" : ""}{formatMoney(total, currency, locale)}
-        </Badge>
+        </span>
       </div>
       <div className="flex flex-col gap-2">{children}</div>
     </div>
@@ -223,46 +242,50 @@ export default function PipelinePage() {
   if (!hasCrm) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.pipeline.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.pipeline.description")}</p>
-        </div>
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <Lock className="h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-medium">{t("crm.locked.title")}</p>
-            <p className="max-w-md text-xs text-muted-foreground">{t("crm.locked.description")}</p>
-            <Button asChild className="mt-2">
+        <PageHeader
+          eyebrow={t("crm.eyebrow")}
+          title={t("crm.pipeline.title")}
+          description={t("crm.pipeline.description")}
+        />
+        <EmptyState
+          tone="warn"
+          eyebrow={t("emptyStates.eyebrowBilling")}
+          title={t("crm.locked.title")}
+          description={t("crm.locked.description")}
+          action={
+            <Button asChild>
               <Link href={`/${locale}/billing`}>{t("crm.locked.upgrade")}</Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("crm.pipeline.title")}</h1>
-          <p className="text-muted-foreground">{t("crm.pipeline.description")}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" onClick={() => setStagesOpen(true)}>
-            <Settings2 className="mr-1 h-4 w-4" /> {t("crm.stages.manage")}
-          </Button>
-          <Button onClick={() => setDialogOpen(true)} disabled={contacts.length === 0}>
-            <Plus className="mr-1 h-4 w-4" /> {t("crm.pipeline.newDeal")}
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow={t("crm.eyebrow")}
+        title={t("crm.pipeline.title")}
+        description={t("crm.pipeline.description")}
+        action={
+          <>
+            <Button variant="outline" onClick={() => setStagesOpen(true)}>
+              <Settings2 className="mr-1 h-4 w-4" /> {t("crm.stages.manage")}
+            </Button>
+            <Button onClick={() => setDialogOpen(true)} disabled={contacts.length === 0}>
+              <Plus className="mr-1 h-4 w-4" /> {t("crm.pipeline.newDeal")}
+            </Button>
+          </>
+        }
+      />
 
       {contacts.length === 0 && (
         // A deal needs a contact, so the button above is disabled. Say why and
         // give the way out, instead of leaving a dead control on the page.
-        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-dashed p-3">
-          <p className="text-sm text-muted-foreground">{t("crm.pipeline.noContacts")}</p>
+        // Spark, because this is the one thing on the board waiting on the user.
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-spark/35 bg-spark/10 p-3">
+          <p className="text-sm text-spark-ink">{t("crm.pipeline.noContacts")}</p>
           <Button variant="outline" size="sm" asChild className="ml-auto">
             <Link href={`/${locale}/crm/contacts`}>{t("crm.pipeline.goToContacts")}</Link>
           </Button>
@@ -283,9 +306,15 @@ export default function PipelinePage() {
                 mixed={mixed}
                 locale={locale}
                 count={col.deals.length}
+                mixedLabel={t("crm.pipeline.mixedCurrencies")}
               >
                 {col.deals.map((deal) => (
-                  <DealCardItem key={deal.id} deal={deal} locale={locale} />
+                  <DealCardItem
+                    key={deal.id}
+                    deal={deal}
+                    locale={locale}
+                    dragLabel={t("crm.pipeline.drag")}
+                  />
                 ))}
               </StageColumn>
             );

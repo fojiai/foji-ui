@@ -298,7 +298,9 @@
     "empty": "No human handoff requests yet",
     "emptyHint": "Enable human handoff in your agent settings to start receiving requests.",
     "notified": "Notified",
-    "pending": "Pending"
+    "pending": "Pending",
+    "eyebrow": "Support",
+    "pendingCount": "{count} pending"
   },
   "leads": {
     "title": "Leads",
@@ -308,7 +310,8 @@
     "allAgents": "All agents",
     "empty": "No leads captured yet",
     "emptyHint": "Enable lead capture in your agent settings to start collecting contacts.",
-    "anonymous": "Anonymous"
+    "anonymous": "Anonymous",
+    "eyebrow": "Capture"
   },
   "files": {
     "title": "Files",
@@ -767,7 +770,9 @@
       "deals": "deals",
       "moved": "Deal moved",
       "created": "Deal created",
-      "goToContacts": "Go to Contacts"
+      "goToContacts": "Go to Contacts",
+      "drag": "Drag deal",
+      "mixedCurrencies": "Mixed currencies in this column"
     },
     "tasks": {
       "title": "Tasks",
