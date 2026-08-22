@@ -46,6 +46,8 @@ interface EmbeddedSignupPayload {
 }
 
 const SDK_SCRIPT_ID = "foji-facebook-jssdk";
+/** How long to wait for Meta's popup before assuming it never opened. */
+const POPUP_TIMEOUT_MS = 90_000;
 
 export function ConnectWhatsAppButton({
   companyId,
@@ -59,7 +61,9 @@ export function ConnectWhatsAppButton({
   const t = useTranslations();
   const [config, setConfig] = useState<WhatsAppOnboardingConfig | null>(null);
   const [sdkReady, setSdkReady] = useState(false);
+  const [sdkError, setSdkError] = useState(false);
   const [busy, setBusy] = useState(false);
+  const stuckTimer = useRef<number | null>(null);
 
   /** Meta sends the ids over postMessage, the code arrives via the callback.
    *  They race, so we stash the ids and act once we hold both halves. */
@@ -73,7 +77,21 @@ export function ConnectWhatsAppButton({
   // third-party script on the page for customers who will never use it.
   useEffect(() => {
     if (!config?.enabled || !config.appId) return;
-    if (document.getElementById(SDK_SCRIPT_ID)) { setSdkReady(true); return; }
+
+    // Readiness means window.FB exists and is initialised — not merely that a
+    // <script> tag is on the page. Those are different moments, and treating
+    // them as the same enables the button while FB is still undefined.
+    let cancelled = false;
+    function markReadyWhenLoaded() {
+      if (cancelled) return;
+      if (window.FB) { setSdkReady(true); return; }
+      window.setTimeout(markReadyWhenLoaded, 150);
+    }
+
+    if (document.getElementById(SDK_SCRIPT_ID)) {
+      markReadyWhenLoaded();
+      return () => { cancelled = true; };
+    }
 
     window.fbAsyncInit = () => {
       window.FB?.init({
@@ -82,7 +100,7 @@ export function ConnectWhatsAppButton({
         xfbml: false,
         version: config.graphVersion,
       });
-      setSdkReady(true);
+      if (!cancelled) setSdkReady(true);
     };
 
     const script = document.createElement("script");
@@ -91,8 +109,13 @@ export function ConnectWhatsAppButton({
     script.async = true;
     script.defer = true;
     script.crossOrigin = "anonymous";
-    script.onerror = () => setSdkReady(false);
+    script.onerror = () => {
+      console.error("[whatsapp] Meta's SDK failed to load — check for a blocker on connect.facebook.net");
+      if (!cancelled) { setSdkReady(false); setSdkError(true); }
+    };
     document.body.appendChild(script);
+
+    return () => { cancelled = true; };
   }, [config]);
 
   useEffect(() => {
@@ -128,17 +151,53 @@ export function ConnectWhatsAppButton({
   }, [t]);
 
   const launch = useCallback(() => {
-    if (!window.FB || !config?.configId) return;
+    if (!window.FB) {
+      console.error("[whatsapp] window.FB is not available — Meta's SDK did not load.");
+      toast({ variant: "destructive", title: t("agents.whatsapp.sdkUnavailable") });
+      return;
+    }
+    if (!config?.configId) {
+      console.error("[whatsapp] No Meta:EmbeddedSignupConfigId configured on the server.");
+      toast({ variant: "destructive", title: t("agents.whatsapp.notConfigured") });
+      return;
+    }
+
     setBusy(true);
     signupData.current = {};
 
+    // ── Bug 3: if Meta's popup is blocked, FB.login's callback never fires and
+    // the button stays disabled forever. Release it and say why.
+    if (stuckTimer.current) window.clearTimeout(stuckTimer.current);
+    stuckTimer.current = window.setTimeout(() => {
+      setBusy((wasBusy) => {
+        if (wasBusy) {
+          console.warn("[whatsapp] Meta never called back — popup blocked, or the window was closed.");
+          toast({ variant: "destructive", title: t("agents.whatsapp.popupBlocked") });
+        }
+        return false;
+      });
+    }, POPUP_TIMEOUT_MS);
+
     window.FB.login(
       async (response) => {
+        if (stuckTimer.current) window.clearTimeout(stuckTimer.current);
+
         const code = response?.authResponse?.code;
-        if (!code) { setBusy(false); return; } // customer closed the popup
+        if (!code) {
+          // Closing the popup is a normal thing to do, so this is not an error.
+          console.info("[whatsapp] Flow closed without a code", response?.status);
+          setBusy(false);
+          return;
+        }
 
         const { wabaId, phoneNumberId } = signupData.current;
         if (!wabaId || !phoneNumberId) {
+          // Almost always the app's Allowed Domains / OAuth redirect URIs not
+          // listing this exact origin — Meta then withholds the ids.
+          console.error(
+            "[whatsapp] Meta returned a code but no waba_id/phone_number_id. " +
+            "Check Allowed Domains and Valid OAuth Redirect URIs both list " + window.location.origin
+          );
           setBusy(false);
           toast({ variant: "destructive", title: t("agents.whatsapp.connectIncomplete") });
           return;
@@ -154,6 +213,7 @@ export function ConnectWhatsAppButton({
         } catch (err) {
           toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
         } finally {
+          if (stuckTimer.current) window.clearTimeout(stuckTimer.current);
           setBusy(false);
         }
       },
@@ -168,6 +228,12 @@ export function ConnectWhatsAppButton({
 
   // Not configured on this deployment — the caller falls back to manual setup.
   if (!config?.enabled) return null;
+
+  if (sdkError) {
+    return (
+      <p className="text-xs text-spark-ink">{t("agents.whatsapp.sdkUnavailable")}</p>
+    );
+  }
 
   return (
     <Button type="button" onClick={launch} disabled={!sdkReady || busy}>

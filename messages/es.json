@@ -160,7 +160,10 @@
         "step6": "Envía un mensaje desde otro móvil a ese número y mira cómo responde el agente.",
         "step6Hint": "Si no responde en unos segundos, vuelve aquí: esta pantalla te dirá qué falta.",
         "closing": "Si algo sale mal, esta página muestra exactamente cuál es el problema y qué hacer. Nunca necesitas un panel de desarrollador ni copiar ningún código."
-      }
+      },
+      "sdkUnavailable": "No pudimos cargar la ventana de Meta. Desactiva los bloqueadores en esta página y recarga.",
+      "notConfigured": "La conexión en un clic aún no está configurada en este servidor. Contacta con soporte.",
+      "popupBlocked": "La ventana de Meta no se abrió. Permite las ventanas emergentes para este sitio e inténtalo de nuevo."
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",

@@ -160,7 +160,10 @@
         "step6": "Mande uma mensagem de outro celular para esse número e veja o agente responder.",
         "step6Hint": "Se não responder em alguns segundos, volte aqui: a tela vai dizer o que está faltando.",
         "closing": "Se algo der errado, esta página mostra exatamente qual é o problema e o que fazer. Você não precisa mexer em painel de desenvolvedor nem copiar nenhum código."
-      }
+      },
+      "sdkUnavailable": "Não conseguimos carregar a janela da Meta. Desative bloqueadores de anúncios/rastreadores nesta página e recarregue.",
+      "notConfigured": "A conexão em um clique ainda não está configurada neste servidor. Fale com o suporte.",
+      "popupBlocked": "A janela da Meta não abriu. Permita pop-ups para este site e tente de novo."
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",

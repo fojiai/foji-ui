@@ -160,7 +160,10 @@
         "step6": "Message that number from another phone and watch the agent reply.",
         "step6Hint": "If nothing comes back within a few seconds, come back here: this page will tell you what's missing.",
         "closing": "If anything goes wrong, this page shows exactly what the problem is and what to do. You never need a developer panel or to copy any code."
-      }
+      },
+      "sdkUnavailable": "We couldn't load Meta's window. Turn off ad/tracker blockers on this page and reload.",
+      "notConfigured": "One-click connection is not configured on this server yet. Contact support.",
+      "popupBlocked": "Meta's window did not open. Allow pop-ups for this site and try again."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",
