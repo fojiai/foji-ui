@@ -178,8 +178,15 @@ export function ConnectWhatsAppButton({
       });
     }, POPUP_TIMEOUT_MS);
 
-    window.FB.login(
-      async (response) => {
+    // The callback passed to FB.login must be a plain function. Meta's SDK
+    // inspects it and rejects an async one with "Expression is of type
+    // asyncfunction, not function", which surfaces as a click that does
+    // nothing at all.
+    const onLoginResponse = (response: FbLoginResponse) => {
+      void handleLoginResponse(response);
+    };
+
+    const handleLoginResponse = async (response: FbLoginResponse) => {
         if (stuckTimer.current) window.clearTimeout(stuckTimer.current);
 
         const code = response?.authResponse?.code;
@@ -216,14 +223,14 @@ export function ConnectWhatsAppButton({
           if (stuckTimer.current) window.clearTimeout(stuckTimer.current);
           setBusy(false);
         }
-      },
-      {
-        config_id: config.configId,
-        response_type: "code",
-        override_default_response_type: true,
-        extras: { setup: {}, featureType: "", sessionInfoVersion: "3" },
-      }
-    );
+    };
+
+    window.FB.login(onLoginResponse, {
+      config_id: config.configId,
+      response_type: "code",
+      override_default_response_type: true,
+      extras: { setup: {}, featureType: "", sessionInfoVersion: "3" },
+    });
   }, [config, companyId, agentId, onConnected, t]);
 
   // Not configured on this deployment — the caller falls back to manual setup.
