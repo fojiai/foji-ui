@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { LEGAL_URLS } from "@/lib/legal";
 
 export default function PublicLayout({
   children,
@@ -17,11 +18,12 @@ export default function PublicLayout({
             <Image src="/logo-icon.png" alt="Foji AI" width={28} height={28} className="rounded-lg" />
             <span className="font-bold text-lg">Foji AI</span>
           </Link>
+          {/* Legal docs are canonical on the marketing site — link out. */}
           <nav className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link href="/legal" className="hover:text-foreground transition-colors">Legal</Link>
-            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-            <Link href="/refund" className="hover:text-foreground transition-colors">Refund</Link>
-            <Link href="/data-deletion" className="hover:text-foreground transition-colors">Data</Link>
+            <a href={LEGAL_URLS.terms} className="hover:text-foreground transition-colors">Termos</a>
+            <a href={LEGAL_URLS.privacy} className="hover:text-foreground transition-colors">Privacidade</a>
+            <Link href="/refund" className="hover:text-foreground transition-colors">Reembolso</Link>
+            <a href={LEGAL_URLS.dataDeletion} className="hover:text-foreground transition-colors">Excluir dados</a>
             <Link href="/login" className="text-primary hover:underline font-medium">Login</Link>
           </nav>
         </div>
@@ -37,10 +39,10 @@ export default function PublicLayout({
         <div className="mx-auto max-w-4xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} P2 TECH INOVA SIMPLES (I.S.) — CNPJ 52.417.209/0001-59</p>
           <nav className="flex gap-4">
-            <Link href="/legal" className="hover:text-foreground transition-colors">Legal</Link>
-            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-            <Link href="/refund" className="hover:text-foreground transition-colors">Refund</Link>
-            <Link href="/data-deletion" className="hover:text-foreground transition-colors">Data</Link>
+            <a href={LEGAL_URLS.terms} className="hover:text-foreground transition-colors">Termos</a>
+            <a href={LEGAL_URLS.privacy} className="hover:text-foreground transition-colors">Privacidade</a>
+            <Link href="/refund" className="hover:text-foreground transition-colors">Reembolso</Link>
+            <a href={LEGAL_URLS.dataDeletion} className="hover:text-foreground transition-colors">Excluir dados</a>
           </nav>
         </div>
       </footer>

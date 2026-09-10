@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { LEGAL_URLS } from "@/lib/legal";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,9 +15,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
         {/* Footer links */}
         <nav className="relative z-10 mt-8 flex gap-4 text-xs text-zinc-500">
-          <Link href="/legal" className="hover:text-zinc-300 transition-colors">Legal</Link>
-          <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy</Link>
-          <Link href="/refund" className="hover:text-zinc-300 transition-colors">Refund</Link>
+          <a href={LEGAL_URLS.terms} className="hover:text-zinc-300 transition-colors">Termos</a>
+          <a href={LEGAL_URLS.privacy} className="hover:text-zinc-300 transition-colors">Privacidade</a>
+          <Link href="/refund" className="hover:text-zinc-300 transition-colors">Reembolso</Link>
         </nav>
       </div>
     </AuthProvider>
