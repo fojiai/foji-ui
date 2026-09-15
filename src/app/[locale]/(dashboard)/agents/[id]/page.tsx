@@ -111,7 +111,7 @@ export default function AgentDetailPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [starters, setStarters] = useState<string[]>([""]);
   const [testKey, setTestKey] = useState(0); // force iframe reload
 
@@ -282,27 +282,47 @@ export default function AgentDetailPage() {
   }
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files?.[0]) return;
-    const file = e.target.files[0];
-    e.target.value = "";
-    if (file.size > 30 * 1024 * 1024) {
+    const selected = Array.from(e.target.files ?? []);
+    e.target.value = ""; // reset so re-picking the same file(s) still fires onChange
+    if (selected.length === 0) return;
+
+    const ok = selected.filter((f) => f.size <= 30 * 1024 * 1024);
+    if (ok.length < selected.length) {
+      // At least one file was over the limit — tell them, keep the rest.
       toast({ variant: "destructive", title: t("files.sizeExceeded") });
-      return;
     }
-    setPendingFile(file);
+    if (ok.length > 0) setPendingFiles(ok);
   }
 
   async function confirmUpload() {
-    if (!pendingFile) return;
-    const file = pendingFile;
-    setPendingFile(null);
+    if (pendingFiles.length === 0) return;
+    const toUpload = pendingFiles;
+    setPendingFiles([]);
     setUploadingFile(true);
+    let succeeded = 0;
     try {
-      const uploaded = await filesApi.upload(agentId, file);
-      setFiles((prev) => [uploaded, ...prev]);
-      toast({ title: t("files.uploadSuccess") });
-    } catch (err) {
-      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
+      // Sequential, not parallel: keeps the order stable and avoids hammering
+      // the upload endpoint with a dozen presigned-URL requests at once.
+      for (const file of toUpload) {
+        try {
+          const uploaded = await filesApi.upload(agentId, file);
+          setFiles((prev) => [uploaded, ...prev]);
+          succeeded++;
+        } catch (err) {
+          toast({
+            variant: "destructive",
+            title: apiErrorMessage(err, t("errors.generic")),
+          });
+        }
+      }
+      if (succeeded > 0) {
+        toast({
+          title:
+            succeeded === 1
+              ? t("files.uploadSuccess")
+              : t("files.uploadSuccessMultiple", { count: succeeded }),
+        });
+      }
     } finally {
       setUploadingFile(false);
     }
@@ -1022,6 +1042,7 @@ export default function AgentDetailPage() {
                       type="file"
                       className="sr-only"
                       accept=".pdf,.docx,.pptx,.xlsx"
+                      multiple
                       onChange={handleFileSelect}
                     />
                   </>
@@ -1030,15 +1051,17 @@ export default function AgentDetailPage() {
             </CardContent>
           </Card>
 
-          <AlertDialog open={!!pendingFile} onOpenChange={(open) => { if (!open) setPendingFile(null); }}>
+          <AlertDialog open={pendingFiles.length > 0} onOpenChange={(open) => { if (!open) setPendingFiles([]); }}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>{t("files.confirmUploadTitle")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {pendingFile && t("files.confirmUploadDescription", {
-                    fileName: pendingFile.name,
-                    fileSize: (pendingFile.size / 1024 / 1024).toFixed(2),
-                  })}
+                  {pendingFiles.length === 1
+                    ? t("files.confirmUploadDescription", {
+                        fileName: pendingFiles[0].name,
+                        fileSize: (pendingFiles[0].size / 1024 / 1024).toFixed(2),
+                      })
+                    : t("files.confirmUploadMultipleDescription", { count: pendingFiles.length })}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

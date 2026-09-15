@@ -374,7 +374,9 @@
     "confirmUploadTitle": "Enviar arquivo?",
     "confirmUploadDescription": "Enviar {fileName} ({fileSize} MB) para processamento? O arquivo será extraído e disponibilizado ao agente.",
     "processingComplete": "Processamento de arquivos concluído",
-    "emptyHint": "Envie PDFs, DOCX, PPTX ou XLSX para o agente aprender com eles."
+    "emptyHint": "Envie PDFs, DOCX, PPTX ou XLSX para o agente aprender com eles.",
+    "confirmUploadMultipleDescription": "Enviar {count} arquivos para processamento? Os arquivos serão extraídos e disponibilizados ao agente.",
+    "uploadSuccessMultiple": "{count} arquivos enviados — processamento iniciado"
   },
   "team": {
     "title": "Equipe",

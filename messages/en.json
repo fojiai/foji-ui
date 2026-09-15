@@ -374,7 +374,9 @@
     "confirmUploadTitle": "Upload file?",
     "confirmUploadDescription": "Upload {fileName} ({fileSize} MB) for processing? The file will be extracted and made available to the agent.",
     "processingComplete": "File processing complete",
-    "emptyHint": "Upload PDFs, DOCX, PPTX or XLSX for the agent to learn from."
+    "emptyHint": "Upload PDFs, DOCX, PPTX or XLSX for the agent to learn from.",
+    "confirmUploadMultipleDescription": "Upload {count} files for processing? The files will be extracted and made available to the agent.",
+    "uploadSuccessMultiple": "{count} files uploaded — processing started"
   },
   "team": {
     "title": "Team",
