@@ -954,7 +954,19 @@
     "windowClosed": "Já se passaram mais de 24 horas desde a última mensagem do cliente. O WhatsApp só permite responder livremente dentro desse prazo — aguarde o cliente escrever novamente.",
     "unassigned": "Sem responsável",
     "mediaPreview": "[anexo]",
-    "eyebrow": "Atendimento"
+    "eyebrow": "Atendimento",
+    "tabOpen": "Abertas",
+    "tabResolved": "Resolvidas",
+    "emptyOpen": "Nenhuma conversa aberta",
+    "emptyResolved": "Nenhuma conversa resolvida",
+    "emptyResolvedHint": "Conversas encerradas aparecem aqui. Quando o cliente escreve de novo, a conversa volta para Abertas sozinha.",
+    "awaitingReply": "aguardando resposta",
+    "resolvedAuto": "resolvida automaticamente",
+    "resolvedManual": "resolvida",
+    "resolve": "Resolver",
+    "reopen": "Reabrir",
+    "resolvedToast": "Conversa resolvida",
+    "reopenedToast": "Conversa reaberta"
   },
   "audio": {
     "play": "Reproduzir",

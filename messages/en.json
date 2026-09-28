@@ -954,7 +954,19 @@
     "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again.",
     "unassigned": "Unassigned",
     "mediaPreview": "[attachment]",
-    "eyebrow": "Support"
+    "eyebrow": "Support",
+    "tabOpen": "Open",
+    "tabResolved": "Resolved",
+    "emptyOpen": "No open conversations",
+    "emptyResolved": "No resolved conversations",
+    "emptyResolvedHint": "Finished conversations show up here. When the customer writes again, the conversation moves back to Open on its own.",
+    "awaitingReply": "awaiting reply",
+    "resolvedAuto": "auto-resolved",
+    "resolvedManual": "resolved",
+    "resolve": "Resolve",
+    "reopen": "Reopen",
+    "resolvedToast": "Conversation resolved",
+    "reopenedToast": "Conversation reopened"
   },
   "audio": {
     "play": "Play",

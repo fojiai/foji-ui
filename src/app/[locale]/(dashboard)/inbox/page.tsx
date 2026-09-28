@@ -7,9 +7,10 @@ import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import {
   inboxApi, membersApi,
-  type InboxConversation, type InboxMessage, type InboxThread, type CompanyMember,
+  type InboxConversation, type InboxMessage, type InboxThread, type InboxStatus, type CompanyMember,
   apiErrorMessage,
 } from "@/lib/api";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,10 @@ import { AnvilMark } from "@/components/shared/marks";
 import { toast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AudioPlayer } from "@/components/ui/audio-player";
-import { MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw, Paperclip, FileText, UserCheck } from "lucide-react";
+import {
+  MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw, Paperclip, FileText, UserCheck,
+  CheckCircle2, RotateCcw,
+} from "lucide-react";
 
 const LIST_POLL_MS = 10_000;
 const THREAD_POLL_MS = 6_000;
@@ -107,17 +111,30 @@ export default function InboxPage() {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [members, setMembers] = useState<CompanyMember[]>([]);
+  // Open is the working view. Resolved threads — by a person or by the idle
+  // sweep — live in their own tab and come back on their own when the customer
+  // writes again.
+  const [statusFilter, setStatusFilter] = useState<InboxStatus>("Open");
+  const [statusBusy, setStatusBusy] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const loadConversations = useCallback(async () => {
     if (!activeCompanyId) return;
     try {
-      setConversations(await inboxApi.conversations(activeCompanyId));
+      setConversations(await inboxApi.conversations(activeCompanyId, undefined, statusFilter));
     } catch {
       setConversations((prev) => prev ?? []);
     }
-  }, [activeCompanyId]);
+  }, [activeCompanyId, statusFilter]);
+
+  function changeFilter(next: InboxStatus) {
+    if (next === statusFilter) return;
+    setStatusFilter(next);
+    setConversations(null);
+    setSelectedId(null);
+    setThread(null);
+  }
 
   const loadThread = useCallback(
     async (id: number, opts?: { silent?: boolean }) => {
@@ -179,6 +196,25 @@ export default function InboxPage() {
     }
   }
 
+  async function setStatus(next: InboxStatus) {
+    if (!activeCompanyId || !selectedId) return;
+    setStatusBusy(true);
+    try {
+      const updated =
+        next === "Resolved"
+          ? await inboxApi.resolve(activeCompanyId, selectedId)
+          : await inboxApi.reopen(activeCompanyId, selectedId);
+      setThread((prev) => (prev ? { ...prev, conversation: updated } : prev));
+      // It no longer belongs in the tab being viewed.
+      setConversations((prev) => prev?.filter((x) => x.id !== updated.id) ?? prev);
+      toast({ title: t(next === "Resolved" ? "inbox.resolvedToast" : "inbox.reopenedToast") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
+    } finally {
+      setStatusBusy(false);
+    }
+  }
+
   async function send() {
     if (!activeCompanyId || !selectedId || !text.trim()) return;
     setSending(true);
@@ -217,6 +253,14 @@ export default function InboxPage() {
         {/* Conversation list — hidden on mobile once a thread is open */}
         <Card className={selectedId ? "hidden lg:block" : ""}>
           <CardContent className="p-0">
+            <div className="border-b p-2">
+              <Tabs value={statusFilter} onValueChange={(v) => changeFilter(v as InboxStatus)}>
+                <TabsList className="w-full">
+                  <TabsTrigger value="Open" className="flex-1">{t("inbox.tabOpen")}</TabsTrigger>
+                  <TabsTrigger value="Resolved" className="flex-1">{t("inbox.tabResolved")}</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
             {conversations === null ? (
               <div className="p-3"><SkeletonRows rows={6} /></div>
             ) : conversations.length === 0 ? (
@@ -224,8 +268,12 @@ export default function InboxPage() {
                  crowd it — same materials, compact arrangement. */
               <div className="hatch relative flex flex-col items-start gap-2 px-5 py-14">
                 <AnvilMark className="h-10 w-10 text-muted-foreground/40" lit={false} />
-                <p className="type-display mt-1 text-base">{t("inbox.empty")}</p>
-                <p className="text-xs leading-relaxed text-muted-foreground">{t("inbox.emptyHint")}</p>
+                <p className="type-display mt-1 text-base">
+                  {t(statusFilter === "Open" ? "inbox.emptyOpen" : "inbox.emptyResolved")}
+                </p>
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  {t(statusFilter === "Open" ? "inbox.emptyHint" : "inbox.emptyResolvedHint")}
+                </p>
               </div>
             ) : (
               <ul className="max-h-[70vh] divide-y overflow-y-auto">
@@ -276,7 +324,18 @@ export default function InboxPage() {
                             <UserCheck className="h-3 w-3" /> {c.assignedUserName}
                           </span>
                         )}
-                        {!c.canReplyFreeform && (
+                        {/* Read but unanswered: the unread stripe is gone, so
+                            this is the only thing saying someone is waiting. */}
+                        {c.status === "Open" && c.awaitingReply && c.unreadCount === 0 && (
+                          <span className="text-spark-ink">{t("inbox.awaitingReply")}</span>
+                        )}
+                        {c.status === "Resolved" && (
+                          <span className="inline-flex items-center gap-0.5 text-quench-ink">
+                            <CheckCircle2 className="h-3 w-3" />
+                            {t(c.resolvedAutomatically ? "inbox.resolvedAuto" : "inbox.resolvedManual")}
+                          </span>
+                        )}
+                        {c.status === "Open" && !c.canReplyFreeform && (
                           <span className="inline-flex items-center gap-0.5 text-spark-ink">
                             <Clock className="h-3 w-3" /> {t("inbox.windowClosedShort")}
                           </span>
@@ -335,6 +394,27 @@ export default function InboxPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {selected?.status === "Resolved" ? (
+                      <Button
+                        variant="outline" size="sm" disabled={statusBusy}
+                        onClick={() => setStatus("Open")}
+                      >
+                        {statusBusy
+                          ? <LoadingSpinner size="sm" className="mr-1" />
+                          : <RotateCcw className="mr-1 h-3.5 w-3.5" />}
+                        {t("inbox.reopen")}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outline" size="sm" disabled={statusBusy || !selected}
+                        onClick={() => setStatus("Resolved")}
+                      >
+                        {statusBusy
+                          ? <LoadingSpinner size="sm" className="mr-1" />
+                          : <CheckCircle2 className="mr-1 h-3.5 w-3.5" />}
+                        {t("inbox.resolve")}
+                      </Button>
+                    )}
                   </div>
                   {selected?.contactId && (
                     <Button variant="outline" size="sm" asChild>

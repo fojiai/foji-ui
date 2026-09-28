@@ -563,7 +563,15 @@ export interface InboxConversation {
   unreadCount: number;
   /** False once Meta's 24-hour reply window has closed. */
   canReplyFreeform: boolean;
+  status: InboxStatus;
+  resolvedAt?: string | null;
+  /** Resolved by the idle sweep rather than a person. */
+  resolvedAutomatically: boolean;
+  /** The customer sent the last message — someone owes them a reply. */
+  awaitingReply: boolean;
 }
+
+export type InboxStatus = "Open" | "Resolved";
 
 export interface InboxMessage {
   id: number;
@@ -585,11 +593,24 @@ export interface InboxThread {
 }
 
 export const inboxApi = {
-  conversations: (companyId: number, agentId?: number) => {
+  conversations: (companyId: number, agentId?: number, status?: InboxStatus) => {
     const qs = new URLSearchParams({ companyId: String(companyId) });
     if (agentId) qs.set("agentId", String(agentId));
+    if (status) qs.set("status", status.toLowerCase());
     return apiFetch<InboxConversation[]>(`/api/whatsapp/inbox/conversations?${qs.toString()}`);
   },
+
+  resolve: (companyId: number, conversationId: number) =>
+    apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/resolve`, {
+      method: "POST",
+      body: JSON.stringify({ companyId }),
+    }),
+
+  reopen: (companyId: number, conversationId: number) =>
+    apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/reopen`, {
+      method: "POST",
+      body: JSON.stringify({ companyId }),
+    }),
 
   thread: (companyId: number, conversationId: number) =>
     apiFetch<InboxThread>(`/api/whatsapp/inbox/conversations/${conversationId}?companyId=${companyId}`),
