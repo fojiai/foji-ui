@@ -180,6 +180,8 @@ export interface Agent {
   whatsAppPhoneNumberId?: string;
   hasWhatsAppToken?: boolean;
   whatsAppMode?: string;
+  /** Send longer AI replies as two WhatsApp messages. Each counts as a billed message. */
+  whatsAppSplitReplies?: boolean;
   /** True when Meta rejected our token — the owner has to reconnect. */
   whatsAppNeedsReconnect?: boolean;
   whatsAppTokenExpiresAt?: string | null;

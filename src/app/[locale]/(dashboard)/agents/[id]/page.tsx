@@ -40,6 +40,7 @@ const schema = z.object({
   whatsAppPhoneNumberId: z.string().optional(),
   whatsAppAccessToken: z.string().optional(),
   whatsAppMode: z.enum(["Agent", "Inbox"]).optional(),
+  whatsAppSplitReplies: z.boolean().optional(),
   supportWhatsAppNumber: z.string().optional(),
   salesWhatsAppNumber: z.string().optional(),
   supportEmail: z.string().email().optional().or(z.literal("")),
@@ -150,6 +151,7 @@ export default function AgentDetailPage() {
         whatsAppEnabled: a.whatsAppEnabled,
         whatsAppPhoneNumberId: a.whatsAppPhoneNumberId ?? "",
         whatsAppMode: (a.whatsAppMode as "Agent" | "Inbox") ?? "Agent",
+        whatsAppSplitReplies: a.whatsAppSplitReplies ?? false,
         supportWhatsAppNumber: a.supportWhatsAppNumber ?? "",
         salesWhatsAppNumber: a.salesWhatsAppNumber ?? "",
         supportEmail: a.supportEmail ?? "",
@@ -709,6 +711,24 @@ export default function AgentDetailPage() {
                           </SelectContent>
                         </Select>
                       </div>
+                      {/* Only the AI's replies are split — in Inbox mode people
+                          write their own messages. The hint states the cost
+                          plainly: each message is billed by Meta. */}
+                      {(watch("whatsAppMode") ?? "Agent") === "Agent" && (
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0">
+                            <Label htmlFor="whatsapp-split-replies">{t("agents.whatsapp.splitLabel")}</Label>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {t("agents.whatsapp.splitHint")}
+                            </p>
+                          </div>
+                          <Switch
+                            id="whatsapp-split-replies"
+                            checked={watch("whatsAppSplitReplies") ?? false}
+                            onCheckedChange={(v) => setValue("whatsAppSplitReplies", v)}
+                          />
+                        </div>
+                      )}
                       {/* The whole point: one button. Meta's popup collects the
                           number, and the server does the token exchange, webhook
                           subscription and number registration. The manual fields

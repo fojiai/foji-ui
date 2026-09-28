@@ -163,7 +163,9 @@
       },
       "sdkUnavailable": "Não conseguimos carregar a janela da Meta. Desative bloqueadores de anúncios/rastreadores nesta página e recarregue.",
       "notConfigured": "A conexão em um clique ainda não está configurada neste servidor. Fale com o suporte.",
-      "popupBlocked": "A janela da Meta não abriu. Permita pop-ups para este site e tente de novo."
+      "popupBlocked": "A janela da Meta não abriu. Permita pop-ups para este site e tente de novo.",
+      "splitLabel": "Dividir respostas longas em duas mensagens",
+      "splitHint": "Respostas maiores chegam como duas mensagens curtas, com “digitando…” entre elas — mais parecido com uma pessoa. Cada mensagem é cobrada pela Meta e conta no limite do seu plano."
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",

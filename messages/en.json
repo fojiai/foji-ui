@@ -163,7 +163,9 @@
       },
       "sdkUnavailable": "We couldn't load Meta's window. Turn off ad/tracker blockers on this page and reload.",
       "notConfigured": "One-click connection is not configured on this server yet. Contact support.",
-      "popupBlocked": "Meta's window did not open. Allow pop-ups for this site and try again."
+      "popupBlocked": "Meta's window did not open. Allow pop-ups for this site and try again.",
+      "splitLabel": "Split long replies into two messages",
+      "splitHint": "Longer replies arrive as two short messages with “typing…” in between — closer to how a person texts. Each message is billed by Meta and counts toward your plan's limit."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",
