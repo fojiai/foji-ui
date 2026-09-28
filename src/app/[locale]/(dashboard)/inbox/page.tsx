@@ -24,7 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AudioPlayer } from "@/components/ui/audio-player";
 import {
   MessageCircle, Send, ArrowLeft, Clock, Contact2, RefreshCw, Paperclip, FileText, UserCheck,
-  CheckCircle2, RotateCcw,
+  CheckCircle2, RotateCcw, Bot, Headset,
 } from "lucide-react";
 
 const LIST_POLL_MS = 10_000;
@@ -116,6 +116,7 @@ export default function InboxPage() {
   // writes again.
   const [statusFilter, setStatusFilter] = useState<InboxStatus>("Open");
   const [statusBusy, setStatusBusy] = useState(false);
+  const [handlerBusy, setHandlerBusy] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -215,6 +216,24 @@ export default function InboxPage() {
     }
   }
 
+  /** Hybrid: take the conversation from the AI, or hand it back. */
+  async function setHandler(takeOver: boolean) {
+    if (!activeCompanyId || !selectedId) return;
+    setHandlerBusy(true);
+    try {
+      const updated = takeOver
+        ? await inboxApi.takeover(activeCompanyId, selectedId)
+        : await inboxApi.release(activeCompanyId, selectedId);
+      setThread((prev) => (prev ? { ...prev, conversation: updated } : prev));
+      setConversations((prev) => prev?.map((x) => (x.id === updated.id ? updated : x)) ?? prev);
+      toast({ title: t(takeOver ? "inbox.takenOverToast" : "inbox.handedBackToast") });
+    } catch (err) {
+      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
+    } finally {
+      setHandlerBusy(false);
+    }
+  }
+
   async function send() {
     if (!activeCompanyId || !selectedId || !text.trim()) return;
     setSending(true);
@@ -223,6 +242,8 @@ export default function InboxPage() {
       setThread((prev) => (prev ? { ...prev, messages: [...prev.messages, sent] } : prev));
       setText("");
       loadConversations();
+      // Hybrid: replying took the conversation over — refresh the header state.
+      if (thread?.conversation.agentMode === "Hybrid") loadThread(selectedId, { silent: true });
     } catch (err) {
       const msg = (err as { data?: { error?: string } })?.data?.error;
       toast({ variant: "destructive", title: msg || t("errors.generic") });
@@ -335,6 +356,24 @@ export default function InboxPage() {
                             {t(c.resolvedAutomatically ? "inbox.resolvedAuto" : "inbox.resolvedManual")}
                           </span>
                         )}
+                        {/* Hybrid: who has it right now. A customer who asked for
+                            a person is the one thing here that needs someone. */}
+                        {c.agentMode === "Hybrid" && c.status === "Open" && (
+                          c.humanTakeover ? (
+                            <span
+                              className={`inline-flex items-center gap-0.5 ${
+                                c.takeoverReason === "ai_escalation" ? "text-spark-ink" : ""
+                              }`}
+                            >
+                              <Headset className="h-3 w-3" />
+                              {t(c.takeoverReason === "ai_escalation" ? "inbox.askedForPerson" : "inbox.withTeam")}
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-0.5 text-forge-ink">
+                              <Bot className="h-3 w-3" /> {t("inbox.aiAnswering")}
+                            </span>
+                          )
+                        )}
                         {c.status === "Open" && !c.canReplyFreeform && (
                           <span className="inline-flex items-center gap-0.5 text-spark-ink">
                             <Clock className="h-3 w-3" /> {t("inbox.windowClosedShort")}
@@ -394,6 +433,26 @@ export default function InboxPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {selected?.agentMode === "Hybrid" && selected.status === "Open" && (
+                      selected.humanTakeover ? (
+                        <Button
+                          variant="outline" size="sm" disabled={handlerBusy}
+                          onClick={() => setHandler(false)}
+                        >
+                          {handlerBusy
+                            ? <LoadingSpinner size="sm" className="mr-1" />
+                            : <Bot className="mr-1 h-3.5 w-3.5" />}
+                          {t("inbox.handBack")}
+                        </Button>
+                      ) : (
+                        <Button size="sm" disabled={handlerBusy} onClick={() => setHandler(true)}>
+                          {handlerBusy
+                            ? <LoadingSpinner size="sm" className="mr-1" />
+                            : <Headset className="mr-1 h-3.5 w-3.5" />}
+                          {t("inbox.takeOver")}
+                        </Button>
+                      )
+                    )}
                     {selected?.status === "Resolved" ? (
                       <Button
                         variant="outline" size="sm" disabled={statusBusy}
@@ -425,6 +484,16 @@ export default function InboxPage() {
                   )}
                 </div>
 
+                {/* The AI handed this over: say why, so whoever opens it knows a
+                    customer is waiting on a person specifically. */}
+                {selected?.agentMode === "Hybrid" && selected.status === "Open"
+                  && selected.humanTakeover && selected.takeoverReason === "ai_escalation" && (
+                  <div className="flex items-start gap-2 border-b border-spark/40 bg-spark/10 px-3 py-2 text-xs text-spark-ink">
+                    <Headset className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>{t("inbox.escalatedBanner")}</span>
+                  </div>
+                )}
+
                 {/* Messages */}
                 <div className="flex-1 space-y-3 overflow-y-auto px-3 py-4">
                   {threadLoading ? (
@@ -435,9 +504,16 @@ export default function InboxPage() {
                       return (
                         <div key={m.id} className={`flex ${outbound ? "justify-end" : "justify-start"}`}>
                           <div className={`max-w-[85%] sm:max-w-[70%] ${outbound ? "text-right" : ""}`}>
-                            {outbound && m.senderDisplayName && (
+                            {outbound && (m.isAiGenerated || m.senderDisplayName) && (
                               <p className="mb-0.5 text-[10px] font-medium text-muted-foreground">
-                                {m.senderDisplayName}
+                                {m.isAiGenerated ? (
+                                  <>
+                                    <Bot className="mr-0.5 inline h-3 w-3 align-[-2px]" />
+                                    {t("inbox.aiLabel")}
+                                  </>
+                                ) : (
+                                  m.senderDisplayName
+                                )}
                               </p>
                             )}
                             <div
@@ -479,7 +555,13 @@ export default function InboxPage() {
                         className="min-h-[64px] resize-none"
                       />
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-[10px] text-muted-foreground">{t("inbox.prefixHint")}</p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {/* Hybrid: sending takes the conversation over — say so
+                              before it happens, not after. */}
+                          {selected?.agentMode === "Hybrid" && !selected.humanTakeover
+                            ? t("inbox.replyTakesOverHint")
+                            : t("inbox.prefixHint")}
+                        </p>
                         <Button size="sm" onClick={send} disabled={sending || !text.trim()}>
                           {sending ? <LoadingSpinner size="sm" className="mr-2" /> : <Send className="mr-1 h-3.5 w-3.5" />}
                           {t("inbox.send")}

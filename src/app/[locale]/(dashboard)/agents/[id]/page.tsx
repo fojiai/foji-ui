@@ -39,7 +39,7 @@ const schema = z.object({
   whatsAppEnabled: z.boolean(),
   whatsAppPhoneNumberId: z.string().optional(),
   whatsAppAccessToken: z.string().optional(),
-  whatsAppMode: z.enum(["Agent", "Inbox"]).optional(),
+  whatsAppMode: z.enum(["Agent", "Inbox", "Hybrid"]).optional(),
   whatsAppSplitReplies: z.boolean().optional(),
   supportWhatsAppNumber: z.string().optional(),
   salesWhatsAppNumber: z.string().optional(),
@@ -150,7 +150,7 @@ export default function AgentDetailPage() {
         isActive: a.isActive,
         whatsAppEnabled: a.whatsAppEnabled,
         whatsAppPhoneNumberId: a.whatsAppPhoneNumberId ?? "",
-        whatsAppMode: (a.whatsAppMode as "Agent" | "Inbox") ?? "Agent",
+        whatsAppMode: (a.whatsAppMode as "Agent" | "Inbox" | "Hybrid") ?? "Agent",
         whatsAppSplitReplies: a.whatsAppSplitReplies ?? false,
         supportWhatsAppNumber: a.supportWhatsAppNumber ?? "",
         salesWhatsAppNumber: a.salesWhatsAppNumber ?? "",
@@ -702,19 +702,31 @@ export default function AgentDetailPage() {
                         <p className="text-xs text-muted-foreground">{t("agents.whatsapp.modeHint")}</p>
                         <Select
                           value={watch("whatsAppMode") ?? "Agent"}
-                          onValueChange={(v) => setValue("whatsAppMode", v as "Agent" | "Inbox")}
+                          onValueChange={(v) => setValue("whatsAppMode", v as "Agent" | "Inbox" | "Hybrid")}
                         >
                           <SelectTrigger><SelectValue /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="Agent">{t("agents.whatsapp.modeAgent")}</SelectItem>
+                            <SelectItem value="Hybrid">{t("agents.whatsapp.modeHybrid")}</SelectItem>
                             <SelectItem value="Inbox">{t("agents.whatsapp.modeInbox")}</SelectItem>
                           </SelectContent>
                         </Select>
+                        {/* One line on what the chosen mode actually does — "who
+                            answers" is the decision, so spell out the consequence. */}
+                        <p className="text-xs text-muted-foreground">
+                          {t(
+                            (watch("whatsAppMode") ?? "Agent") === "Hybrid"
+                              ? "agents.whatsapp.modeHybridHint"
+                              : (watch("whatsAppMode") ?? "Agent") === "Inbox"
+                                ? "agents.whatsapp.modeInboxHint"
+                                : "agents.whatsapp.modeAgentHint"
+                          )}
+                        </p>
                       </div>
                       {/* Only the AI's replies are split — in Inbox mode people
                           write their own messages. The hint states the cost
                           plainly: each message is billed by Meta. */}
-                      {(watch("whatsAppMode") ?? "Agent") === "Agent" && (
+                      {(watch("whatsAppMode") ?? "Agent") !== "Inbox" && (
                         <div className="flex items-start justify-between gap-4">
                           <div className="min-w-0">
                             <Label htmlFor="whatsapp-split-replies">{t("agents.whatsapp.splitLabel")}</Label>

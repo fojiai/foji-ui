@@ -571,6 +571,13 @@ export interface InboxConversation {
   resolvedAutomatically: boolean;
   /** The customer sent the last message — someone owes them a reply. */
   awaitingReply: boolean;
+  /** The agent's WhatsApp mode. Takeover controls only apply to "Hybrid". */
+  agentMode: "Agent" | "Inbox" | "Hybrid";
+  /** Hybrid: a person is handling it and the AI is quiet. */
+  humanTakeover: boolean;
+  /** "manual" | "reply" | "ai_escalation" */
+  takeoverReason?: string | null;
+  takeoverAt?: string | null;
 }
 
 export type InboxStatus = "Open" | "Resolved";
@@ -587,6 +594,8 @@ export interface InboxMessage {
   sentByUserId?: number | null;
   senderDisplayName?: string | null;
   createdAt: string;
+  /** Written by the AI (hybrid mode). */
+  isAiGenerated?: boolean;
 }
 
 export interface InboxThread {
@@ -610,6 +619,20 @@ export const inboxApi = {
 
   reopen: (companyId: number, conversationId: number) =>
     apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/reopen`, {
+      method: "POST",
+      body: JSON.stringify({ companyId }),
+    }),
+
+  /** Hybrid: take the conversation from the AI. */
+  takeover: (companyId: number, conversationId: number) =>
+    apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/takeover`, {
+      method: "POST",
+      body: JSON.stringify({ companyId }),
+    }),
+
+  /** Hybrid: hand the conversation back to the AI. */
+  release: (companyId: number, conversationId: number) =>
+    apiFetch<InboxConversation>(`/api/whatsapp/inbox/conversations/${conversationId}/release`, {
       method: "POST",
       body: JSON.stringify({ companyId }),
     }),

@@ -120,7 +120,7 @@
       "tokenSet": "Set",
       "tokenNotSet": "Not set",
       "modeLabel": "Who replies",
-      "modeHint": "Choose whether the AI answers on its own or your team answers from the inbox.",
+      "modeHint": "Choose who answers this number's WhatsApp messages.",
       "modeAgent": "AI agent",
       "modeInbox": "My team (inbox)",
       "connectButton": "Connect my WhatsApp",
@@ -165,7 +165,11 @@
       "notConfigured": "One-click connection is not configured on this server yet. Contact support.",
       "popupBlocked": "Meta's window did not open. Allow pop-ups for this site and try again.",
       "splitLabel": "Split long replies into two messages",
-      "splitHint": "Longer replies arrive as two short messages with “typing…” in between — closer to how a person texts. Each message is billed by Meta and counts toward your plan's limit."
+      "splitHint": "Longer replies arrive as two short messages with “typing…” in between — closer to how a person texts. Each message is billed by Meta and counts toward your plan's limit.",
+      "modeHybrid": "AI + team (hybrid)",
+      "modeAgentHint": "The AI answers everything on its own, instantly.",
+      "modeHybridHint": "The AI answers and every conversation shows up in the inbox. Your team can take over any conversation, and the AI calls the team itself when a customer asks for a person or is unhappy.",
+      "modeInboxHint": "Only your team answers, from the inbox. The AI stays out."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",
@@ -968,7 +972,17 @@
     "resolve": "Resolve",
     "reopen": "Reopen",
     "resolvedToast": "Conversation resolved",
-    "reopenedToast": "Conversation reopened"
+    "reopenedToast": "Conversation reopened",
+    "aiAnswering": "AI answering",
+    "withTeam": "with the team",
+    "askedForPerson": "asked for a person",
+    "takeOver": "Take over",
+    "handBack": "Hand back to AI",
+    "takenOverToast": "You took over — the AI won't reply here anymore",
+    "handedBackToast": "The AI is answering this conversation again",
+    "escalatedBanner": "The AI called the team: the customer needs to talk to a person. Meanwhile, the AI won't reply in this conversation.",
+    "aiLabel": "AI",
+    "replyTakesOverHint": "Replying takes the conversation over and the AI stops answering here. Your name is added at the start of the message."
   },
   "audio": {
     "play": "Play",

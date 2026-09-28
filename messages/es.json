@@ -120,7 +120,7 @@
       "tokenSet": "Configurado",
       "tokenNotSet": "No configurado",
       "modeLabel": "Quién responde",
-      "modeHint": "Elige si la IA responde sola o si tu equipo responde desde la bandeja.",
+      "modeHint": "Elige quién responde los mensajes de WhatsApp de este número.",
       "modeAgent": "Agente de IA",
       "modeInbox": "Mi equipo (bandeja)",
       "connectButton": "Conectar mi WhatsApp",
@@ -165,7 +165,11 @@
       "notConfigured": "La conexión en un clic aún no está configurada en este servidor. Contacta con soporte.",
       "popupBlocked": "La ventana de Meta no se abrió. Permite las ventanas emergentes para este sitio e inténtalo de nuevo.",
       "splitLabel": "Dividir respuestas largas en dos mensajes",
-      "splitHint": "Las respuestas más largas llegan como dos mensajes cortos, con “escribiendo…” entre ellos — más parecido a una persona. Cada mensaje lo cobra Meta y cuenta en el límite de tu plan."
+      "splitHint": "Las respuestas más largas llegan como dos mensajes cortos, con “escribiendo…” entre ellos — más parecido a una persona. Cada mensaje lo cobra Meta y cuenta en el límite de tu plan.",
+      "modeHybrid": "IA + equipo (híbrido)",
+      "modeAgentHint": "La IA responde todo sola, al instante.",
+      "modeHybridHint": "La IA responde y todas las conversaciones aparecen en la bandeja de entrada. Tu equipo puede tomar cualquier conversación, y la IA llama al equipo sola cuando el cliente pide una persona o está insatisfecho.",
+      "modeInboxHint": "Solo tu equipo responde, desde la bandeja de entrada. La IA no participa."
     },
     "industries": {
       "accounting_finance": "Contabilidad y Finanzas",
@@ -968,7 +972,17 @@
     "resolve": "Resolver",
     "reopen": "Reabrir",
     "resolvedToast": "Conversación resuelta",
-    "reopenedToast": "Conversación reabierta"
+    "reopenedToast": "Conversación reabierta",
+    "aiAnswering": "IA respondiendo",
+    "withTeam": "con el equipo",
+    "askedForPerson": "pidió una persona",
+    "takeOver": "Tomar conversación",
+    "handBack": "Devolver a la IA",
+    "takenOverToast": "Tomaste la conversación — la IA ya no responde aquí",
+    "handedBackToast": "La IA volvió a responder esta conversación",
+    "escalatedBanner": "La IA llamó al equipo: el cliente necesita hablar con una persona. Mientras tanto, la IA no responde en esta conversación.",
+    "aiLabel": "IA",
+    "replyTakesOverHint": "Al responder, tomas la conversación y la IA deja de responder aquí. Tu nombre va al inicio del mensaje."
   },
   "audio": {
     "play": "Reproducir",
