@@ -982,7 +982,8 @@
     "handedBackToast": "La IA volvió a responder esta conversación",
     "escalatedBanner": "La IA llamó al equipo: el cliente necesita hablar con una persona. Mientras tanto, la IA no responde en esta conversación.",
     "aiLabel": "IA",
-    "replyTakesOverHint": "Al responder, tomas la conversación y la IA deja de responder aquí. Tu nombre va al inicio del mensaje."
+    "replyTakesOverHint": "Al responder, tomas la conversación y la IA deja de responder aquí. Tu nombre va al inicio del mensaje.",
+    "escalationTimedOutBanner": "Nadie respondió a tiempo: la IA le avisó al cliente que el equipo responderá por aquí y volvió a atender. El cliente sigue queriendo hablar con una persona — toma la conversación para responder."
   },
   "audio": {
     "play": "Reproducir",

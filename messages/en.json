@@ -982,7 +982,8 @@
     "handedBackToast": "The AI is answering this conversation again",
     "escalatedBanner": "The AI called the team: the customer needs to talk to a person. Meanwhile, the AI won't reply in this conversation.",
     "aiLabel": "AI",
-    "replyTakesOverHint": "Replying takes the conversation over and the AI stops answering here. Your name is added at the start of the message."
+    "replyTakesOverHint": "Replying takes the conversation over and the AI stops answering here. Your name is added at the start of the message.",
+    "escalationTimedOutBanner": "Nobody answered in time: the AI told the customer the team will reply here and went back to answering. The customer still wants a person — take over to reply."
   },
   "audio": {
     "play": "Play",

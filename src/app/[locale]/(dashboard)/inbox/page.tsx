@@ -359,14 +359,19 @@ export default function InboxPage() {
                         {/* Hybrid: who has it right now. A customer who asked for
                             a person is the one thing here that needs someone. */}
                         {c.agentMode === "Hybrid" && c.status === "Open" && (
-                          c.humanTakeover ? (
-                            <span
-                              className={`inline-flex items-center gap-0.5 ${
-                                c.takeoverReason === "ai_escalation" ? "text-spark-ink" : ""
-                              }`}
-                            >
+                          c.awaitingHumanSince ? (
+                            /* How long they've waited is the whole point — it's
+                               what tells you which one to open first. */
+                            <span className="inline-flex items-center gap-0.5 text-spark-ink">
                               <Headset className="h-3 w-3" />
-                              {t(c.takeoverReason === "ai_escalation" ? "inbox.askedForPerson" : "inbox.withTeam")}
+                              {t("inbox.askedForPerson")} ·{" "}
+                              <span className="type-readout">
+                                {format.relativeTime(new Date(c.awaitingHumanSince))}
+                              </span>
+                            </span>
+                          ) : c.humanTakeover ? (
+                            <span className="inline-flex items-center gap-0.5">
+                              <Headset className="h-3 w-3" /> {t("inbox.withTeam")}
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-0.5 text-forge-ink">
@@ -486,11 +491,15 @@ export default function InboxPage() {
 
                 {/* The AI handed this over: say why, so whoever opens it knows a
                     customer is waiting on a person specifically. */}
-                {selected?.agentMode === "Hybrid" && selected.status === "Open"
-                  && selected.humanTakeover && selected.takeoverReason === "ai_escalation" && (
+                {selected?.agentMode === "Hybrid" && selected.status === "Open" && selected.awaitingHumanSince && (
                   <div className="flex items-start gap-2 border-b border-spark/40 bg-spark/10 px-3 py-2 text-xs text-spark-ink">
                     <Headset className="mt-0.5 h-4 w-4 shrink-0" />
-                    <span>{t("inbox.escalatedBanner")}</span>
+                    <span>
+                      {/* Two states of the same request: still waiting (the AI
+                          is quiet), or nobody came in time (the AI told the
+                          customer and resumed). */}
+                      {t(selected.humanTakeover ? "inbox.escalatedBanner" : "inbox.escalationTimedOutBanner")}
+                    </span>
                   </div>
                 )}
 

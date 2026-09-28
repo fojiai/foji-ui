@@ -578,6 +578,9 @@ export interface InboxConversation {
   /** "manual" | "reply" | "ai_escalation" */
   takeoverReason?: string | null;
   takeoverAt?: string | null;
+  /** Hybrid: the customer asked for a person and nobody has answered yet. Stays
+   *  set after the escalation times out and the AI resumes. */
+  awaitingHumanSince?: string | null;
 }
 
 export type InboxStatus = "Open" | "Resolved";
