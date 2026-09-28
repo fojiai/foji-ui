@@ -458,7 +458,10 @@
     "deleteConfirmBody": "This permanently deletes the workspace, every agent, all files and the conversation history. It cannot be undone.",
     "deleteConfirmAction": "Delete permanently",
     "deleteConfirmPrompt": "To confirm, type {name} below:",
-    "deleteSuccess": "Company deleted. Your session has ended."
+    "deleteSuccess": "Company deleted. Your session has ended.",
+    "companyAbout": "What your company does",
+    "companyAboutPlaceholder": "E.g.: We're a men's clothing store in Fortaleza that ships across Brazil. We sell shirts, trousers and accessories, with free exchanges within 30 days.",
+    "companyAboutHint": "Your agents use this when a customer asks who they're talking to or what you do. In 2 or 3 sentences, say what you sell, who you serve and where."
   },
   "profile": {
     "title": "My Profile",

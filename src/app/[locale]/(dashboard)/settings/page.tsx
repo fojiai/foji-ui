@@ -13,6 +13,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { apiFetch, companiesApi, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -50,9 +51,12 @@ function SuperAdminSettingsView() {
 
 // ─── Regular Settings View (tenant-scoped) ───────────────────────────────────
 
+// Matches Companies.Description (varchar 1000).
+const DESCRIPTION_MAX = 1000;
+
 const schema = z.object({
   name: z.string().min(2),
-  description: z.string().optional(),
+  description: z.string().max(DESCRIPTION_MAX).optional(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -96,7 +100,7 @@ function RegularSettingsView() {
     }
   }
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
@@ -155,9 +159,26 @@ function RegularSettingsView() {
               <Input value={company.slug} readOnly className="bg-muted text-muted-foreground cursor-not-allowed" />
               <p className="text-xs text-muted-foreground">{t("settings.slugImmutable")}</p>
             </div>
+            {/* This text is what the agents say when a customer asks "who is
+                this?" or "what do you do?", so it's worth prompting for a real
+                answer rather than a one-word label. */}
             <div className="space-y-2">
-              <Label>{t("common.description")}</Label>
-              <Input {...register("description")} />
+              <Label htmlFor="company-description">{t("settings.companyAbout")}</Label>
+              <Textarea
+                id="company-description"
+                rows={4}
+                maxLength={DESCRIPTION_MAX}
+                placeholder={t("settings.companyAboutPlaceholder")}
+                aria-invalid={!!errors.description}
+                aria-describedby="company-description-hint"
+                {...register("description")}
+              />
+              <div id="company-description-hint" className="flex items-start justify-between gap-4">
+                <p className="text-xs text-muted-foreground">{t("settings.companyAboutHint")}</p>
+                <span className="type-readout shrink-0 text-xs text-muted-foreground">
+                  {(watch("description") ?? "").length}/{DESCRIPTION_MAX}
+                </span>
+              </div>
             </div>
             <div className="flex justify-end">
               <Button type="submit" disabled={isSaving}>

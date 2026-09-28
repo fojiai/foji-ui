@@ -458,7 +458,10 @@
     "deleteConfirmBody": "Isto exclui permanentemente o espaço de trabalho, todos os agentes, arquivos e o histórico de conversas. Não há como desfazer.",
     "deleteConfirmAction": "Excluir permanentemente",
     "deleteConfirmPrompt": "Para confirmar, digite {name} abaixo:",
-    "deleteSuccess": "Empresa excluída. Sua sessão foi encerrada."
+    "deleteSuccess": "Empresa excluída. Sua sessão foi encerrada.",
+    "companyAbout": "O que sua empresa faz",
+    "companyAboutPlaceholder": "Ex.: Somos uma loja de roupas masculinas em Fortaleza, com entrega para todo o Brasil. Vendemos camisas, calças e acessórios, com troca grátis em 30 dias.",
+    "companyAboutHint": "Seus agentes usam este texto quando um cliente pergunta quem está falando ou o que vocês fazem. Conte em 2 ou 3 frases o que vocês vendem, para quem e onde atendem."
   },
   "profile": {
     "title": "Meu Perfil",

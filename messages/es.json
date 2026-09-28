@@ -458,7 +458,10 @@
     "deleteConfirmBody": "Esto elimina permanentemente el espacio de trabajo, todos los agentes, los archivos y el historial de conversaciones. No se puede deshacer.",
     "deleteConfirmAction": "Eliminar permanentemente",
     "deleteConfirmPrompt": "Para confirmar, escribe {name} abajo:",
-    "deleteSuccess": "Empresa eliminada. Tu sesión ha finalizado."
+    "deleteSuccess": "Empresa eliminada. Tu sesión ha finalizado.",
+    "companyAbout": "Qué hace tu empresa",
+    "companyAboutPlaceholder": "Ej.: Somos una tienda de ropa masculina en Fortaleza con envíos a todo Brasil. Vendemos camisas, pantalones y accesorios, con cambio gratis en 30 días.",
+    "companyAboutHint": "Tus agentes usan este texto cuando un cliente pregunta con quién habla o qué hacen. En 2 o 3 frases, cuenta qué venden, a quién y dónde atienden."
   },
   "profile": {
     "title": "Mi Perfil",
