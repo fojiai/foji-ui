@@ -78,7 +78,8 @@
       "service": "Atención",
       "customers": "Clientes",
       "account": "Cuenta"
-    }
+    },
+    "history": "Historial"
   },
   "dashboard": {
     "title": "Panel",
@@ -1252,6 +1253,10 @@
     "handoffs": {
       "title": "¿Para qué sirve esta pantalla?",
       "body": "Aquí aparecen los clientes que pidieron hablar con una persona de verdad. Llámalos o escríbeles lo antes posible."
+    },
+    "history": {
+      "title": "¿Para qué sirve esta pantalla?",
+      "body": "Aquí puedes leer, de principio a fin, cada conversación que tus asistentes tuvieron con clientes, en tu sitio y en WhatsApp. Sirve para comprobar que el asistente responde bien y para ver lo que escribió alguien de tu equipo. Solo los dueños y administradores ven esta pantalla."
     }
   },
   "whatsappCosts": {
@@ -1265,5 +1270,36 @@
     "planOver": "Si pasas de ese número, depende de tu plan: o el asistente deja de responder en WhatsApp hasta que cambie el mes, o cada mensaje extra lo cobra Foji, con el precio que aparece en “Facturación”.",
     "planTitle": "1. Tu plan de Foji",
     "metaTitle": "2. Meta, dueña de WhatsApp"
+  },
+  "history": {
+    "eyebrow": "Atención",
+    "title": "Historial de conversaciones",
+    "description": "Todas las conversaciones de tus asistentes con clientes, incluidos los mensajes de tu equipo.",
+    "count": "{count, plural, one {# conversación} other {# conversaciones}}",
+    "retention": "Guardamos las conversaciones de los últimos 90 días.",
+    "allAgents": "Todos los asistentes",
+    "agentFilter": "Asistente",
+    "channelFilter": "Dónde fue la conversación",
+    "allChannels": "Sitio y WhatsApp",
+    "site": "Sitio",
+    "whatsapp": "WhatsApp",
+    "search": "Nombre, teléfono o palabra",
+    "searchLabel": "Buscar conversación",
+    "empty": "Todavía no hay conversaciones",
+    "emptyHint": "Cuando alguien hable con un asistente, la conversación aparecerá aquí sola.",
+    "noResults": "No encontramos conversaciones",
+    "noResultsHint": "Prueba otra palabra o elige \"Todos los asistentes\".",
+    "visitor": "Visitante del sitio",
+    "customer": "Cliente",
+    "team": "Equipo",
+    "teamReplied": "El equipo respondió",
+    "pick": "Elige una conversación de la lista para leer todo lo que se dijo.",
+    "back": "Volver a la lista",
+    "loadMore": "Mostrar más",
+    "started": "Empezó el {date}",
+    "noMessages": "No encontramos los mensajes de esta conversación. Las conversaciones de más de 90 días se borran.",
+    "attachment": "Archivo",
+    "openInbox": "Responder en Conversaciones",
+    "refresh": "Actualizar"
   }
 }

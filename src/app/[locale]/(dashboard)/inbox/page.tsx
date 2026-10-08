@@ -172,6 +172,15 @@ export default function InboxPage() {
     return () => clearInterval(id);
   }, [selectedId, loadThread]);
 
+  // Opened from the history page ("Reply in Conversations"): /inbox?open=<id>.
+  useEffect(() => {
+    if (!activeCompanyId) return;
+    const id = Number(new URLSearchParams(window.location.search).get("open"));
+    if (!id) return;
+    setSelectedId(id);
+    loadThread(id);
+  }, [activeCompanyId, loadThread]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [thread?.messages.length]);

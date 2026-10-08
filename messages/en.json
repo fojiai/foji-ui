@@ -78,7 +78,8 @@
       "service": "Support",
       "customers": "Customers",
       "account": "Account"
-    }
+    },
+    "history": "History"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1252,6 +1253,10 @@
     "handoffs": {
       "title": "What is this page for?",
       "body": "Customers who asked to talk to a real person show up here. Call or message them as soon as you can."
+    },
+    "history": {
+      "title": "What is this page for?",
+      "body": "Here you can read, from start to finish, every conversation your assistants had with customers, on your website and on WhatsApp. Use it to check the assistant is answering well and to see what someone on your team wrote. Only owners and admins can see this page."
     }
   },
   "whatsappCosts": {
@@ -1265,5 +1270,36 @@
     "planOver": "If you go over that number, it depends on your plan: either the assistant stops answering on WhatsApp until the month turns over, or each extra message is charged by Foji, at the price shown under “Billing”.",
     "planTitle": "1. Your Foji plan",
     "metaTitle": "2. Meta, the owner of WhatsApp"
+  },
+  "history": {
+    "eyebrow": "Customer service",
+    "title": "Conversation history",
+    "description": "Every conversation your assistants had with customers, including your team's messages.",
+    "count": "{count, plural, one {# conversation} other {# conversations}}",
+    "retention": "We keep conversations from the last 90 days.",
+    "allAgents": "All assistants",
+    "agentFilter": "Assistant",
+    "channelFilter": "Where it happened",
+    "allChannels": "Website and WhatsApp",
+    "site": "Website",
+    "whatsapp": "WhatsApp",
+    "search": "Name, phone or word",
+    "searchLabel": "Search conversations",
+    "empty": "No conversations yet",
+    "emptyHint": "When someone talks to one of your assistants, the conversation shows up here on its own.",
+    "noResults": "No conversations found",
+    "noResultsHint": "Try another word or choose \"All assistants\".",
+    "visitor": "Website visitor",
+    "customer": "Customer",
+    "team": "Team",
+    "teamReplied": "Team replied",
+    "pick": "Choose a conversation from the list to read everything that was said.",
+    "back": "Back to the list",
+    "loadMore": "Show more",
+    "started": "Started on {date}",
+    "noMessages": "We couldn't find the messages for this conversation. Conversations older than 90 days are deleted.",
+    "attachment": "File",
+    "openInbox": "Reply in Conversations",
+    "refresh": "Refresh"
   }
 }

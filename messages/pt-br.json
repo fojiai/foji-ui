@@ -78,7 +78,8 @@
       "service": "Atendimento",
       "customers": "Clientes",
       "account": "Conta"
-    }
+    },
+    "history": "Histórico"
   },
   "dashboard": {
     "title": "Painel",
@@ -1252,6 +1253,10 @@
     "handoffs": {
       "title": "Para que serve esta tela?",
       "body": "Aqui aparecem os clientes que pediram para falar com uma pessoa de verdade. Ligue ou mande mensagem para eles o quanto antes."
+    },
+    "history": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui você lê, do começo ao fim, cada conversa que seus atendentes tiveram com clientes, no site e no WhatsApp. Serve para conferir se o atendente está respondendo bem e para ver o que alguém da sua equipe escreveu. Só donos e administradores veem esta tela."
     }
   },
   "whatsappCosts": {
@@ -1265,5 +1270,36 @@
     "planOver": "Se passar desse número, depende do seu plano: ou o atendente para de responder no WhatsApp até o mês virar, ou cada mensagem a mais é cobrada pela Foji, com o valor que aparece em “Faturamento”.",
     "planTitle": "1. O seu plano da Foji",
     "metaTitle": "2. A Meta, dona do WhatsApp"
+  },
+  "history": {
+    "eyebrow": "Atendimento",
+    "title": "Histórico de conversas",
+    "description": "Todas as conversas dos seus atendentes com clientes, inclusive as mensagens da sua equipe.",
+    "count": "{count, plural, one {# conversa} other {# conversas}}",
+    "retention": "Guardamos as conversas dos últimos 90 dias.",
+    "allAgents": "Todos os atendentes",
+    "agentFilter": "Atendente",
+    "channelFilter": "Onde foi a conversa",
+    "allChannels": "Site e WhatsApp",
+    "site": "Site",
+    "whatsapp": "WhatsApp",
+    "search": "Nome, telefone ou palavra",
+    "searchLabel": "Procurar conversa",
+    "empty": "Nenhuma conversa ainda",
+    "emptyHint": "Quando alguém conversar com um atendente, a conversa aparece aqui sozinha.",
+    "noResults": "Nenhuma conversa encontrada",
+    "noResultsHint": "Tente outra palavra ou escolha \"Todos os atendentes\".",
+    "visitor": "Visitante do site",
+    "customer": "Cliente",
+    "team": "Equipe",
+    "teamReplied": "Equipe respondeu",
+    "pick": "Escolha uma conversa na lista para ler tudo o que foi dito.",
+    "back": "Voltar para a lista",
+    "loadMore": "Mostrar mais",
+    "started": "Começou em {date}",
+    "noMessages": "Não encontramos as mensagens dessa conversa. Conversas com mais de 90 dias são apagadas.",
+    "attachment": "Arquivo",
+    "openInbox": "Responder em Conversas",
+    "refresh": "Atualizar"
   }
 }

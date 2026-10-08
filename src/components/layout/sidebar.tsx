@@ -24,6 +24,7 @@ import {
   MessagesSquare,
   KanbanSquare,
   ListChecks,
+  History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -44,6 +45,8 @@ interface NavItem {
   labelKey: string;
   superAdminLabelKey?: string;
   hiddenForSuperAdmin?: boolean;
+  /** Only owners and admins of the active company (and super admins). */
+  adminOnly?: boolean;
 }
 
 interface NavGroup {
@@ -64,6 +67,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/agents", icon: Bot, labelKey: "nav.agents" },
       { href: "/inbox", icon: MessagesSquare, labelKey: "nav.inbox" },
+      { href: "/history", icon: History, labelKey: "nav.history", adminOnly: true },
       { href: "/handoffs", icon: PhoneForwarded, labelKey: "nav.handoffs" },
       { href: "/leads", icon: UserPlus, labelKey: "nav.leads" },
     ],
@@ -209,9 +213,13 @@ function SidebarContent({
       ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
       : user?.firstName?.[0]?.toUpperCase() ?? "?";
 
+  const role = user?.companies?.find((c) => c.companyId === activeCompanyId)?.role;
+  const isCompanyAdmin = isSuperAdmin || role === "owner" || role === "admin";
   const visibleGroups = NAV_GROUPS.map((g) => ({
     ...g,
-    items: g.items.filter((item) => !(isSuperAdmin && item.hiddenForSuperAdmin)),
+    items: g.items.filter(
+      (item) => !(isSuperAdmin && item.hiddenForSuperAdmin) && !(item.adminOnly && !isCompanyAdmin)
+    ),
   })).filter((g) => g.items.length > 0);
 
   return (

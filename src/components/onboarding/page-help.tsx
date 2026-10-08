@@ -10,7 +10,7 @@ import { useOnboarding } from "./onboarding-provider";
  * page, written for someone who has never used anything like it. Stays until
  * the person says they've got it; "Ver tour" covers it after that.
  */
-export function PageHelp({ page }: { page: "agents" | "agent" | "inbox" | "leads" | "handoffs" | "dashboard" }) {
+export function PageHelp({ page }: { page: "agents" | "agent" | "inbox" | "leads" | "handoffs" | "dashboard" | "history" }) {
   const t = useTranslations("pageHelp");
   const { loaded, isDone, complete } = useOnboarding();
   const key = `help:${page}`;

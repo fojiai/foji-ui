@@ -350,6 +350,58 @@ export const leadsApi = {
   },
 };
 
+// ─── Conversation history (owners and admins) ───────────────────────────────
+
+export type HistoryKind = "inbox" | "session";
+export type HistoryChannel = "site" | "whatsapp";
+
+export interface HistoryItem {
+  kind: HistoryKind;
+  id: number;
+  agentId: number;
+  agentName: string;
+  channel: HistoryChannel;
+  contactName?: string | null;
+  contactPhone?: string | null;
+  contactEmail?: string | null;
+  startedAt: string;
+  lastMessageAt: string;
+  preview?: string | null;
+  teamReplied: boolean;
+}
+
+export interface HistoryMessage {
+  from: "customer" | "ai" | "team";
+  text: string;
+  at: string;
+  senderName?: string | null;
+  mediaUrl?: string | null;
+  mediaContentType?: string | null;
+  mediaFileName?: string | null;
+}
+
+export interface HistoryThread {
+  conversation: HistoryItem;
+  messages: HistoryMessage[];
+}
+
+export const historyApi = {
+  list: (
+    companyId: number,
+    opts: { agentId?: number; channel?: HistoryChannel; search?: string; page?: number; pageSize?: number } = {}
+  ) => {
+    const q = new URLSearchParams({ companyId: String(companyId) });
+    if (opts.agentId) q.set("agentId", String(opts.agentId));
+    if (opts.channel) q.set("channel", opts.channel);
+    if (opts.search) q.set("search", opts.search);
+    q.set("page", String(opts.page ?? 1));
+    q.set("pageSize", String(opts.pageSize ?? 30));
+    return apiFetch<{ items: HistoryItem[]; total: number }>(`/api/conversations?${q}`);
+  },
+  get: (companyId: number, kind: HistoryKind, id: number) =>
+    apiFetch<HistoryThread>(`/api/conversations/${kind}/${id}?companyId=${companyId}`),
+};
+
 // ─── Files ───────────────────────────────────────────────────────────────────
 
 export interface AgentFile {
