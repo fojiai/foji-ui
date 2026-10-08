@@ -1300,7 +1300,9 @@
     "noMessages": "Não encontramos as mensagens dessa conversa. Conversas com mais de 90 dias são apagadas.",
     "attachment": "Arquivo",
     "openInbox": "Responder em Conversas",
-    "refresh": "Atualizar"
+    "refresh": "Atualizar",
+    "unavailable": "Não conseguimos carregar as mensagens agora. A conversa está guardada, tente de novo daqui a pouco.",
+    "tryAgain": "Tentar de novo"
   },
   "acceptInvitation": {
     "loading": "Carregando convite…",

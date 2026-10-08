@@ -1300,7 +1300,9 @@
     "noMessages": "We couldn't find the messages for this conversation. Conversations older than 90 days are deleted.",
     "attachment": "File",
     "openInbox": "Reply in Conversations",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "unavailable": "We couldn't load the messages right now. The conversation is saved, try again in a moment.",
+    "tryAgain": "Try again"
   },
   "acceptInvitation": {
     "loading": "Loading invitation…",

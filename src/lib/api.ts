@@ -383,6 +383,8 @@ export interface HistoryMessage {
 export interface HistoryThread {
   conversation: HistoryItem;
   messages: HistoryMessage[];
+  /** The messages exist but couldn't be loaded right now. */
+  messagesUnavailable?: boolean;
 }
 
 export const historyApi = {

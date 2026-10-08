@@ -335,6 +335,14 @@ export default function HistoryPage() {
                 <div className="max-h-[70vh] flex-1 space-y-3 overflow-y-auto px-3 py-4">
                   {threadLoading ? (
                     <SkeletonRows rows={5} />
+                  ) : thread?.messagesUnavailable ? (
+                    <div className="flex flex-col items-center gap-3 p-6 text-center">
+                      <p className="text-sm text-muted-foreground">{t("unavailable")}</p>
+                      <Button variant="outline" size="sm" onClick={() => open(selected)}>
+                        <RefreshCw className="mr-1 h-4 w-4" aria-hidden="true" />
+                        {t("tryAgain")}
+                      </Button>
+                    </div>
                   ) : !thread || thread.messages.length === 0 ? (
                     <p className="p-6 text-center text-sm text-muted-foreground">{t("noMessages")}</p>
                   ) : (

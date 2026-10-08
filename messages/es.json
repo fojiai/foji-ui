@@ -1300,7 +1300,9 @@
     "noMessages": "No encontramos los mensajes de esta conversación. Las conversaciones de más de 90 días se borran.",
     "attachment": "Archivo",
     "openInbox": "Responder en Conversaciones",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "unavailable": "No pudimos cargar los mensajes ahora. La conversación está guardada, inténtalo de nuevo en un momento.",
+    "tryAgain": "Intentar de nuevo"
   },
   "acceptInvitation": {
     "loading": "Cargando invitación…",
