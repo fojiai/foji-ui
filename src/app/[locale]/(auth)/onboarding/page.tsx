@@ -9,7 +9,6 @@ import { z } from "zod";
 import Image from "next/image";
 import { Check, X, Loader2 } from "lucide-react";
 import { authApi, plansApi, subscriptionsApi, type Plan, apiErrorMessage } from "@/lib/api";
-import { setToken } from "@/lib/auth";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +35,7 @@ type SlugStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 export default function OnboardingPage() {
   const t = useTranslations();
   const router = useRouter();
-  const { switchCompany } = useAuth();
+  const { switchCompany, adoptToken } = useAuth();
 
   const [step, setStep] = useState<Step>("company");
   const [companyId, setCompanyId] = useState<number | null>(null);
@@ -102,9 +101,11 @@ export default function OnboardingPage() {
     setIsLoading(true);
     try {
       const company = await authApi.createCompany(data);
-      if (company.token) setToken(company.token);
+      // The old token was issued before this company existed; without the new
+      // one every company-scoped call (creating an agent, …) is a 403.
+      if (company.newToken) adoptToken(company.newToken, company.id);
+      else switchCompany(company.id);
       setCompanyId(company.id);
-      switchCompany(company.id);
       const fetchedPlans = await plansApi.list();
       setPlans(fetchedPlans.filter((p) => p.isActive));
       setStep("plan");

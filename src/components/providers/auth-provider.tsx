@@ -19,6 +19,8 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   switchCompany: (companyId: number) => void;
+  /** Swap in a token the API re-issued (e.g. after creating a company) so the new company is usable immediately. */
+  adoptToken: (token: string, activeCompanyId?: number) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -57,13 +59,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login");
   }
 
+  function adoptToken(token: string, companyId?: number) {
+    setToken(token);
+    const claims = getCurrentUser();
+    setUser(claims);
+    const next = companyId ?? claims?.companies[0]?.companyId ?? null;
+    setActive(next);
+    if (next) setActiveCompanyId(next);
+  }
+
   function switchCompany(companyId: number) {
     setActive(companyId);
     setActiveCompanyId(companyId);
   }
 
   return (
-    <AuthContext.Provider value={{ user, activeCompanyId, isLoading, login, logout, switchCompany }}>
+    <AuthContext.Provider value={{ user, activeCompanyId, isLoading, login, logout, switchCompany, adoptToken }}>
       {children}
     </AuthContext.Provider>
   );

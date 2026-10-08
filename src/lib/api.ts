@@ -134,7 +134,7 @@ export const authApi = {
 
   /** Creates a company for the currently authenticated user. */
   createCompany: (data: { name: string; slug: string }) =>
-    apiFetch<{ id: number; name: string; slug: string; token: string }>("/api/companies", {
+    apiFetch<{ id: number; name: string; slug: string; newToken: string }>("/api/companies", {
       method: "POST",
       body: JSON.stringify(data),
     }),
