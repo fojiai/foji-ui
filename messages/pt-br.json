@@ -403,7 +403,11 @@
     "processingComplete": "Pronto! O atendente terminou de ler os arquivos.",
     "emptyHint": "Envie arquivos com informações do seu negócio (PDF, Word, PowerPoint ou Excel). O atendente aprende com eles.",
     "confirmUploadMultipleDescription": "Enviar {count} arquivos? O atendente vai ler e aprender com eles.",
-    "uploadSuccessMultiple": "{count} arquivos enviados. O atendente está lendo…"
+    "uploadSuccessMultiple": "{count} arquivos enviados. O atendente está lendo…",
+    "dropNow": "Solte o arquivo aqui para enviar",
+    "unsupportedType": "Esse tipo de arquivo não é aceito. Envie PDF, Word, PowerPoint ou Excel.",
+    "dropNoFile": "Não conseguimos pegar esse arquivo",
+    "dropNoFileHint": "Arraste o arquivo da pasta onde ele está salvo (por exemplo, Downloads) ou clique na caixa para escolher."
   },
   "team": {
     "title": "Equipe",

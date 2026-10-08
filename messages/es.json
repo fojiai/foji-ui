@@ -403,7 +403,11 @@
     "processingComplete": "¡Listo! El asistente terminó de leer los archivos.",
     "emptyHint": "Sube archivos con información de tu negocio (PDF, Word, PowerPoint o Excel). El asistente aprende de ellos.",
     "confirmUploadMultipleDescription": "¿Subir {count} archivos? El asistente los leerá y aprenderá de ellos.",
-    "uploadSuccessMultiple": "{count} archivos subidos. El asistente los está leyendo…"
+    "uploadSuccessMultiple": "{count} archivos subidos. El asistente los está leyendo…",
+    "dropNow": "Suelta el archivo aquí para subirlo",
+    "unsupportedType": "Ese tipo de archivo no se acepta. Sube un PDF, Word, PowerPoint o Excel.",
+    "dropNoFile": "No pudimos tomar ese archivo",
+    "dropNoFileHint": "Arrastra el archivo desde la carpeta donde está guardado (por ejemplo, Descargas) o haz clic en la caja para elegirlo."
   },
   "team": {
     "title": "Equipo",

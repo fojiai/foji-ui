@@ -321,15 +321,70 @@ export default function AgentDetailPage() {
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? []);
     e.target.value = ""; // reset so re-picking the same file(s) still fires onChange
-    if (selected.length === 0) return;
+    queueFiles(selected);
+  }
 
-    const ok = selected.filter((f) => f.size <= 30 * 1024 * 1024);
+  function queueFiles(selected: File[]) {
+    if (selected.length === 0) return;
+    const supported = selected.filter((f) => /\.(pdf|docx|pptx|xlsx)$/i.test(f.name));
+    if (supported.length < selected.length) {
+      toast({ variant: "destructive", title: t("files.unsupportedType") });
+    }
+    const ok = supported.filter((f) => f.size <= 30 * 1024 * 1024);
     if (ok.length < selected.length) {
       // At least one file was over the limit — tell them, keep the rest.
       toast({ variant: "destructive", title: t("files.sizeExceeded") });
     }
     if (ok.length > 0) setPendingFiles(ok);
   }
+
+  // Drag and drop, anywhere on this page, not just the box. A file dropped
+  // outside it used to be opened by the browser (the PDF replaced the page,
+  // unsaved edits included). Now any drop switches to Files and uploads it.
+  const [dragging, setDragging] = useState(false);
+  useEffect(() => {
+    const hasFiles = (e: DragEvent) => Array.from(e.dataTransfer?.types ?? []).includes("Files");
+    let depth = 0;
+    const onEnter = (e: DragEvent) => {
+      if (!hasFiles(e)) return;
+      depth++;
+      setDragging(true);
+    };
+    const onOver = (e: DragEvent) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
+    };
+    const onLeave = (e: DragEvent) => {
+      if (!hasFiles(e)) return;
+      depth = Math.max(0, depth - 1);
+      if (depth === 0) setDragging(false);
+    };
+    const onDrop = (e: DragEvent) => {
+      depth = 0;
+      setDragging(false);
+      if (!hasFiles(e)) return; // text or a link dragged inside the page
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer?.files ?? []);
+      if (files.length === 0) {
+        // Some download lists hand over only the file's address, not the file.
+        toast({ variant: "destructive", title: t("files.dropNoFile"), description: t("files.dropNoFileHint") });
+        return;
+      }
+      setTab("files");
+      queueFiles(files);
+    };
+    window.addEventListener("dragenter", onEnter);
+    window.addEventListener("dragover", onOver);
+    window.addEventListener("dragleave", onLeave);
+    window.addEventListener("drop", onDrop);
+    return () => {
+      window.removeEventListener("dragenter", onEnter);
+      window.removeEventListener("dragover", onOver);
+      window.removeEventListener("dragleave", onLeave);
+      window.removeEventListener("drop", onDrop);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function confirmUpload() {
     if (pendingFiles.length === 0) return;
@@ -425,6 +480,15 @@ export default function AgentDetailPage() {
         }
       />
 
+      {dragging && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary bg-card px-10 py-8 shadow-lg">
+            <Upload className="h-10 w-10 text-primary" aria-hidden="true" />
+            <p className="type-display text-lg">{t("files.dropNow")}</p>
+            <p className="text-sm text-muted-foreground">{t("files.supportedFormats")}</p>
+          </div>
+        </div>
+      )}
       <PageHelp page="agent" />
       <AgentHealth
         agent={agent}
@@ -1093,7 +1157,12 @@ export default function AgentDetailPage() {
         <TabsContent value="files" className="mt-4 space-y-4">
           <Card>
             <CardContent className="pt-6">
-              <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-input p-8 transition-colors hover:border-primary/50">
+              <label
+                className={cn(
+                  "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-input p-8 transition-colors hover:border-primary/50",
+                  dragging && "border-primary bg-primary/5"
+                )}
+              >
                 {uploadingFile ? (
                   <LoadingSpinner size="md" label={t("files.uploading")} />
                 ) : (

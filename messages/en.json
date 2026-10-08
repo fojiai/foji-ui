@@ -403,7 +403,11 @@
     "processingComplete": "Done! The assistant finished reading the files.",
     "emptyHint": "Upload files about your business (PDF, Word, PowerPoint or Excel). The assistant learns from them.",
     "confirmUploadMultipleDescription": "Upload {count} files? The assistant will read them and learn from them.",
-    "uploadSuccessMultiple": "{count} files uploaded. The assistant is reading them…"
+    "uploadSuccessMultiple": "{count} files uploaded. The assistant is reading them…",
+    "dropNow": "Drop the file here to upload it",
+    "unsupportedType": "That type of file isn't accepted. Upload a PDF, Word, PowerPoint or Excel file.",
+    "dropNoFile": "We couldn't get that file",
+    "dropNoFileHint": "Drag the file from the folder where it's saved (for example, Downloads) or click the box to choose it."
   },
   "team": {
     "title": "Team",
