@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SkeletonRows } from "@/components/ui/skeleton";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
+import { PageHelp } from "@/components/onboarding/page-help";
 import { TourButton } from "@/components/onboarding/tour-button";
 import { useTour } from "@/components/onboarding/use-tour";
 import { AnvilMark } from "@/components/shared/marks";
@@ -275,6 +276,7 @@ export default function InboxPage() {
           </div>
         }
       />
+      <PageHelp page="inbox" />
 
       <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
         {/* Conversation list — hidden on mobile once a thread is open */}

@@ -25,6 +25,8 @@ import {
 } from "@/components/shared/empty-state";
 import { HeatDot } from "@/components/shared/heat";
 import { GettingStarted } from "@/components/onboarding/getting-started";
+import { AgentHealth } from "@/components/onboarding/agent-health";
+import { PageHelp } from "@/components/onboarding/page-help";
 import { TourButton } from "@/components/onboarding/tour-button";
 import { useTour } from "@/components/onboarding/use-tour";
 
@@ -182,7 +184,15 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      <PageHelp page="dashboard" />
+
       <GettingStarted agents={agents} stats={stats} />
+
+      {/* "Is it working?" per assistant — the answer to the first question every
+          new owner asks. Three at most; the agents page has the rest. */}
+      {agents.slice(0, 3).map((a) => (
+        <AgentHealth key={a.id} agent={a} stats={stats} compact />
+      ))}
 
       {/* ── Readout strip ──────────────────────────────────────────────────
           Detail after the summary. Three, not four: "total de conversas" is the

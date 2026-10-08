@@ -58,20 +58,20 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "agents": "Agents",
+    "agents": "Assistants",
     "files": "Files",
     "team": "Team",
     "billing": "Billing",
     "settings": "Settings",
     "admin": "Admin",
     "contact": "Contact",
-    "leads": "Leads",
-    "handoffs": "Handoffs",
+    "leads": "Interested people",
+    "handoffs": "Help requests",
     "contacts": "Contacts",
-    "pipeline": "Pipeline",
+    "pipeline": "Sales funnel",
     "tasks": "Tasks",
     "reports": "Reports",
-    "inbox": "Inbox",
+    "inbox": "Conversations",
     "expandMenu": "Expand menu",
     "collapseMenu": "Collapse menu",
     "groups": {
@@ -83,60 +83,60 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome, {name}",
-    "totalAgents": "Total Agents",
-    "activeAgents": "Active Agents",
-    "totalChats": "Total Conversations",
-    "totalMessages": "Total Messages",
+    "totalAgents": "Assistants",
+    "activeAgents": "Assistants on",
+    "totalChats": "Conversations",
+    "totalMessages": "Messages",
     "conversationsChart": "Conversations per day",
     "conversations": "Conversations",
     "last30days": "Last 30 days",
-    "noData": "No usage data yet",
-    "noDataHint": "Data will appear here after the first conversations",
+    "noData": "No conversations yet",
+    "noDataHint": "When a customer talks to your assistant, the numbers show up here.",
     "tagline": "Forge your intelligence",
-    "agentsLive": "{active} of {total} agents live",
-    "noAgentsLive": "No agents live yet",
-    "viewAgents": "View agents"
+    "agentsLive": "{active} of {total} assistants on",
+    "noAgentsLive": "No assistant switched on yet",
+    "viewAgents": "See assistants"
   },
   "agents": {
-    "title": "Agents",
-    "create": "New Agent",
-    "empty": "No agents created yet",
-    "emptyDescription": "Create your first AI agent to get started",
-    "name": "Agent Name",
-    "industry": "Area of expertise",
-    "language": "Response language",
-    "systemPrompt": "System Prompt",
-    "userPrompt": "Additional Instructions",
-    "embedCode": "Embed Code",
-    "regenerateToken": "Regenerate Token",
+    "title": "Assistants",
+    "create": "New assistant",
+    "empty": "You don't have an assistant yet",
+    "emptyDescription": "Create your first virtual assistant. It talks to your customers for you.",
+    "name": "Assistant's name",
+    "industry": "Type of business",
+    "language": "Language it answers in",
+    "systemPrompt": "How your assistant should act",
+    "userPrompt": "Extra rules",
+    "embedCode": "Code to add to your website",
+    "regenerateToken": "Make a new code",
     "whatsapp": {
       "title": "WhatsApp",
       "enable": "Enable WhatsApp",
       "requiresPlan": "Requires Professional or Scale plan",
       "phoneNumberId": "Phone Number ID",
-      "phoneNumberHint": "Not your phone number — this is the numeric Phone Number ID shown under WhatsApp → API Setup in the Meta developer panel (e.g. 123456789012345).",
+      "phoneNumberHint": "Not your phone number. It's the numeric “Phone Number ID” shown under WhatsApp → API Setup in the Meta developer panel (e.g. 123456789012345).",
       "accessToken": "Access Token",
       "accessTokenHint": "Permanent WhatsApp API token (System User) from your Meta account. Stored encrypted and never shown back. Leave blank to keep the current one.",
       "tokenSet": "Set",
       "tokenNotSet": "Not set",
-      "modeLabel": "Who replies",
-      "modeHint": "Choose who answers this number's WhatsApp messages.",
-      "modeAgent": "AI agent",
-      "modeInbox": "My team (inbox)",
+      "modeLabel": "Who answers on WhatsApp",
+      "modeHint": "Choose who answers the messages that arrive on this number.",
+      "modeAgent": "Only the virtual assistant",
+      "modeInbox": "Only my team",
       "connectButton": "Connect my WhatsApp",
       "connectTitle": "Connect your WhatsApp in one click",
-      "connectDescription": "Pick your number inside WhatsApp itself and you are done. We handle the rest — no token, no developer panel.",
+      "connectDescription": "Pick your number inside WhatsApp itself and you're done. We handle the rest, with no technical setup.",
       "connected": "Connected",
       "connectSuccess": "WhatsApp connected!",
       "connectCancelled": "Connection cancelled.",
       "connectIncomplete": "The connection did not finish. Try again and select a number all the way through.",
       "manualSetup": "Manual setup (advanced)",
       "needsReconnect": "Reconnection needed",
-      "needsReconnectHint": "WhatsApp disconnected and is not receiving messages. Click to reconnect — it takes one click.",
+      "needsReconnectHint": "WhatsApp disconnected and isn't receiving messages. Click here to connect again. It takes one click.",
       "adminTools": "Admin tools",
       "refreshToken": "Force token refresh",
       "refreshSuccess": "Token refreshed.",
-      "refreshFailed": "Meta refused the refresh — the customer must reconnect.",
+      "refreshFailed": "Meta refused the renewal. The customer needs to connect again.",
       "tokenExpires": "Token expires {date}",
       "tokenPermanent": "Permanent token (no expiry)",
       "billingIssue": "Payment pending at Meta",
@@ -149,27 +149,27 @@
         "beforeTitle": "Before you start, have ready:",
         "before1": "A mobile number that can receive an SMS or a call right now.",
         "before2": "Your business's Facebook login (Meta creates one on the spot if you don't have it).",
-        "before3": "A credit card — Meta bills you for messages directly, not through Foji.",
+        "before3": "A credit card. Meta, the company that owns WhatsApp, charges some messages straight to your card. That money doesn't go through Foji.",
         "numberWarning": "About the number: it cannot be in use in the WhatsApp app (regular or Business) on a phone. If it is, delete that account in the app first or the connection will fail. Many people use a fresh SIM just for this.",
         "step1": "Click \"Connect my WhatsApp\". A window from Meta itself opens.",
         "step2": "Sign in with your Facebook account and pick (or create) your business profile.",
         "step3": "Enter the number that will answer your customers and confirm the code sent by SMS or call.",
         "step4": "Keep clicking continue until the window closes on its own.",
         "step5": "Add a card in Meta Business Manager.",
-        "step5Hint": "Without a card Meta simply does not deliver your messages — and it does not warn you. This is the number one cause of \"I connected it and nothing works\".",
-        "step6": "Message that number from another phone and watch the agent reply.",
+        "step5Hint": "Without a card, Meta doesn't deliver your messages and doesn't warn you either. It's the number one reason for “I connected it and nothing works”.",
+        "step6": "Message that number from another phone and watch the assistant reply.",
         "step6Hint": "If nothing comes back within a few seconds, come back here: this page will tell you what's missing.",
         "closing": "If anything goes wrong, this page shows exactly what the problem is and what to do. You never need a developer panel or to copy any code."
       },
       "sdkUnavailable": "We couldn't load Meta's window. Turn off ad/tracker blockers on this page and reload.",
       "notConfigured": "One-click connection is not configured on this server yet. Contact support.",
       "popupBlocked": "Meta's window did not open. Allow pop-ups for this site and try again.",
-      "splitLabel": "Split long replies into two messages",
-      "splitHint": "Longer replies arrive as two short messages with “typing…” in between — closer to how a person texts. Each message is billed by Meta and counts toward your plan's limit.",
-      "modeHybrid": "AI + team (hybrid)",
-      "modeAgentHint": "The AI answers everything on its own, instantly.",
-      "modeHybridHint": "The AI answers and every conversation shows up in the inbox. Your team can take over any conversation, and the AI calls the team itself when a customer asks for a person or is unhappy.",
-      "modeInboxHint": "Only your team answers, from the inbox. The AI stays out."
+      "splitLabel": "Send long replies as two messages",
+      "splitHint": "Long replies arrive as two short messages, with “typing…” in between, the way a person would text. Note: that's two messages instead of one, so they count twice toward your plan's limit.",
+      "modeHybrid": "The virtual assistant and my team",
+      "modeAgentHint": "The virtual assistant answers everything by itself, right away, any time.",
+      "modeHybridHint": "The virtual assistant answers, and you see every conversation under “Conversations”. You can step into any of them, and it calls you when a customer asks for a person.",
+      "modeInboxHint": "Only people from your team answer, from the “Conversations” screen. The virtual assistant stays out."
     },
     "industries": {
       "accounting_finance": "Accounting & Finance",
@@ -183,29 +183,29 @@
       "es": "Español"
     },
     "status": {
-      "active": "Active",
-      "inactive": "Inactive"
+      "active": "On",
+      "inactive": "Off"
     },
     "escalation": {
-      "title": "Escalation Contacts",
-      "hint": "When a user asks to speak to a human, the agent provides these contacts.",
+      "title": "Your team's contacts",
+      "hint": "When a customer asks to talk to someone at your company, the assistant gives them these contacts.",
       "supportWhatsApp": "Support WhatsApp",
       "salesWhatsApp": "Sales WhatsApp",
       "supportEmail": "Support Email",
       "salesEmail": "Sales Email",
       "upgradeProfessional": "Available on Professional and Scale plans"
     },
-    "basicInfo": "Basic Info",
-    "basicInfoHint": "Give your agent a name and choose its industry and language.",
-    "namePlaceholder": "e.g. Finance Assistant",
-    "nameRequired": "Agent name is required",
-    "descriptionPlaceholder": "Brief description of what this agent does",
-    "systemPromptHint": "This is the core instruction that defines your agent's personality, knowledge scope, and behavior.",
-    "systemPromptPlaceholder": "You are a helpful assistant for our company. Answer questions based on the documents provided...",
-    "systemPromptRequired": "System prompt is required (at least 10 characters)",
-    "userPromptHint": "Extra rules appended to every conversation. Use for formatting preferences, tone, or restrictions.",
-    "userPromptPlaceholder": "Always cite sources. Keep answers under 3 paragraphs. Respond in a professional tone.",
-    "examplePrompts": "Start from a template",
+    "basicInfo": "The basics",
+    "basicInfoHint": "Give your assistant a name and choose the language it answers in.",
+    "namePlaceholder": "e.g. Ana",
+    "nameRequired": "Give the assistant a name",
+    "descriptionPlaceholder": "e.g. Answers questions about prices and opening hours",
+    "systemPromptHint": "Write it the way you'd explain the job to a new employee: what to do, how to talk and what not to say.",
+    "systemPromptPlaceholder": "E.g.: You help the customers of Hot Bread Bakery. Be friendly. Answer about prices, opening hours and orders. If you don't know the answer, ask for the customer's phone number.",
+    "systemPromptRequired": "Write at least one sentence explaining how the assistant should act.",
+    "userPromptHint": "Small rules that apply to every conversation. E.g. “Answer in 3 sentences at most” or “Never talk about competitors”.",
+    "userPromptPlaceholder": "E.g.: Answer in 3 sentences at most. At the end, offer our WhatsApp.",
+    "examplePrompts": "No ideas? Start from an example and adjust it:",
     "examples": {
       "customerSupport": "Customer Support",
       "customerSupportPrompt": "You are a friendly customer support agent for our company. Answer questions about our products and services based on the documents provided. If you don't know the answer, say so honestly and suggest the user contact our support team. Always be polite, concise, and helpful.",
@@ -214,7 +214,7 @@
       "hrAssistant": "HR Assistant",
       "hrAssistantPrompt": "You are an HR assistant. Answer employee questions about company policies, benefits, vacation rules, and internal procedures based on the documents provided. Always be empathetic and professional. For sensitive matters like complaints or legal issues, recommend speaking with the HR team directly.",
       "onboarding": "Employee Onboarding",
-      "onboardingPrompt": "You are an onboarding assistant for new employees. Help them understand company culture, tools, processes, and policies based on the documents provided. Be welcoming and proactive — anticipate common questions and provide step-by-step guidance.",
+      "onboardingPrompt": "You are an onboarding assistant for new employees. Help them understand company culture, tools, processes, and policies based on the documents provided. Be welcoming and proactive: anticipate common questions and provide step-by-step guidance.",
       "legalAdvisor": "Legal Advisor",
       "legalAdvisorPrompt": "You are a legal information assistant. Help users understand legal concepts and procedures based on the documents provided. Always clarify that you provide general legal information, not legal advice, and recommend consulting a qualified attorney for specific cases. Cite relevant articles and laws when possible.",
       "contractReview": "Contract Review",
@@ -235,154 +235,175 @@
       "generalAssistant": "Virtual Assistant"
     },
     "howItWorks": {
-      "title": "How agents work",
-      "step1": "Create your agent with a name, industry, and system prompt",
-      "step2": "Upload documents (PDF, DOCX, PPTX, XLSX) to give it knowledge",
-      "step3": "Embed the chat widget on your website or connect via WhatsApp"
+      "title": "How it works, in 3 steps",
+      "step1": "You create the assistant and explain how it should act.",
+      "step2": "You upload files about your business (menu, prices, FAQ). It learns from them.",
+      "step3": "You put the assistant on your website or your WhatsApp, and it starts talking to customers."
     },
     "filesHint": {
-      "title": "Add knowledge after creating",
-      "description": "Once your agent is created, you can upload documents to give it context. The agent will use these to answer questions."
+      "title": "Files come in the next step",
+      "description": "After creating the assistant, you upload files about your business. It uses them to answer customers."
     },
     "detail": {
       "settings": "Settings",
       "files": "Files ({count})",
-      "embed": "Embed",
-      "prompts": "Prompts",
-      "delete": "Delete Agent",
+      "embed": "Go live",
+      "prompts": "Instructions",
+      "delete": "Delete assistant",
       "deleteTitle": "Delete {name}?",
-      "deleteDescription": "This will permanently delete the agent, all its files, and conversation history. This cannot be undone.",
-      "agentDeleted": "Agent deleted",
-      "agentToken": "Agent Token",
-      "regenerateTitle": "Regenerate token?",
-      "regenerateDescription": "The current embed script will stop working immediately. You'll need to update it everywhere it's used.",
-      "regenerate": "Regenerate",
-      "tokenRegenerated": "Token regenerated",
-      "embedHint": "Paste this snippet just before the closing body tag of your website.",
+      "deleteDescription": "This permanently deletes the assistant, its files and all its conversations. It can't be undone.",
+      "agentDeleted": "Assistant deleted",
+      "agentToken": "Assistant's secret code",
+      "regenerateTitle": "Make a new code?",
+      "regenerateDescription": "The chat on your website stops working right away. You'll need to paste the new code into your site.",
+      "regenerate": "Make a new code",
+      "tokenRegenerated": "New code created",
+      "embedHint": "Copy this code and send it to whoever looks after your website, by WhatsApp or email. They'll know where to paste it. After that, the chat shows up in the corner of your website.",
       "test": "Test",
-      "testTitle": "Test your agent",
-      "testDescription": "Chat with your agent to see how it responds. Changes to prompts and files are reflected immediately."
+      "testTitle": "Test your assistant",
+      "testDescription": "Chat with it here as if you were a customer. Anything you change in settings or files applies right away.",
+      "savedTitle": "Changes saved!",
+      "savedTryTest": "Now try it in the “Test” tab to see how the assistant turned out."
     },
     "welcomeMessage": {
-      "title": "Welcome Message",
-      "hint": "First message the bot sends when a user opens the chat. Leave empty for a default greeting.",
-      "placeholder": "e.g. Hello! How can I help you today?"
+      "title": "First message",
+      "hint": "What the assistant says when someone opens the chat on your website. Leave it empty for a standard greeting.",
+      "placeholder": "e.g. Hi! How can I help you today?"
     },
     "starters": {
-      "title": "Conversation Starters",
-      "hint": "Suggested questions shown as clickable chips before the user types. Up to 4.",
-      "add": "Add starter",
+      "title": "Ready-made questions",
+      "hint": "Questions shown as buttons in the chat, so the customer can just click. Up to 4.",
+      "add": "Add question",
       "placeholder": "e.g. What services do you offer?"
     },
     "appearance": {
-      "title": "Widget Appearance",
-      "hint": "Customize how the chat widget looks on your website.",
-      "primaryColor": "Primary color",
-      "widgetTitle": "Header title",
+      "title": "How the chat looks on your website",
+      "hint": "Choose the colour and the side of the screen where the chat appears.",
+      "primaryColor": "Colour",
+      "widgetTitle": "Title at the top of the chat",
       "widgetTitlePlaceholder": "e.g. Support",
-      "widgetPlaceholder": "Input placeholder",
+      "widgetPlaceholder": "Text inside the message box",
       "widgetPlaceholderDefault": "e.g. Type a message...",
-      "position": "Position",
+      "position": "Side of the screen",
       "positionLeft": "Left",
-      "positionRight": "Right"
+      "positionRight": "Right",
+      "colorHint": "Tap one of the suggested colours or pick any colour.",
+      "suggestedColors": "Suggested colours",
+      "pickAnyColor": "Pick another colour",
+      "hexCode": "Colour code",
+      "preview": "This is how the chat button will look in the corner of your website.",
+      "tooLight": "This colour is very light: the white text in the chat may be hard to read. Pick a darker colour.",
+      "invalidHex": "Invalid code. Use the #RRGGBB format, for example #E5262B.",
+      "colors": {
+        "red": "Red",
+        "orange": "Orange",
+        "yellow": "Mustard",
+        "green": "Green",
+        "teal": "Teal",
+        "blue": "Blue",
+        "purple": "Purple",
+        "pink": "Pink",
+        "brown": "Brown",
+        "graphite": "Graphite"
+      }
     },
-    "responseStyle": "Response Style",
-    "responseStyleHint": "Controls the tone of the agent's replies. The agent always adapts its language to match the user.",
-    "responseStyleDefault": "Default (no style set)",
+    "responseStyle": "Way of talking",
+    "responseStyleHint": "Choose how the assistant talks. It always answers in the customer's language.",
+    "responseStyleDefault": "Normal",
     "responseStyles": {
-      "professional": "Professional — formal, precise, no emojis",
-      "friendly": "Friendly — warm, casual, up to 2 emojis",
-      "concise": "Concise — short answers, 4 sentences max"
+      "professional": "Serious: polite and direct, no emojis",
+      "friendly": "Friendly: warm and relaxed, a few emojis",
+      "concise": "Short: quick answers, up to 4 sentences"
     },
     "leadCapture": {
-      "title": "Lead Capture",
-      "hint": "Shows a form before the first message to collect the visitor's name, email, and phone.",
-      "enable": "Enable lead capture",
-      "prompt": "Form message",
-      "promptPlaceholder": "e.g. Leave your contact info so we can follow up:",
-      "promptHint": "Leave blank to use the default message in the agent's language."
+      "title": "Ask for the customer's details",
+      "hint": "Before chatting on your website, the chat asks for name, email and phone. Whoever fills it in shows up under “Interested people”.",
+      "enable": "Ask for name and contact at the start",
+      "prompt": "Wording of the request",
+      "promptPlaceholder": "e.g. To help you better, leave your name and phone:",
+      "promptHint": "Leave it empty for standard wording."
     },
     "handoff": {
-      "title": "Human Handoff",
-      "hint": "Adds a button to the widget so visitors can request a human agent. You'll get an email notification.",
-      "enable": "Enable human handoff",
-      "notifyEmail": "Notification email",
-      "notifyWhatsApp": "Notification WhatsApp",
-      "message": "Confirmation message",
+      "title": "Talk to a person",
+      "hint": "Shows a button in the website chat so customers can ask to talk to someone from your team. You get a notice by email or WhatsApp.",
+      "enable": "Show the “Talk to a person” button",
+      "notifyEmail": "Email that gets the notice",
+      "notifyWhatsApp": "WhatsApp that gets the notice",
+      "message": "Message to the customer after the request",
       "messagePlaceholder": "e.g. Request registered! Our team will reach out shortly.",
-      "messageHint": "Message shown to the visitor after clicking the button. Leave blank for the default."
+      "messageHint": "The customer sees this after clicking the button. Leave it empty for standard wording."
     },
     "calendar": {
       "title": "Google Calendar",
-      "description": "Let the AI check your availability and book appointments directly from the chat.",
+      "description": "Lets the assistant see your free times and book appointments with customers in the chat.",
       "connect": "Connect Google Calendar",
       "connectedAs": "Connected as {email}",
       "disconnect": "Disconnect",
       "disconnectTitle": "Disconnect Google Calendar?",
-      "disconnectDescription": "The AI will no longer be able to suggest or book appointments. You can reconnect at any time.",
+      "disconnectDescription": "The assistant won't be able to suggest or book times any more. You can connect again whenever you like.",
       "connectedSuccess": "Google Calendar connected successfully!",
       "disconnectedSuccess": "Google Calendar disconnected.",
       "requiresPlan": "Available on plans that include Google Calendar. Upgrade to enable.",
       "connectError": "Could not connect Google Calendar. Please try again."
     },
     "sections": {
-      "setup": "Agent setup",
-      "setupHint": "Identity and the instructions that shape how it answers.",
-      "experience": "Customer experience",
-      "experienceHint": "What the visitor sees and what happens during the conversation.",
-      "channels": "Channels & integrations",
-      "channelsHint": "Where the agent works and where conversations go."
+      "setup": "Who your assistant is",
+      "setupHint": "Its name and how it should act.",
+      "experience": "What the customer sees",
+      "experienceHint": "The conversation from the customer's side.",
+      "channels": "Where it helps",
+      "channelsHint": "Your website, your WhatsApp and where help requests go."
     },
-    "eyebrow": "Your agents",
-    "liveSummary": "{active} of {total} live right now",
-    "createDescription": "An agent answers your customers using the documents and instructions you give it."
+    "eyebrow": "Your assistants",
+    "liveSummary": "{active} of {total} on right now",
+    "createDescription": "A virtual assistant talks to your customers for you, using the information and instructions you give it."
   },
   "handoffs": {
-    "title": "Human Handoffs",
-    "description": "Human handoff requests received through the widget.",
+    "title": "Help requests",
+    "description": "Customers who clicked “Talk to a person” in the chat on your website. Get in touch with them!",
     "total": "requests",
-    "filterByAgent": "Filter by agent",
-    "allAgents": "All agents",
-    "empty": "No human handoff requests yet",
-    "emptyHint": "Enable human handoff in your agent settings to start receiving requests.",
-    "notified": "Notified",
-    "pending": "Pending",
+    "filterByAgent": "Filter by assistant",
+    "allAgents": "All assistants",
+    "empty": "No customer has asked for help yet",
+    "emptyHint": "Turn on “Talk to a person” in the assistant's settings to get requests here.",
+    "notified": "You were notified",
+    "pending": "Waiting",
     "eyebrow": "Support",
     "pendingCount": "{count} pending"
   },
   "leads": {
-    "title": "Leads",
-    "description": "Contacts collected by the lead capture form across your agents.",
-    "total": "leads",
-    "filterByAgent": "Filter by agent",
-    "allAgents": "All agents",
-    "empty": "No leads captured yet",
-    "emptyHint": "Enable lead capture in your agent settings to start collecting contacts.",
-    "anonymous": "Anonymous",
-    "eyebrow": "Capture"
+    "title": "Interested people",
+    "description": "People who left their name, email or phone while talking to your assistant. Get in touch with them!",
+    "total": "people",
+    "filterByAgent": "Filter by assistant",
+    "allAgents": "All assistants",
+    "empty": "Nobody has left their contact yet",
+    "emptyHint": "Turn on “Ask for the customer's details” in the assistant's settings to start getting contacts here.",
+    "anonymous": "No name",
+    "eyebrow": "Customers"
   },
   "files": {
     "title": "Files",
     "upload": "Upload file",
     "empty": "No files uploaded",
-    "processing": "Processing",
-    "ready": "Ready",
-    "failed": "Failed",
-    "pending": "Pending",
+    "processing": "Reading the file…",
+    "ready": "Learned",
+    "failed": "Didn't work",
+    "pending": "Waiting",
     "maxSize": "Max size: 30MB",
     "dropzone": "Drop files here or click to select",
-    "supportedFormats": "PDF, DOCX, PPTX, XLSX",
+    "supportedFormats": "PDF, Word, PowerPoint or Excel",
     "sizeExceeded": "File exceeds the 30MB limit",
-    "uploadSuccess": "File uploaded — processing started",
+    "uploadSuccess": "File uploaded. The assistant is reading it…",
     "uploading": "Uploading…",
     "deleteTitle": "Delete file?",
-    "deleteDescription": "Remove {fileName} from this agent?",
+    "deleteDescription": "Remove {fileName}? The assistant will forget what was in it.",
     "confirmUploadTitle": "Upload file?",
-    "confirmUploadDescription": "Upload {fileName} ({fileSize} MB) for processing? The file will be extracted and made available to the agent.",
-    "processingComplete": "File processing complete",
-    "emptyHint": "Upload PDFs, DOCX, PPTX or XLSX for the agent to learn from.",
-    "confirmUploadMultipleDescription": "Upload {count} files for processing? The files will be extracted and made available to the agent.",
-    "uploadSuccessMultiple": "{count} files uploaded — processing started"
+    "confirmUploadDescription": "Upload {fileName} ({fileSize} MB)? The assistant will read the file and learn from it.",
+    "processingComplete": "Done! The assistant finished reading the files.",
+    "emptyHint": "Upload files about your business (PDF, Word, PowerPoint or Excel). The assistant learns from them.",
+    "confirmUploadMultipleDescription": "Upload {count} files? The assistant will read them and learn from them.",
+    "uploadSuccessMultiple": "{count} files uploaded. The assistant is reading them…"
   },
   "team": {
     "title": "Team",
@@ -413,7 +434,7 @@
     "availablePlans": "Available Plans",
     "usage": "Usage",
     "usageThisMonth": "This month",
-    "agents": "Agents",
+    "agents": "Assistants",
     "conversations": "Conversations",
     "messages": "Messages",
     "conversationsPerMonth": "conversations/mo",
@@ -445,29 +466,29 @@
     "perMonth": "/mo",
     "whatsappMessages": "WhatsApp messages",
     "whatsappOverage": "{count} messages over · R$ {amount}",
-    "whatsappLimitReached": "Message limit reached — the agent has stopped replying on WhatsApp."
+    "whatsappLimitReached": "You've used all of your plan's WhatsApp messages this month. The assistant stopped answering on WhatsApp until the month turns over or you change plans."
   },
   "settings": {
     "title": "Settings",
     "company": "Company",
     "companyName": "Company name",
-    "companySlug": "Slug",
+    "companySlug": "Company address",
     "logo": "Logo",
     "danger": "Danger zone",
     "deleteCompany": "Delete company",
     "eyebrow": "Account",
     "description": "Your workspace details.",
     "adminOnlyTitle": "Platform settings",
-    "slugImmutable": "The slug cannot be changed after creation.",
+    "slugImmutable": "The address can't be changed later.",
     "dangerHint": "These actions are irreversible.",
     "deleteConfirmTitle": "Delete {name}?",
-    "deleteConfirmBody": "This permanently deletes the workspace, every agent, all files and the conversation history. It cannot be undone.",
+    "deleteConfirmBody": "This permanently deletes the company, all assistants, files and conversations. It can't be undone.",
     "deleteConfirmAction": "Delete permanently",
     "deleteConfirmPrompt": "To confirm, type {name} below:",
     "deleteSuccess": "Company deleted. Your session has ended.",
     "companyAbout": "What your company does",
     "companyAboutPlaceholder": "E.g.: We're a men's clothing store in Fortaleza that ships across Brazil. We sell shirts, trousers and accessories, with free exchanges within 30 days.",
-    "companyAboutHint": "Your agents use this when a customer asks who they're talking to or what you do. In 2 or 3 sentences, say what you sell, who you serve and where."
+    "companyAboutHint": "Your assistants use this text when a customer asks who they're talking to or what you do. Say in 2 or 3 sentences what you sell, to whom and where."
   },
   "profile": {
     "title": "My Profile",
@@ -551,11 +572,11 @@
   "onboarding": {
     "createCompany": "Create your company",
     "companyName": "Company name",
-    "companySlug": "Unique identifier (slug)",
+    "companySlug": "Company address (no spaces)",
     "selectPlan": "Choose your plan",
     "planDescription": "You can change plans at any time",
     "workspaceDescription": "This will be your workspace on Foji AI.",
-    "slugTaken": "This slug is already taken",
+    "slugTaken": "That address is already taken",
     "slugAvailable": "Available",
     "slugChecking": "Checking...",
     "slugInvalid": "Only lowercase letters, numbers and hyphens",
@@ -563,7 +584,7 @@
     "skipForNow": "Skip for now",
     "subscribe": "Subscribe",
     "continueFree": "Continue free",
-    "upToAgents": "Up to {count} agents",
+    "upToAgents": "Up to {count} assistants",
     "welcome": "Welcome to Foji AI",
     "welcomeSubtitle": "Let's set up your workspace"
   },
@@ -709,7 +730,7 @@
       "create": "Create contact",
       "created": "Contact created",
       "updated": "Contact saved",
-      "duplicateWarning": "Possible duplicate — this contact matched another by email and phone. Review before merging.",
+      "duplicateWarning": "This might be the same person: this contact has the same email and phone as another one. Check before joining them.",
       "tabDetails": "Details",
       "tabTimeline": "Timeline",
       "tabDeals": "Deals",
@@ -737,7 +758,7 @@
       "Archived": "Archived"
     },
     "timeline": {
-      "leadCaptured": "Lead captured",
+      "leadCaptured": "Left their contact in the chat",
       "handoff": "Requested human handoff",
       "dealCreated": "Deal created",
       "dealWon": "Deal won",
@@ -945,8 +966,8 @@
     "eyebrow": "Customers"
   },
   "inbox": {
-    "title": "Inbox",
-    "description": "Talk to your customers on WhatsApp — the whole team on one number.",
+    "title": "WhatsApp conversations",
+    "description": "Talk to your customers on WhatsApp. Your whole team uses the same number.",
     "empty": "No conversations yet",
     "emptyHint": "Conversations appear here when a customer messages a number set to inbox mode.",
     "selectConversation": "Select a conversation",
@@ -957,7 +978,7 @@
     "prefixHint": "Your name is added automatically at the start of the message.",
     "openContact": "View contact",
     "windowClosedShort": "window closed",
-    "windowClosed": "More than 24 hours have passed since the customer's last message. WhatsApp only allows free-form replies within that window — wait for them to write again.",
+    "windowClosed": "More than 24 hours have passed since the customer's last message. Under a WhatsApp rule, you can't send a free message after that. Wait for the customer to write again.",
     "unassigned": "Unassigned",
     "mediaPreview": "[attachment]",
     "eyebrow": "Support",
@@ -978,12 +999,12 @@
     "askedForPerson": "asked for a person",
     "takeOver": "Take over",
     "handBack": "Hand back to AI",
-    "takenOverToast": "You took over — the AI won't reply here anymore",
+    "takenOverToast": "You took over the conversation. The virtual assistant won't answer here anymore.",
     "handedBackToast": "The AI is answering this conversation again",
     "escalatedBanner": "The AI called the team: the customer needs to talk to a person. Meanwhile, the AI won't reply in this conversation.",
     "aiLabel": "AI",
     "replyTakesOverHint": "Replying takes the conversation over and the AI stops answering here. Your name is added at the start of the message.",
-    "escalationTimedOutBanner": "Nobody answered in time: the AI told the customer the team will reply here and went back to answering. The customer still wants a person — take over to reply."
+    "escalationTimedOutBanner": "Nobody answered in time. The virtual assistant told the customer the team will reply here and went back to answering. The customer still wants a person: take over the conversation to reply."
   },
   "audio": {
     "play": "Play",
@@ -998,7 +1019,7 @@
   "verifyEmail": {
     "eyebrow": "Confirmation",
     "loadingTitle": "Confirming your email",
-    "loadingDescription": "One moment — we are activating your account.",
+    "loadingDescription": "Just a moment, we're activating your account.",
     "successTitle": "Email confirmed",
     "successDescription": "Your account is active. Sign in to get started.",
     "errorTitle": "We couldn't confirm it",
@@ -1022,8 +1043,8 @@
         "body": "Go through this list from top to bottom. Each item takes you straight to the right place. Your assistant will be ready in minutes."
       },
       "agents": {
-        "title": "Agents",
-        "body": "An agent is your virtual assistant. This is where you create it, teach it and test it."
+        "title": "Assistants",
+        "body": "Your virtual assistant lives here. This is where you create it, teach it and test it."
       },
       "inbox": {
         "title": "Inbox",
@@ -1041,17 +1062,17 @@
     "agents": {
       "create": {
         "title": "Create your assistant",
-        "body": "Click here to create an agent. You can have more than one, for example one for sales and one for support."
+        "body": "Click here to create an assistant. You can have more than one, for example one for sales and one for support."
       },
       "card": {
-        "title": "Your agents",
-        "body": "Click an agent to change what it knows, upload documents and test it."
+        "title": "Your assistants",
+        "body": "Click an assistant to change what it knows, upload documents and test it."
       }
     },
     "agent-new": {
       "name": {
         "title": "Give it a name",
-        "body": "This is how the agent introduces itself to customers. It can be a person's name, like “Ana”, or your company's name."
+        "body": "This is how the assistant introduces itself to customers. It can be a person's name, like “Ana”, or your company's name."
       },
       "description": {
         "title": "Say what your company does",
@@ -1067,17 +1088,17 @@
       },
       "files": {
         "title": "Documents come next",
-        "body": "After creating it, you upload your menu, price list or FAQ. The agent learns from them."
+        "body": "After creating it, you upload your menu, price list or FAQ. The assistant learns from them."
       },
       "create": {
         "title": "Done!",
-        "body": "Click “Create agent”. You can change everything later."
+        "body": "Click “Create assistant”. You can change everything later."
       }
     },
     "agent": {
       "settings": {
         "title": "Settings",
-        "body": "Change the agent's name, tone and instructions here. When you're done, click Save at the bottom."
+        "body": "Change the assistant's name, tone and instructions here. When you're done, click Save at the bottom."
       },
       "files": {
         "title": "Documents",
@@ -1085,7 +1106,7 @@
       },
       "test": {
         "title": "Test before your customers do",
-        "body": "Chat with the agent as if you were a customer. If it gets something wrong, adjust the instructions or upload more documents."
+        "body": "Chat with the assistant as if you were a customer. If it gets something wrong, adjust the instructions or upload more documents."
       },
       "embed": {
         "title": "Go live",
@@ -1093,7 +1114,7 @@
       },
       "active": {
         "title": "On and off",
-        "body": "When off, the agent stops answering everywhere. Handy to pause it."
+        "body": "When off, the assistant stops answering everywhere. Handy to pause it."
       }
     },
     "inbox": {
@@ -1120,19 +1141,19 @@
     "allDone": "All set! 🎉 Your assistant is ready to talk to customers.",
     "items": {
       "createAgent": {
-        "title": "Create your agent",
+        "title": "Create your assistant",
         "hint": "Give it a name and tell it how to help."
       },
       "describe": {
         "title": "Say what your company does",
-        "hint": "One sentence, so the agent can introduce itself."
+        "hint": "One sentence, so the assistant can introduce itself."
       },
       "upload": {
         "title": "Upload a document",
         "hint": "Menu, prices, FAQ…"
       },
       "test": {
-        "title": "Test the agent",
+        "title": "Test the assistant",
         "hint": "Chat with it as if you were a customer."
       },
       "goLive": {
@@ -1140,5 +1161,105 @@
         "hint": "On your website or on WhatsApp."
       }
     }
+  },
+  "health": {
+    "eyebrow": "Is it working?",
+    "eyebrowNamed": "Is {name} working?",
+    "verdict": {
+      "working": {
+        "title": "Yes! It's working.",
+        "body": "Your assistant is on, knows about your business and has already talked to customers."
+      },
+      "ready": {
+        "title": "It's ready!",
+        "body": "Everything is set. You're just waiting for the first customer to send a message. Meanwhile, test it yourself."
+      },
+      "learning": {
+        "title": "It works, but knows very little",
+        "body": "It already answers, but hasn't read any file about your business yet. Upload a file so it answers better."
+      },
+      "off": {
+        "title": "Not working yet",
+        "body": "At least one step is missing. See what's missing below and click the button next to it."
+      }
+    },
+    "on": {
+      "ok": "It's on and ready to answer.",
+      "bad": "It's off. Nobody gets an answer.",
+      "fix": "Turn on"
+    },
+    "files": {
+      "ok": "It has read {count, plural, one {# file} other {# files}} about your business.",
+      "reading": "It's reading your files right now. It takes a few minutes.",
+      "none": "It hasn't read any file yet. Without files it only knows the basics.",
+      "fix": "Upload a file"
+    },
+    "whatsapp": {
+      "ok": "It's answering on your WhatsApp.",
+      "none": "It's not on WhatsApp.",
+      "connect": "Connect WhatsApp",
+      "problem": "WhatsApp stopped. It needs your attention.",
+      "fix": "See the problem"
+    },
+    "site": {
+      "ok": "You've copied the code for your website.",
+      "none": "It's not on your website yet.",
+      "fix": "Add to website"
+    },
+    "chats": {
+      "none": "No customer has chatted yet. That's normal at the start.",
+      "today": "Last conversation with a customer: today.",
+      "yesterday": "Last conversation with a customer: yesterday.",
+      "daysAgo": "Last conversation with a customer: {days} days ago."
+    },
+    "testYourself": "Want to see it for yourself? Chat with it as if you were a customer.",
+    "testButton": "Test it yourself",
+    "marks": {
+      "ok": "done",
+      "warn": "needs attention",
+      "bad": "problem",
+      "busy": "in progress",
+      "todo": "not done yet"
+    }
+  },
+  "pageHelp": {
+    "label": "What this page is for",
+    "dismiss": "Got it",
+    "dashboard": {
+      "title": "What is this page for?",
+      "body": "This is the summary of your business on Foji. Here you see how many conversations your assistant had and what's still left to do."
+    },
+    "agents": {
+      "title": "What is this page for?",
+      "body": "Your virtual assistants live here. An assistant is like an employee who answers your customers by itself, on your website and on WhatsApp, 24 hours a day. Click one to change what it knows or to test it."
+    },
+    "agent": {
+      "title": "What is this page for?",
+      "body": "Here you teach and adjust this assistant. Use the tabs: “Settings” changes its name and manner, “Files” teaches it about your business, “Go live” puts it on your website or WhatsApp, and “Test” lets you chat with it."
+    },
+    "inbox": {
+      "title": "What is this page for?",
+      "body": "The conversations that arrive on your WhatsApp show up here. You can read everything the customer and the assistant said and, if you want, reply yourself."
+    },
+    "leads": {
+      "title": "What is this page for?",
+      "body": "People who left their name, email or phone while talking to your assistant show up here. They're interested customers: get in touch!"
+    },
+    "handoffs": {
+      "title": "What is this page for?",
+      "body": "Customers who asked to talk to a real person show up here. Call or message them as soon as you can."
+    }
+  },
+  "whatsappCosts": {
+    "title": "Who charges for WhatsApp messages?",
+    "intro": "There are two different things. We explain both so you're never surprised:",
+    "plan": "Your Foji plan includes a number of WhatsApp messages per month. Each time the assistant answers a customer, that's one message. You can see how many you've used under “Billing”.",
+    "meta": "Meta, the company that owns WhatsApp (the same one behind Facebook and Instagram), also charges businesses that use WhatsApp with automatic replies. That's Meta's rule for every business, not just Foji.",
+    "metaFree": "Each number gets 1,000 free replies per month. After that, Meta charges a few cents per message. Messages your business sends first, like promotions and reminders, are always charged by Meta.",
+    "metaWhere": "Meta's charge goes straight to the card you added to your Meta account. It doesn't go through Foji, and Foji earns nothing from it.",
+    "link": "See Meta's official prices",
+    "planOver": "If you go over that number, it depends on your plan: either the assistant stops answering on WhatsApp until the month turns over, or each extra message is charged by Foji, at the price shown under “Billing”.",
+    "planTitle": "1. Your Foji plan",
+    "metaTitle": "2. Meta, the owner of WhatsApp"
   }
 }

@@ -442,3 +442,16 @@
 .driver-popover.foji-tour .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: var(--card); }
 .driver-popover.foji-tour .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: var(--card); }
 .driver-popover.foji-tour .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: var(--card); }
+
+/* "Look here": a soft pulsing ring, e.g. on the Test tab right after saving. */
+@keyframes foji-glow {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 0%, transparent); }
+  50% { box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 45%, transparent); }
+}
+.foji-glow {
+  animation: foji-glow 1.2s ease-in-out 5;
+  background-color: color-mix(in oklab, var(--primary) 12%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .foji-glow { animation: none; box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 45%, transparent); }
+}

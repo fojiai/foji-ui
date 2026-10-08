@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageLoader } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
+import { PageHelp } from "@/components/onboarding/page-help";
 import { EmptyState } from "@/components/shared/empty-state";
 import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
@@ -77,6 +78,7 @@ export default function HandoffsPage() {
           )
         }
       />
+      <PageHelp page="handoffs" />
 
       <div className="flex items-center gap-3">
         <Select value={selectedAgent} onValueChange={handleAgentFilter}>

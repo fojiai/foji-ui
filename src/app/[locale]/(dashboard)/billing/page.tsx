@@ -30,6 +30,7 @@ import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner"
 import { PageHeader } from "@/components/shared/page-header";
 import { HeatStatus } from "@/components/shared/heat";
 import { toast } from "@/hooks/use-toast";
+import { WhatsAppCosts } from "@/components/agents/whatsapp-costs";
 
 // ─── Super Admin: Manage All Subscriptions ───────────────────────────────────
 
@@ -611,6 +612,7 @@ function RegularBillingView() {
                   )}
                 </div>
               )}
+              {plan.hasWhatsApp && <WhatsAppCosts />}
               {plan.maxConversationsPerMonth > 0 && (
                 <UsageBar
                   label={t("billing.conversations")}

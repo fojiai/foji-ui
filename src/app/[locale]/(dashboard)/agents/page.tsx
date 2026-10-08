@@ -16,6 +16,7 @@ import {
   NoCompanySelectedState,
 } from "@/components/shared/empty-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { PageHelp } from "@/components/onboarding/page-help";
 import { HeatStatus } from "@/components/shared/heat";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -99,6 +100,7 @@ export default function AgentsPage() {
           </div>
         }
       />
+      <PageHelp page="agents" />
 
       {agents.length === 0 ? (
         <EmptyState

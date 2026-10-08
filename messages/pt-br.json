@@ -58,20 +58,20 @@
   },
   "nav": {
     "dashboard": "Painel",
-    "agents": "Agentes",
+    "agents": "Atendentes",
     "files": "Arquivos",
     "team": "Equipe",
     "billing": "Faturamento",
     "settings": "Configurações",
     "admin": "Admin",
     "contact": "Contato",
-    "leads": "Leads",
-    "handoffs": "Atendimentos",
+    "leads": "Interessados",
+    "handoffs": "Pedidos de ajuda",
     "contacts": "Contatos",
-    "pipeline": "Funil",
+    "pipeline": "Funil de vendas",
     "tasks": "Tarefas",
     "reports": "Relatórios",
-    "inbox": "Caixa de entrada",
+    "inbox": "Conversas",
     "expandMenu": "Expandir menu",
     "collapseMenu": "Recolher menu",
     "groups": {
@@ -83,64 +83,64 @@
   "dashboard": {
     "title": "Painel",
     "welcome": "Bem-vindo, {name}",
-    "totalAgents": "Total de Agentes",
-    "activeAgents": "Agentes Ativos",
-    "totalChats": "Total de Conversas",
-    "totalMessages": "Total de Mensagens",
+    "totalAgents": "Atendentes",
+    "activeAgents": "Atendentes ligados",
+    "totalChats": "Conversas",
+    "totalMessages": "Mensagens",
     "conversationsChart": "Conversas por dia",
     "conversations": "Conversas",
     "last30days": "Últimos 30 dias",
-    "noData": "Sem dados de uso ainda",
-    "noDataHint": "Os dados aparecem aqui após as primeiras conversas",
+    "noData": "Ainda não houve conversas",
+    "noDataHint": "Quando um cliente conversar com seu atendente, os números aparecem aqui.",
     "tagline": "Forje sua inteligência",
-    "agentsLive": "{active} de {total} agentes no ar",
-    "noAgentsLive": "Nenhum agente no ar ainda",
-    "viewAgents": "Ver agentes"
+    "agentsLive": "{active} de {total} atendentes ligados",
+    "noAgentsLive": "Nenhum atendente ligado ainda",
+    "viewAgents": "Ver atendentes"
   },
   "agents": {
-    "title": "Agentes",
-    "create": "Novo Agente",
-    "empty": "Nenhum agente criado ainda",
-    "emptyDescription": "Crie seu primeiro agente de IA para começar",
-    "name": "Nome do Agente",
-    "industry": "Área de atuação",
-    "language": "Idioma de resposta",
-    "systemPrompt": "Prompt do Sistema",
-    "userPrompt": "Instruções Adicionais",
-    "embedCode": "Código de Incorporação",
-    "regenerateToken": "Regenerar Token",
+    "title": "Atendentes",
+    "create": "Novo atendente",
+    "empty": "Você ainda não tem um atendente",
+    "emptyDescription": "Crie seu primeiro atendente virtual. Ele conversa com seus clientes por você.",
+    "name": "Nome do atendente",
+    "industry": "Tipo de negócio",
+    "language": "Língua das respostas",
+    "systemPrompt": "Como o atendente deve agir",
+    "userPrompt": "Regras extras",
+    "embedCode": "Código para colocar no seu site",
+    "regenerateToken": "Gerar código novo",
     "whatsapp": {
       "title": "WhatsApp",
       "enable": "Ativar WhatsApp",
       "requiresPlan": "Requer plano Professional ou Scale",
       "phoneNumberId": "Phone Number ID",
-      "phoneNumberHint": "Não é o número de telefone — é o Phone Number ID numérico que aparece em WhatsApp → API Setup no painel de desenvolvedor da Meta (ex: 123456789012345).",
+      "phoneNumberHint": "Não é o número de telefone. É o código “Phone Number ID”, só com números, que aparece em WhatsApp → API Setup no painel de desenvolvedor da Meta (ex: 123456789012345).",
       "accessToken": "Access Token",
       "accessTokenHint": "Token permanente da API do WhatsApp (System User) da sua conta Meta. Fica criptografado e nunca é exibido de volta. Deixe em branco para manter o atual.",
       "tokenSet": "Configurado",
       "tokenNotSet": "Não configurado",
-      "modeLabel": "Quem responde",
-      "modeHint": "Escolha quem responde as mensagens deste número no WhatsApp.",
-      "modeAgent": "Agente de IA",
-      "modeInbox": "Minha equipe (caixa de entrada)",
+      "modeLabel": "Quem responde no WhatsApp",
+      "modeHint": "Escolha quem responde as mensagens que chegam neste número.",
+      "modeAgent": "Só o atendente virtual",
+      "modeInbox": "Só a minha equipe",
       "connectButton": "Conectar meu WhatsApp",
       "connectTitle": "Conecte seu WhatsApp em um clique",
-      "connectDescription": "Você escolhe o número dentro do próprio WhatsApp e pronto. Nós cuidamos do resto — sem token, sem painel de desenvolvedor.",
+      "connectDescription": "Você escolhe o número dentro do próprio WhatsApp e pronto. Nós cuidamos do resto, sem nenhuma configuração técnica.",
       "connected": "Conectado",
       "connectSuccess": "WhatsApp conectado!",
       "connectCancelled": "Conexão cancelada.",
       "connectIncomplete": "A conexão não foi concluída. Tente novamente e selecione um número até o final.",
       "manualSetup": "Configuração manual (avançado)",
       "needsReconnect": "Reconexão necessária",
-      "needsReconnectHint": "O WhatsApp desconectou e não está recebendo mensagens. Clique para reconectar — leva um clique.",
+      "needsReconnectHint": "O WhatsApp desconectou e não está recebendo mensagens. Clique aqui para conectar de novo. É só um clique.",
       "adminTools": "Ferramentas de admin",
       "refreshToken": "Forçar refresh do token",
       "refreshSuccess": "Token renovado.",
-      "refreshFailed": "A Meta recusou a renovação — o cliente precisa reconectar.",
+      "refreshFailed": "A Meta recusou a renovação. O cliente precisa conectar de novo.",
       "tokenExpires": "Token expira em {date}",
       "tokenPermanent": "Token permanente (sem expiração)",
       "billingIssue": "Pagamento pendente na Meta",
-      "billingIssueHint": "A Meta bloqueou o envio das suas mensagens porque a conta do WhatsApp Business não tem uma forma de pagamento válida. Adicione um cartão no Gerenciador de Negócios da Meta — as mensagens voltam a sair sozinhas.",
+      "billingIssueHint": "A Meta parou de enviar as suas mensagens porque a sua conta do WhatsApp na Meta está sem um cartão válido. Cadastre um cartão no Gerenciador de Negócios da Meta e as mensagens voltam a sair sozinhas.",
       "openBilling": "Abrir pagamentos na Meta",
       "paymentReminder": "Último passo: adicione uma forma de pagamento no Gerenciador de Negócios da Meta. Sem isso, a Meta não entrega suas mensagens.",
       "guide": {
@@ -149,27 +149,27 @@
         "beforeTitle": "Antes de começar, tenha em mãos:",
         "before1": "Um número de celular que possa receber SMS ou ligação agora.",
         "before2": "O login do Facebook da sua empresa (se não tiver, a Meta cria na hora).",
-        "before3": "Um cartão de crédito — a Meta cobra as mensagens direto de você, não pela Foji.",
-        "numberWarning": "Atenção ao número: ele não pode estar sendo usado no aplicativo do WhatsApp (nem o comum, nem o Business) no celular. Se estiver, apague a conta dele no aplicativo antes de continuar — senão a conexão falha. Muita gente usa um chip novo só para isso.",
+        "before3": "Um cartão de crédito. A Meta, dona do WhatsApp, cobra algumas mensagens direto no seu cartão. Esse valor não passa pela Foji.",
+        "numberWarning": "Atenção ao número: ele não pode estar sendo usado no aplicativo do WhatsApp (nem o comum, nem o Business) no celular. Se estiver, apague a conta dele no aplicativo antes de continuar, senão a conexão falha. Muita gente usa um chip novo só para isso.",
         "step1": "Clique no botão \"Conectar meu WhatsApp\". Vai abrir uma janela da própria Meta.",
         "step2": "Entre com sua conta do Facebook e escolha (ou crie) o perfil da sua empresa.",
         "step3": "Digite o número que vai atender seus clientes e confirme o código que chegar por SMS ou ligação.",
         "step4": "Vá clicando em continuar até a janela fechar sozinha.",
         "step5": "Adicione um cartão no Gerenciador de Negócios da Meta.",
-        "step5Hint": "Sem cartão a Meta simplesmente não entrega suas mensagens — e não avisa. É o motivo número 1 de \"conectei e não funciona\".",
-        "step6": "Mande uma mensagem de outro celular para esse número e veja o agente responder.",
+        "step5Hint": "Sem cartão, a Meta não entrega as suas mensagens e também não avisa. É o motivo número 1 de “conectei e não funciona”.",
+        "step6": "Mande uma mensagem de outro celular para esse número e veja o atendente responder.",
         "step6Hint": "Se não responder em alguns segundos, volte aqui: a tela vai dizer o que está faltando.",
         "closing": "Se algo der errado, esta página mostra exatamente qual é o problema e o que fazer. Você não precisa mexer em painel de desenvolvedor nem copiar nenhum código."
       },
       "sdkUnavailable": "Não conseguimos carregar a janela da Meta. Desative bloqueadores de anúncios/rastreadores nesta página e recarregue.",
       "notConfigured": "A conexão em um clique ainda não está configurada neste servidor. Fale com o suporte.",
       "popupBlocked": "A janela da Meta não abriu. Permita pop-ups para este site e tente de novo.",
-      "splitLabel": "Dividir respostas longas em duas mensagens",
-      "splitHint": "Respostas maiores chegam como duas mensagens curtas, com “digitando…” entre elas — mais parecido com uma pessoa. Cada mensagem é cobrada pela Meta e conta no limite do seu plano.",
-      "modeHybrid": "IA + equipe (híbrido)",
-      "modeAgentHint": "A IA responde tudo sozinha, na hora.",
-      "modeHybridHint": "A IA responde e todas as conversas aparecem na caixa de entrada. Sua equipe pode assumir qualquer conversa, e a IA chama a equipe sozinha quando o cliente pede uma pessoa ou está insatisfeito.",
-      "modeInboxHint": "Só sua equipe responde, pela caixa de entrada. A IA não participa."
+      "splitLabel": "Mandar respostas longas em duas mensagens",
+      "splitHint": "Respostas grandes chegam em duas mensagens curtas, com “digitando…” entre elas, como uma pessoa faria. Atenção: viram duas mensagens em vez de uma, então contam duas vezes no limite do seu plano.",
+      "modeHybrid": "O atendente virtual e a minha equipe",
+      "modeAgentHint": "O atendente virtual responde tudo sozinho, na hora, a qualquer hora.",
+      "modeHybridHint": "O atendente virtual responde, e você vê todas as conversas em “Conversas”. Você pode entrar em qualquer conversa, e ele chama você quando o cliente pede uma pessoa.",
+      "modeInboxHint": "Só pessoas da sua equipe respondem, pela tela “Conversas”. O atendente virtual não participa."
     },
     "industries": {
       "accounting_finance": "Contabilidade & Finanças",
@@ -178,34 +178,34 @@
       "general_assistant": "Assistente Geral"
     },
     "languages": {
-      "pt-br": "Português BR",
+      "pt-br": "Português",
       "en": "English",
       "es": "Español"
     },
     "status": {
-      "active": "Ativo",
-      "inactive": "Inativo"
+      "active": "Ligado",
+      "inactive": "Desligado"
     },
     "escalation": {
-      "title": "Contatos de Escalação",
-      "hint": "Quando um usuário pede para falar com um humano, o agente fornece estes contatos.",
-      "supportWhatsApp": "WhatsApp de Suporte",
-      "salesWhatsApp": "WhatsApp de Vendas",
-      "supportEmail": "E-mail de Suporte",
-      "salesEmail": "E-mail de Vendas",
+      "title": "Contatos da sua equipe",
+      "hint": "Quando um cliente pedir para falar com alguém da sua empresa, o atendente passa estes contatos.",
+      "supportWhatsApp": "WhatsApp do suporte",
+      "salesWhatsApp": "WhatsApp de vendas",
+      "supportEmail": "E-mail do suporte",
+      "salesEmail": "E-mail de vendas",
       "upgradeProfessional": "Disponível nos planos Professional e Scale"
     },
-    "basicInfo": "Informações Básicas",
-    "basicInfoHint": "Dê um nome ao seu agente e escolha sua indústria e idioma.",
-    "namePlaceholder": "ex: Assistente Financeiro",
-    "nameRequired": "Nome do agente é obrigatório",
-    "descriptionPlaceholder": "Breve descrição do que este agente faz",
-    "systemPromptHint": "Esta é a instrução principal que define a personalidade, escopo de conhecimento e comportamento do seu agente.",
-    "systemPromptPlaceholder": "Você é um assistente útil para nossa empresa. Responda perguntas com base nos documentos fornecidos...",
-    "systemPromptRequired": "Prompt do sistema é obrigatório (mínimo 10 caracteres)",
-    "userPromptHint": "Regras extras adicionadas a cada conversa. Use para preferências de formato, tom ou restrições.",
-    "userPromptPlaceholder": "Sempre cite fontes. Mantenha respostas em até 3 parágrafos. Responda em tom profissional.",
-    "examplePrompts": "Começar de um modelo",
+    "basicInfo": "O básico",
+    "basicInfoHint": "Dê um nome ao seu atendente e escolha a língua em que ele responde.",
+    "namePlaceholder": "ex: Ana",
+    "nameRequired": "Dê um nome ao atendente",
+    "descriptionPlaceholder": "ex: Responde dúvidas sobre preços e horários",
+    "systemPromptHint": "Escreva como você explicaria o trabalho para um funcionário novo: o que ele deve fazer, como deve falar e o que não deve dizer.",
+    "systemPromptPlaceholder": "Ex.: Você atende os clientes da Padaria Pão Quente. Seja simpático. Responda sobre preços, horários e encomendas. Se não souber a resposta, peça o telefone do cliente.",
+    "systemPromptRequired": "Escreva pelo menos uma frase explicando como o atendente deve agir.",
+    "userPromptHint": "Pequenas regras que valem em toda conversa. Ex.: “Responda em no máximo 3 frases” ou “Nunca fale de concorrentes”.",
+    "userPromptPlaceholder": "Ex.: Responda em no máximo 3 frases. No fim, ofereça o nosso WhatsApp.",
+    "examplePrompts": "Sem ideias? Comece com um exemplo e ajuste do seu jeito:",
     "examples": {
       "customerSupport": "Suporte ao Cliente",
       "customerSupportPrompt": "Você é um agente de suporte ao cliente amigável para nossa empresa. Responda perguntas sobre nossos produtos e serviços com base nos documentos fornecidos. Se não souber a resposta, diga honestamente e sugira que o usuário entre em contato com nossa equipe de suporte. Seja sempre educado, conciso e prestativo.",
@@ -214,7 +214,7 @@
       "hrAssistant": "Assistente de RH",
       "hrAssistantPrompt": "Você é um assistente de RH. Responda perguntas dos funcionários sobre políticas da empresa, benefícios, regras de férias e procedimentos internos com base nos documentos fornecidos. Seja sempre empático e profissional. Para assuntos sensíveis como reclamações ou questões jurídicas, recomende falar diretamente com a equipe de RH.",
       "onboarding": "Integração de Funcionários",
-      "onboardingPrompt": "Você é um assistente de integração para novos funcionários. Ajude-os a entender a cultura da empresa, ferramentas, processos e políticas com base nos documentos fornecidos. Seja acolhedor e proativo — antecipe perguntas comuns e forneça orientação passo a passo.",
+      "onboardingPrompt": "Você é um assistente de integração para novos funcionários. Ajude-os a entender a cultura da empresa, ferramentas, processos e políticas com base nos documentos fornecidos. Seja acolhedor e proativo: antecipe perguntas comuns e forneça orientação passo a passo.",
       "legalAdvisor": "Consultor Jurídico",
       "legalAdvisorPrompt": "Você é um assistente de informações jurídicas. Ajude os usuários a entender conceitos e procedimentos legais com base nos documentos fornecidos. Sempre esclareça que você fornece informações jurídicas gerais, não aconselhamento jurídico, e recomende consultar um advogado qualificado para casos específicos. Cite artigos e leis relevantes quando possível.",
       "contractReview": "Revisão de Contratos",
@@ -235,154 +235,175 @@
       "generalAssistant": "Assistente Virtual"
     },
     "howItWorks": {
-      "title": "Como agentes funcionam",
-      "step1": "Crie seu agente com nome, indústria e prompt do sistema",
-      "step2": "Envie documentos (PDF, DOCX, PPTX, XLSX) para dar conhecimento",
-      "step3": "Incorpore o widget de chat no seu site ou conecte via WhatsApp"
+      "title": "Como funciona, em 3 passos",
+      "step1": "Você cria o atendente e explica como ele deve agir.",
+      "step2": "Você envia arquivos com informações do seu negócio (cardápio, preços, perguntas frequentes). Ele aprende com eles.",
+      "step3": "Você coloca o atendente no seu site ou no seu WhatsApp, e ele começa a conversar com os clientes."
     },
     "filesHint": {
-      "title": "Adicione conhecimento depois de criar",
-      "description": "Após criar o agente, você pode enviar documentos para dar contexto. O agente usará esses documentos para responder perguntas."
+      "title": "Os arquivos vêm no próximo passo",
+      "description": "Depois de criar o atendente, você envia arquivos com informações do seu negócio. Ele usa esses arquivos para responder os clientes."
     },
     "detail": {
       "settings": "Configurações",
       "files": "Arquivos ({count})",
-      "embed": "Incorporar",
-      "prompts": "Prompts",
-      "delete": "Excluir Agente",
+      "embed": "Colocar no ar",
+      "prompts": "Instruções",
+      "delete": "Excluir atendente",
       "deleteTitle": "Excluir {name}?",
-      "deleteDescription": "Isso excluirá permanentemente o agente, todos os seus arquivos e histórico de conversas. Essa ação não pode ser desfeita.",
-      "agentDeleted": "Agente excluído",
-      "agentToken": "Token do Agente",
-      "regenerateTitle": "Regenerar token?",
-      "regenerateDescription": "O script de incorporação atual parará de funcionar imediatamente. Você precisará atualizá-lo em todos os lugares onde é usado.",
-      "regenerate": "Regenerar",
-      "tokenRegenerated": "Token regenerado",
-      "embedHint": "Cole este trecho logo antes da tag de fechamento body do seu site.",
+      "deleteDescription": "Isso apaga para sempre o atendente, os arquivos dele e todas as conversas. Não tem como desfazer.",
+      "agentDeleted": "Atendente excluído",
+      "agentToken": "Código secreto do atendente",
+      "regenerateTitle": "Gerar um código novo?",
+      "regenerateDescription": "O chat que está no seu site para de funcionar na hora. Depois você precisa colar o código novo no site.",
+      "regenerate": "Gerar código novo",
+      "tokenRegenerated": "Código novo gerado",
+      "embedHint": "Copie este código e mande para quem cuida do seu site, por WhatsApp ou e-mail. Essa pessoa vai saber onde colar. Depois disso, o chat aparece no canto do seu site.",
       "test": "Testar",
-      "testTitle": "Teste seu agente",
-      "testDescription": "Converse com seu agente para ver como ele responde. Alterações em prompts e arquivos são refletidas imediatamente."
+      "testTitle": "Teste seu atendente",
+      "testDescription": "Converse com ele aqui, como se você fosse um cliente. O que você mudar nas configurações ou nos arquivos já vale na hora.",
+      "savedTitle": "Alterações salvas!",
+      "savedTryTest": "Agora teste na aba “Testar” para ver como o atendente ficou."
     },
     "welcomeMessage": {
-      "title": "Mensagem de Boas-vindas",
-      "hint": "Primeira mensagem que o bot envia quando um usuário abre o chat. Deixe vazio para uma saudação padrão.",
-      "placeholder": "ex: Olá! Como posso ajudar?"
+      "title": "Primeira mensagem",
+      "hint": "O que o atendente diz quando alguém abre o chat no seu site. Se deixar vazio, ele usa uma saudação padrão.",
+      "placeholder": "ex: Oi! Como posso te ajudar hoje?"
     },
     "starters": {
-      "title": "Sugestões de Conversa",
-      "hint": "Perguntas sugeridas exibidas como botões antes do usuário digitar. Até 4.",
-      "add": "Adicionar sugestão",
+      "title": "Perguntas prontas",
+      "hint": "Perguntas que aparecem como botões no chat, para o cliente só clicar. Até 4.",
+      "add": "Adicionar pergunta",
       "placeholder": "ex: Quais serviços vocês oferecem?"
     },
     "appearance": {
-      "title": "Aparência do Widget",
-      "hint": "Personalize como o widget de chat aparece no seu site.",
-      "primaryColor": "Cor principal",
-      "widgetTitle": "Título do cabeçalho",
-      "widgetTitlePlaceholder": "ex: Suporte",
-      "widgetPlaceholder": "Placeholder do campo de texto",
+      "title": "Aparência do chat no seu site",
+      "hint": "Escolha a cor e o lado da tela em que o chat aparece.",
+      "primaryColor": "Cor",
+      "widgetTitle": "Título no topo do chat",
+      "widgetTitlePlaceholder": "ex: Fale com a gente",
+      "widgetPlaceholder": "Texto dentro da caixa de mensagem",
       "widgetPlaceholderDefault": "ex: Digite uma mensagem...",
-      "position": "Posição",
+      "position": "Lado da tela",
       "positionLeft": "Esquerda",
-      "positionRight": "Direita"
+      "positionRight": "Direita",
+      "colorHint": "Toque numa das cores sugeridas ou escolha qualquer cor.",
+      "suggestedColors": "Cores sugeridas",
+      "pickAnyColor": "Escolher outra cor",
+      "hexCode": "Código da cor",
+      "preview": "É assim que o botão do chat vai aparecer no canto do seu site.",
+      "tooLight": "Essa cor é muito clara: o texto branco do chat pode ficar difícil de ler. Escolha uma cor mais escura.",
+      "invalidHex": "Código inválido. Use o formato #RRGGBB, por exemplo #E5262B.",
+      "colors": {
+        "red": "Vermelho",
+        "orange": "Laranja",
+        "yellow": "Amarelo-mostarda",
+        "green": "Verde",
+        "teal": "Verde-azulado",
+        "blue": "Azul",
+        "purple": "Roxo",
+        "pink": "Rosa",
+        "brown": "Marrom",
+        "graphite": "Grafite"
+      }
     },
-    "responseStyle": "Estilo de Resposta",
-    "responseStyleHint": "Define o tom das respostas do agente. O agente sempre ajusta o idioma conforme o usuário.",
-    "responseStyleDefault": "Padrão (sem estilo definido)",
+    "responseStyle": "Jeito de falar",
+    "responseStyleHint": "Escolha como o atendente conversa. Ele sempre responde na língua do cliente.",
+    "responseStyleDefault": "Normal",
     "responseStyles": {
-      "professional": "Profissional — formal, direto, sem emojis",
-      "friendly": "Amigável — descontraído, acolhedor, até 2 emojis",
-      "concise": "Conciso — respostas curtas, máximo 4 frases"
+      "professional": "Sério: educado e direto, sem emojis",
+      "friendly": "Simpático: leve e acolhedor, com alguns emojis",
+      "concise": "Curto: respostas rápidas, de até 4 frases"
     },
     "leadCapture": {
-      "title": "Captura de Leads",
-      "hint": "Exibe um formulário antes da primeira mensagem para coletar nome, e-mail e telefone do visitante.",
-      "enable": "Ativar captura de leads",
-      "prompt": "Mensagem do formulário",
-      "promptPlaceholder": "ex: Para melhor te atender, deixe seus contatos:",
-      "promptHint": "Deixe em branco para usar a mensagem padrão no idioma do agente."
+      "title": "Pedir os dados do cliente",
+      "hint": "Antes de conversar no site, o chat pede nome, e-mail e telefone. Quem preencher aparece em “Interessados”.",
+      "enable": "Pedir nome e contato no começo da conversa",
+      "prompt": "Frase do pedido",
+      "promptPlaceholder": "ex: Pra te atender melhor, deixe seu nome e telefone:",
+      "promptHint": "Se deixar vazio, usamos uma frase padrão."
     },
     "handoff": {
-      "title": "Transferência para Humano",
-      "hint": "Exibe um botão no widget para o visitante solicitar atendimento humano. Você receberá uma notificação por e-mail.",
-      "enable": "Ativar transferência para humano",
-      "notifyEmail": "E-mail de notificação",
-      "notifyWhatsApp": "WhatsApp de notificação",
-      "message": "Mensagem de confirmação",
+      "title": "Falar com uma pessoa",
+      "hint": "Mostra um botão no chat do site para o cliente pedir para falar com alguém da sua equipe. Você recebe um aviso por e-mail ou WhatsApp.",
+      "enable": "Mostrar o botão “Falar com uma pessoa”",
+      "notifyEmail": "E-mail que recebe o aviso",
+      "notifyWhatsApp": "WhatsApp que recebe o aviso",
+      "message": "Mensagem para o cliente depois do pedido",
       "messagePlaceholder": "ex: Sua solicitação foi registrada! Nossa equipe entrará em contato em breve.",
-      "messageHint": "Mensagem exibida ao visitante após clicar no botão. Deixe em branco para usar a mensagem padrão."
+      "messageHint": "O cliente vê esta mensagem depois de clicar no botão. Se deixar vazio, usamos uma frase padrão."
     },
     "calendar": {
       "title": "Google Agenda",
-      "description": "Permita que o agente verifique sua disponibilidade e agende compromissos diretamente pelo chat.",
+      "description": "Deixa o atendente ver seus horários livres e marcar compromissos com os clientes pelo chat.",
       "connect": "Conectar Google Agenda",
       "connectedAs": "Conectado como {email}",
       "disconnect": "Desconectar",
       "disconnectTitle": "Desconectar Google Agenda?",
-      "disconnectDescription": "O agente não conseguirá mais sugerir ou agendar compromissos. Você pode reconectar a qualquer momento.",
+      "disconnectDescription": "O atendente não vai mais conseguir sugerir nem marcar horários. Você pode conectar de novo quando quiser.",
       "connectedSuccess": "Google Agenda conectado com sucesso!",
       "disconnectedSuccess": "Google Agenda desconectado.",
       "requiresPlan": "Disponível em planos que incluem o Google Agenda. Faça upgrade para ativar.",
       "connectError": "Não foi possível conectar o Google Agenda. Tente novamente."
     },
     "sections": {
-      "setup": "Configuração do agente",
-      "setupHint": "Identidade e instruções que definem como ele responde.",
-      "experience": "Experiência do cliente",
-      "experienceHint": "O que a pessoa vê e o que acontece durante a conversa.",
-      "channels": "Canais e integrações",
-      "channelsHint": "Onde o agente atende e para onde as conversas vão."
+      "setup": "Quem é o seu atendente",
+      "setupHint": "O nome dele e como ele deve agir.",
+      "experience": "O que o cliente vê",
+      "experienceHint": "A conversa do ponto de vista do cliente.",
+      "channels": "Onde ele atende",
+      "channelsHint": "Seu site, seu WhatsApp e para onde vão os pedidos de ajuda."
     },
-    "eyebrow": "Seus agentes",
-    "liveSummary": "{active} de {total} no ar agora",
-    "createDescription": "Um agente responde seus clientes com base nos documentos e instruções que você der a ele."
+    "eyebrow": "Seus atendentes",
+    "liveSummary": "{active} de {total} ligados agora",
+    "createDescription": "Um atendente virtual conversa com seus clientes por você, usando as informações e as instruções que você der."
   },
   "handoffs": {
-    "title": "Atendimentos Humanos",
-    "description": "Solicitações de atendimento humano recebidas pelo widget.",
-    "total": "solicitações",
-    "filterByAgent": "Filtrar por agente",
-    "allAgents": "Todos os agentes",
-    "empty": "Nenhuma solicitação de atendimento humano ainda",
-    "emptyHint": "Ative a transferência para humano nas configurações do agente para receber solicitações.",
-    "notified": "Notificado",
-    "pending": "Pendente",
+    "title": "Pedidos de ajuda",
+    "description": "Clientes que clicaram em “Falar com uma pessoa” no chat do seu site. Entre em contato com eles!",
+    "total": "pedidos",
+    "filterByAgent": "Filtrar por atendente",
+    "allAgents": "Todos os atendentes",
+    "empty": "Nenhum cliente pediu ajuda ainda",
+    "emptyHint": "Ligue “Falar com uma pessoa” nas configurações do atendente para receber os pedidos aqui.",
+    "notified": "Você foi avisado",
+    "pending": "Aguardando",
     "eyebrow": "Atendimento",
     "pendingCount": "{count} pendentes"
   },
   "leads": {
-    "title": "Leads",
-    "description": "Contatos coletados pelo formulário de captura de leads nos seus agentes.",
-    "total": "leads",
-    "filterByAgent": "Filtrar por agente",
-    "allAgents": "Todos os agentes",
-    "empty": "Nenhum lead capturado ainda",
-    "emptyHint": "Ative a captura de leads nas configurações do agente para começar a coletar contatos.",
-    "anonymous": "Anônimo",
-    "eyebrow": "Captura"
+    "title": "Interessados",
+    "description": "Pessoas que deixaram nome, e-mail ou telefone conversando com seu atendente. Entre em contato com elas!",
+    "total": "interessados",
+    "filterByAgent": "Filtrar por atendente",
+    "allAgents": "Todos os atendentes",
+    "empty": "Ninguém deixou contato ainda",
+    "emptyHint": "Ligue “Pedir os dados do cliente” nas configurações do atendente para começar a receber contatos aqui.",
+    "anonymous": "Sem nome",
+    "eyebrow": "Clientes"
   },
   "files": {
     "title": "Arquivos",
     "upload": "Enviar arquivo",
     "empty": "Nenhum arquivo enviado",
-    "processing": "Processando",
-    "ready": "Pronto",
-    "failed": "Falhou",
-    "pending": "Pendente",
+    "processing": "Lendo o arquivo…",
+    "ready": "Aprendido",
+    "failed": "Não deu certo",
+    "pending": "Na fila",
     "maxSize": "Tamanho máximo: 30MB",
     "dropzone": "Arraste arquivos aqui ou clique para selecionar",
-    "supportedFormats": "PDF, DOCX, PPTX, XLSX",
+    "supportedFormats": "PDF, Word, PowerPoint ou Excel",
     "sizeExceeded": "O arquivo excede o limite de 30MB",
-    "uploadSuccess": "Arquivo enviado — processamento iniciado",
+    "uploadSuccess": "Arquivo enviado. O atendente está lendo…",
     "uploading": "Enviando…",
     "deleteTitle": "Excluir arquivo?",
-    "deleteDescription": "Remover {fileName} deste agente?",
+    "deleteDescription": "Remover {fileName}? O atendente vai esquecer o que estava nele.",
     "confirmUploadTitle": "Enviar arquivo?",
-    "confirmUploadDescription": "Enviar {fileName} ({fileSize} MB) para processamento? O arquivo será extraído e disponibilizado ao agente.",
-    "processingComplete": "Processamento de arquivos concluído",
-    "emptyHint": "Envie PDFs, DOCX, PPTX ou XLSX para o agente aprender com eles.",
-    "confirmUploadMultipleDescription": "Enviar {count} arquivos para processamento? Os arquivos serão extraídos e disponibilizados ao agente.",
-    "uploadSuccessMultiple": "{count} arquivos enviados — processamento iniciado"
+    "confirmUploadDescription": "Enviar {fileName} ({fileSize} MB)? O atendente vai ler o arquivo e aprender com ele.",
+    "processingComplete": "Pronto! O atendente terminou de ler os arquivos.",
+    "emptyHint": "Envie arquivos com informações do seu negócio (PDF, Word, PowerPoint ou Excel). O atendente aprende com eles.",
+    "confirmUploadMultipleDescription": "Enviar {count} arquivos? O atendente vai ler e aprender com eles.",
+    "uploadSuccessMultiple": "{count} arquivos enviados. O atendente está lendo…"
   },
   "team": {
     "title": "Equipe",
@@ -413,7 +434,7 @@
     "availablePlans": "Planos Disponíveis",
     "usage": "Uso",
     "usageThisMonth": "Este mês",
-    "agents": "Agentes",
+    "agents": "Atendentes",
     "conversations": "Conversas",
     "messages": "Mensagens",
     "conversationsPerMonth": "conversas/mês",
@@ -445,29 +466,29 @@
     "perMonth": "/mês",
     "whatsappMessages": "Mensagens WhatsApp",
     "whatsappOverage": "{count} mensagens excedentes · R$ {amount}",
-    "whatsappLimitReached": "Limite de mensagens atingido — o agente parou de responder no WhatsApp."
+    "whatsappLimitReached": "Você usou todas as mensagens de WhatsApp do seu plano neste mês. O atendente parou de responder no WhatsApp até o mês virar ou até você mudar de plano."
   },
   "settings": {
     "title": "Configurações",
     "company": "Empresa",
     "companyName": "Nome da empresa",
-    "companySlug": "Slug",
+    "companySlug": "Endereço da empresa",
     "logo": "Logo",
     "danger": "Zona de perigo",
     "deleteCompany": "Excluir empresa",
     "eyebrow": "Conta",
     "description": "Dados do seu espaço de trabalho.",
     "adminOnlyTitle": "Configurações da plataforma",
-    "slugImmutable": "O slug não pode ser alterado depois da criação.",
+    "slugImmutable": "O endereço não pode ser mudado depois.",
     "dangerHint": "Estas ações são irreversíveis.",
     "deleteConfirmTitle": "Excluir {name}?",
-    "deleteConfirmBody": "Isto exclui permanentemente o espaço de trabalho, todos os agentes, arquivos e o histórico de conversas. Não há como desfazer.",
+    "deleteConfirmBody": "Isto apaga para sempre a empresa, todos os atendentes, arquivos e conversas. Não tem como desfazer.",
     "deleteConfirmAction": "Excluir permanentemente",
     "deleteConfirmPrompt": "Para confirmar, digite {name} abaixo:",
     "deleteSuccess": "Empresa excluída. Sua sessão foi encerrada.",
     "companyAbout": "O que sua empresa faz",
     "companyAboutPlaceholder": "Ex.: Somos uma loja de roupas masculinas em Fortaleza, com entrega para todo o Brasil. Vendemos camisas, calças e acessórios, com troca grátis em 30 dias.",
-    "companyAboutHint": "Seus agentes usam este texto quando um cliente pergunta quem está falando ou o que vocês fazem. Conte em 2 ou 3 frases o que vocês vendem, para quem e onde atendem."
+    "companyAboutHint": "Seus atendentes usam este texto quando um cliente pergunta quem está falando ou o que vocês fazem. Conte em 2 ou 3 frases o que vocês vendem, para quem e onde atendem."
   },
   "profile": {
     "title": "Meu Perfil",
@@ -551,11 +572,11 @@
   "onboarding": {
     "createCompany": "Criar sua empresa",
     "companyName": "Nome da empresa",
-    "companySlug": "Identificador único (slug)",
+    "companySlug": "Endereço da empresa (sem espaços)",
     "selectPlan": "Escolha seu plano",
     "planDescription": "Você pode mudar de plano a qualquer momento",
     "workspaceDescription": "Este será seu espaço de trabalho no Foji AI.",
-    "slugTaken": "Este slug já está em uso",
+    "slugTaken": "Esse endereço já está em uso",
     "slugAvailable": "Disponível",
     "slugChecking": "Verificando...",
     "slugInvalid": "Apenas letras minúsculas, números e hífens",
@@ -563,7 +584,7 @@
     "skipForNow": "Pular por enquanto",
     "subscribe": "Assinar",
     "continueFree": "Continuar grátis",
-    "upToAgents": "Até {count} agentes",
+    "upToAgents": "Até {count} atendentes",
     "welcome": "Bem-vindo ao Foji AI",
     "welcomeSubtitle": "Vamos configurar seu espaço de trabalho"
   },
@@ -677,15 +698,15 @@
   "crm": {
     "locked": {
       "title": "CRM",
-      "description": "Transforme leads capturados em uma lista de contatos sem duplicatas e um funil de vendas visual. Disponível em um plano superior.",
+      "description": "Transforme os interessados numa lista de contatos sem repetidos e num funil de vendas visual. Disponível em um plano superior.",
       "upgrade": "Fazer upgrade"
     },
     "contacts": {
       "title": "Contatos",
-      "description": "Seus contatos sem duplicatas, criados automaticamente a partir das conversas dos agentes.",
+      "description": "Seus contatos, sem repetidos, criados sozinhos a partir das conversas dos seus atendentes.",
       "total": "contatos",
       "empty": "Nenhum contato ainda",
-      "emptyHint": "Os contatos aparecem aqui automaticamente quando seus agentes capturam leads. Você também pode adicionar um manualmente.",
+      "emptyHint": "Os contatos aparecem aqui sozinhos quando um cliente deixa nome ou telefone com seu atendente. Você também pode adicionar um.",
       "anonymous": "Contato sem nome",
       "new": "Novo contato",
       "search": "Buscar nome, e-mail ou telefone",
@@ -709,7 +730,7 @@
       "create": "Criar contato",
       "created": "Contato criado",
       "updated": "Contato salvo",
-      "duplicateWarning": "Possível duplicata — este contato coincidiu com outro por e-mail e telefone. Revise antes de mesclar.",
+      "duplicateWarning": "Talvez seja a mesma pessoa: este contato tem o mesmo e-mail e telefone de outro. Confira antes de juntar os dois.",
       "tabDetails": "Detalhes",
       "tabTimeline": "Histórico",
       "tabDeals": "Negócios",
@@ -737,7 +758,7 @@
       "Archived": "Arquivado"
     },
     "timeline": {
-      "leadCaptured": "Lead capturado",
+      "leadCaptured": "Deixou contato no chat",
       "handoff": "Solicitou atendimento humano",
       "dealCreated": "Negócio criado",
       "dealWon": "Negócio ganho",
@@ -945,8 +966,8 @@
     "eyebrow": "Clientes"
   },
   "inbox": {
-    "title": "Caixa de entrada",
-    "description": "Converse com seus clientes no WhatsApp — toda a equipe no mesmo número.",
+    "title": "Conversas do WhatsApp",
+    "description": "Converse com seus clientes no WhatsApp. Toda a sua equipe usa o mesmo número.",
     "empty": "Nenhuma conversa ainda",
     "emptyHint": "As conversas aparecem aqui quando um cliente manda mensagem para um número em modo caixa de entrada.",
     "selectConversation": "Selecione uma conversa",
@@ -957,7 +978,7 @@
     "prefixHint": "Seu nome é adicionado automaticamente no início da mensagem.",
     "openContact": "Ver contato",
     "windowClosedShort": "fora da janela",
-    "windowClosed": "Já se passaram mais de 24 horas desde a última mensagem do cliente. O WhatsApp só permite responder livremente dentro desse prazo — aguarde o cliente escrever novamente.",
+    "windowClosed": "Já se passaram mais de 24 horas desde a última mensagem do cliente. Por uma regra do WhatsApp, depois desse prazo não dá para mandar mensagem livre. Espere o cliente escrever de novo.",
     "unassigned": "Sem responsável",
     "mediaPreview": "[anexo]",
     "eyebrow": "Atendimento",
@@ -978,12 +999,12 @@
     "askedForPerson": "pediu uma pessoa",
     "takeOver": "Assumir conversa",
     "handBack": "Devolver para a IA",
-    "takenOverToast": "Você assumiu a conversa — a IA não responde mais aqui",
+    "takenOverToast": "Você assumiu a conversa. O atendente virtual não responde mais aqui.",
     "handedBackToast": "A IA voltou a responder esta conversa",
     "escalatedBanner": "A IA chamou a equipe: o cliente precisa falar com uma pessoa. Enquanto isso, a IA não responde nesta conversa.",
     "aiLabel": "IA",
     "replyTakesOverHint": "Ao responder, você assume a conversa e a IA para de responder aqui. Seu nome vai no início da mensagem.",
-    "escalationTimedOutBanner": "Ninguém respondeu a tempo: a IA avisou o cliente que a equipe vai responder por aqui e voltou a atender. O cliente continua querendo falar com uma pessoa — assuma a conversa para responder."
+    "escalationTimedOutBanner": "Ninguém respondeu a tempo. O atendente virtual avisou o cliente que a equipe vai responder por aqui e voltou a atender. O cliente continua querendo falar com uma pessoa: assuma a conversa para responder."
   },
   "audio": {
     "play": "Reproduzir",
@@ -998,7 +1019,7 @@
   "verifyEmail": {
     "eyebrow": "Confirmação",
     "loadingTitle": "Confirmando seu e-mail",
-    "loadingDescription": "Só um instante — estamos ativando sua conta.",
+    "loadingDescription": "Só um instante, estamos ativando a sua conta.",
     "successTitle": "E-mail confirmado",
     "successDescription": "Sua conta está ativa. Entre para começar.",
     "errorTitle": "Não conseguimos confirmar",
@@ -1022,8 +1043,8 @@
         "body": "Siga esta lista de cima pra baixo. Cada item te leva direto pro lugar certo. Em poucos minutos seu atendente estará pronto."
       },
       "agents": {
-        "title": "Agentes",
-        "body": "Agente é o seu atendente virtual. Aqui você cria, ensina e testa ele."
+        "title": "Atendentes",
+        "body": "Seu atendente virtual mora aqui. É onde você cria, ensina e testa ele."
       },
       "inbox": {
         "title": "Caixa de entrada",
@@ -1041,17 +1062,17 @@
     "agents": {
       "create": {
         "title": "Crie seu atendente",
-        "body": "Clique aqui pra criar um agente. Você pode ter mais de um, por exemplo um pra vendas e outro pro suporte."
+        "body": "Clique aqui pra criar um atendente. Você pode ter mais de um, por exemplo um pra vendas e outro pro suporte."
       },
       "card": {
-        "title": "Seus agentes",
-        "body": "Clique em um agente pra mudar o que ele sabe, enviar documentos e testar."
+        "title": "Seus atendentes",
+        "body": "Clique em um atendente pra mudar o que ele sabe, enviar documentos e testar."
       }
     },
     "agent-new": {
       "name": {
         "title": "Dê um nome",
-        "body": "É assim que o agente se apresenta pros clientes. Pode ser um nome de pessoa, como “Ana”, ou o nome da sua empresa."
+        "body": "É assim que o atendente se apresenta pros clientes. Pode ser um nome de pessoa, como “Ana”, ou o nome da sua empresa."
       },
       "description": {
         "title": "Conte o que sua empresa faz",
@@ -1067,17 +1088,17 @@
       },
       "files": {
         "title": "Documentos vêm depois",
-        "body": "Depois de criar, você envia cardápio, tabela de preços ou perguntas frequentes. O agente aprende com eles."
+        "body": "Depois de criar, você envia cardápio, tabela de preços ou perguntas frequentes. O atendente aprende com eles."
       },
       "create": {
         "title": "Pronto!",
-        "body": "Clique em “Criar agente”. Você pode mudar tudo depois, sem medo de errar."
+        "body": "Clique em “Criar atendente”. Você pode mudar tudo depois, sem medo de errar."
       }
     },
     "agent": {
       "settings": {
         "title": "Configurações",
-        "body": "Aqui você muda o nome, o jeito de falar e as instruções do agente. Depois de mexer, clique em Salvar lá embaixo."
+        "body": "Aqui você muda o nome, o jeito de falar e as instruções do atendente. Depois de mexer, clique em Salvar lá embaixo."
       },
       "files": {
         "title": "Documentos",
@@ -1085,7 +1106,7 @@
       },
       "test": {
         "title": "Teste antes dos clientes",
-        "body": "Converse com o agente como se fosse um cliente. Se ele errar, ajuste as instruções ou envie mais documentos."
+        "body": "Converse com o atendente como se fosse um cliente. Se ele errar, ajuste as instruções ou envie mais documentos."
       },
       "embed": {
         "title": "Coloque no ar",
@@ -1093,7 +1114,7 @@
       },
       "active": {
         "title": "Liga e desliga",
-        "body": "Desligado, o agente para de responder em todo lugar. Útil pra pausar o atendimento."
+        "body": "Desligado, o atendente para de responder em todo lugar. Útil pra pausar o atendimento."
       }
     },
     "inbox": {
@@ -1120,19 +1141,19 @@
     "allDone": "Tudo pronto! 🎉 Seu atendente já pode conversar com clientes.",
     "items": {
       "createAgent": {
-        "title": "Crie seu agente",
+        "title": "Crie seu atendente",
         "hint": "Dê um nome e diga como ele deve atender."
       },
       "describe": {
         "title": "Conte o que sua empresa faz",
-        "hint": "Uma frase, pro agente saber se apresentar."
+        "hint": "Uma frase, pro atendente saber se apresentar."
       },
       "upload": {
         "title": "Envie um documento",
         "hint": "Cardápio, preços, perguntas frequentes…"
       },
       "test": {
-        "title": "Teste o agente",
+        "title": "Teste o atendente",
         "hint": "Converse com ele como se fosse um cliente."
       },
       "goLive": {
@@ -1140,5 +1161,105 @@
         "hint": "No seu site ou no WhatsApp."
       }
     }
+  },
+  "health": {
+    "eyebrow": "Está funcionando?",
+    "eyebrowNamed": "{name} está funcionando?",
+    "verdict": {
+      "working": {
+        "title": "Sim! Está funcionando.",
+        "body": "Seu atendente está ligado, sabe sobre o seu negócio e já conversou com clientes."
+      },
+      "ready": {
+        "title": "Está pronto!",
+        "body": "Está tudo certo. Só falta o primeiro cliente mandar mensagem. Enquanto isso, teste você mesmo."
+      },
+      "learning": {
+        "title": "Funciona, mas ainda sabe pouco",
+        "body": "Ele já responde, mas ainda não leu nenhum arquivo sobre o seu negócio. Envie um arquivo pra ele responder melhor."
+      },
+      "off": {
+        "title": "Ainda não está funcionando",
+        "body": "Falta pelo menos um passo. Veja abaixo o que falta e clique no botão do lado."
+      }
+    },
+    "on": {
+      "ok": "Está ligado e pronto pra responder.",
+      "bad": "Está desligado. Ninguém recebe resposta.",
+      "fix": "Ligar"
+    },
+    "files": {
+      "ok": "Já leu {count, plural, one {# arquivo} other {# arquivos}} sobre o seu negócio.",
+      "reading": "Está lendo seus arquivos agora. Leva alguns minutos.",
+      "none": "Ainda não leu nenhum arquivo. Sem arquivos, ele só sabe o básico.",
+      "fix": "Enviar arquivo"
+    },
+    "whatsapp": {
+      "ok": "Está atendendo no seu WhatsApp.",
+      "none": "Não está no WhatsApp.",
+      "connect": "Conectar WhatsApp",
+      "problem": "O WhatsApp parou. Precisa da sua atenção.",
+      "fix": "Ver o problema"
+    },
+    "site": {
+      "ok": "Você já copiou o código para o seu site.",
+      "none": "Ainda não está no seu site.",
+      "fix": "Colocar no site"
+    },
+    "chats": {
+      "none": "Nenhum cliente conversou ainda. É normal no começo.",
+      "today": "Última conversa com um cliente: hoje.",
+      "yesterday": "Última conversa com um cliente: ontem.",
+      "daysAgo": "Última conversa com um cliente: há {days} dias."
+    },
+    "testYourself": "Quer ver com os próprios olhos? Converse com ele como se fosse um cliente.",
+    "testButton": "Teste você mesmo",
+    "marks": {
+      "ok": "feito",
+      "warn": "atenção",
+      "bad": "com problema",
+      "busy": "em andamento",
+      "todo": "ainda não feito"
+    }
+  },
+  "pageHelp": {
+    "label": "Para que serve esta tela",
+    "dismiss": "Entendi",
+    "dashboard": {
+      "title": "Para que serve esta tela?",
+      "body": "Este é o resumo do seu negócio na Foji. Aqui você vê quantas conversas seu atendente teve e o que ainda falta fazer."
+    },
+    "agents": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui ficam seus atendentes virtuais. Um atendente é como um funcionário que responde seus clientes sozinho, no site e no WhatsApp, 24 horas por dia. Clique em um para mudar o que ele sabe ou para testar."
+    },
+    "agent": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui você ensina e ajusta este atendente. Use as abas: “Configurações” muda o nome e o jeito dele, “Arquivos” ensina sobre o seu negócio, “Colocar no ar” coloca ele no seu site ou WhatsApp, e “Testar” deixa você conversar com ele."
+    },
+    "inbox": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui aparecem as conversas que chegam no seu WhatsApp. Você pode ler tudo o que o cliente e o atendente disseram e, se quiser, responder você mesmo."
+    },
+    "leads": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui aparecem as pessoas que deixaram nome, e-mail ou telefone conversando com seu atendente. São clientes interessados: entre em contato com eles!"
+    },
+    "handoffs": {
+      "title": "Para que serve esta tela?",
+      "body": "Aqui aparecem os clientes que pediram para falar com uma pessoa de verdade. Ligue ou mande mensagem para eles o quanto antes."
+    }
+  },
+  "whatsappCosts": {
+    "title": "Quem cobra pelas mensagens do WhatsApp?",
+    "intro": "Existem duas coisas diferentes. Explicamos as duas para você nunca ter surpresa:",
+    "plan": "Seu plano da Foji inclui um número de mensagens de WhatsApp por mês. Quando o atendente responde um cliente, conta uma mensagem. Você acompanha quanto já usou em “Faturamento”.",
+    "meta": "A Meta, a empresa dona do WhatsApp (a mesma do Facebook e do Instagram), também cobra das empresas que usam o WhatsApp com atendimento automático. É uma regra da Meta para todas as empresas, não só para a Foji.",
+    "metaFree": "Cada número tem 1.000 respostas grátis por mês. Depois disso, a Meta cobra alguns centavos por mensagem. Mensagens que a sua empresa manda primeiro, como promoções e lembretes, a Meta sempre cobra.",
+    "metaWhere": "Essa cobrança da Meta vai direto no cartão que você cadastrou na sua conta da Meta. Ela não passa pela Foji, e a Foji não ganha nada com ela.",
+    "link": "Ver os preços oficiais da Meta",
+    "planOver": "Se passar desse número, depende do seu plano: ou o atendente para de responder no WhatsApp até o mês virar, ou cada mensagem a mais é cobrada pela Foji, com o valor que aparece em “Faturamento”.",
+    "planTitle": "1. O seu plano da Foji",
+    "metaTitle": "2. A Meta, dona do WhatsApp"
   }
 }

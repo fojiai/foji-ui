@@ -9,7 +9,7 @@ import { z } from "zod";
 import { ArrowLeft, Calendar, Copy, RefreshCw, Paperclip, Trash2, Upload, Plus, X, Palette, MessageCircle, UserPlus, PhoneForwarded } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
-import { agentsApi, calendarApi, filesApi, subscriptionsApi, whatsAppOnboardingApi, type Agent, type AgentFile, type Subscription, apiErrorMessage } from "@/lib/api";
+import { agentsApi, analyticsApi, calendarApi, filesApi, subscriptionsApi, whatsAppOnboardingApi, type Agent, type AgentFile, type CompanyStats, type Subscription, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,15 +22,20 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
 import { ConnectWhatsAppButton } from "@/components/agents/connect-whatsapp-button";
+import { WidgetColorPicker } from "@/components/agents/widget-color-picker";
+import { WhatsAppCosts } from "@/components/agents/whatsapp-costs";
 import { WhatsAppSetupGuide } from "@/components/agents/whatsapp-setup-guide";
 import { EmptyState } from "@/components/shared/empty-state";
 import { HeatStatus } from "@/components/shared/heat";
 import { PhoneInput } from "@/components/shared/phone-input";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { TourButton } from "@/components/onboarding/tour-button";
 import { useTour } from "@/components/onboarding/use-tour";
 import { useOnboarding } from "@/components/onboarding/onboarding-provider";
 import { STEP_EMBED, STEP_TESTED } from "@/components/onboarding/getting-started";
+import { AgentHealth } from "@/components/onboarding/agent-health";
+import { PageHelp } from "@/components/onboarding/page-help";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -112,6 +117,7 @@ export default function AgentDetailPage() {
   const [agent, setAgent] = useState<Agent | null>(null);
   const [files, setFiles] = useState<AgentFile[]>([]);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [stats, setStats] = useState<CompanyStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   // The getting-started checklist links straight to a tab (?tab=files).
@@ -120,6 +126,12 @@ export default function AgentDetailPage() {
     return requested && ["settings", "files", "embed", "test"].includes(requested) ? requested : "settings";
   });
   const { complete } = useOnboarding();
+  const [glowTest, setGlowTest] = useState(false);
+  useEffect(() => {
+    if (!glowTest) return;
+    const timer = window.setTimeout(() => setGlowTest(false), 6000);
+    return () => window.clearTimeout(timer);
+  }, [glowTest]);
   const tour = useTour("agent", { ready: !isLoading && !!agent });
   // Opening the test chat is what "Teste o agente" asks for.
   useEffect(() => {
@@ -138,14 +150,16 @@ export default function AgentDetailPage() {
   async function loadAgent() {
     if (!activeCompanyId) { setIsLoading(false); return; }
     try {
-      const [a, fileList, sub] = await Promise.all([
+      const [a, fileList, sub, companyStats] = await Promise.all([
         agentsApi.get(activeCompanyId, agentId),
         filesApi.list(agentId),
         subscriptionsApi.getSubscription(activeCompanyId).catch(() => null),
+        analyticsApi.getCompanyStats(activeCompanyId).catch(() => null),
       ]);
       setAgent(a);
       setFiles(fileList);
       setSubscription(sub);
+      setStats(companyStats);
 
       // Parse conversation starters
       let parsedStarters = [""];
@@ -265,7 +279,13 @@ export default function AgentDetailPage() {
       await agentsApi.update(activeCompanyId, agentId, payload);
       await loadAgent(); // refresh full detail — update returns only a partial result
       setTestKey((k) => k + 1); // reload test iframe
-      toast({ title: t("common.success") });
+      toast({ title: t("agents.detail.savedTitle"), description: t("agents.detail.savedTryTest") });
+      // Back to the top, where the "is it working?" card and the tabs are, and
+      // point at Test: the natural next step after changing anything.
+      // Instant on purpose: smooth scrolling is skipped in some browsers/tabs,
+      // and the glowing tab already shows where to look.
+      window.scrollTo({ top: 0 });
+      setGlowTest(true);
     } catch (err) {
       toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
     } finally {
@@ -405,12 +425,23 @@ export default function AgentDetailPage() {
         }
       />
 
+      <PageHelp page="agent" />
+      <AgentHealth
+        agent={agent}
+        files={files}
+        stats={stats}
+        goTo={(next) => {
+          setTab(next);
+          document.querySelector('[data-tour="agent-tab-settings"]')?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }}
+      />
+
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="w-full">
           <TabsTrigger value="settings" className="flex-1" data-tour="agent-tab-settings">{t("agents.detail.settings")}</TabsTrigger>
           <TabsTrigger value="files" className="flex-1" data-tour="agent-tab-files">{t("agents.detail.files", { count: files.length })}</TabsTrigger>
           <TabsTrigger value="embed" className="flex-1" data-tour="agent-tab-embed">{t("agents.detail.embed")}</TabsTrigger>
-          <TabsTrigger value="test" className="flex-1" data-tour="agent-tab-test">{t("agents.detail.test")}</TabsTrigger>
+          <TabsTrigger value="test" className={cn("flex-1", glowTest && tab !== "test" && "foji-glow")} data-tour="agent-tab-test">{t("agents.detail.test")}</TabsTrigger>
         </TabsList>
 
         {/* ── Settings ─────────────────────────────────────────────────── */}
@@ -646,28 +677,11 @@ export default function AgentDetailPage() {
                 <CardDescription>{t("agents.appearance.hint")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <WidgetColorPicker
+                  value={watch("widgetPrimaryColor") ?? ""}
+                  onChange={(v) => setValue("widgetPrimaryColor", v, { shouldDirty: true, shouldValidate: true })}
+                />
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{t("agents.appearance.primaryColor")}</Label>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        {...register("widgetPrimaryColor")}
-                        placeholder="#FF2D2D"
-                        className="font-mono"
-                        onChange={(e) => {
-                          let v = e.target.value;
-                          if (v && !v.startsWith("#")) v = "#" + v;
-                          setValue("widgetPrimaryColor", v);
-                        }}
-                      />
-                      {watch("widgetPrimaryColor") && /^#[0-9a-fA-F]{6}$/.test(watch("widgetPrimaryColor") ?? "") && (
-                        <div
-                          className="h-9 w-9 rounded-md border border-input shrink-0"
-                          style={{ backgroundColor: watch("widgetPrimaryColor") }}
-                        />
-                      )}
-                    </div>
-                  </div>
                   <div className="space-y-2">
                     <Label>{t("agents.appearance.position")}</Label>
                     <Select value={watch("widgetPosition") || ""} onValueChange={(v) => setValue("widgetPosition", v as any)}>
@@ -704,6 +718,7 @@ export default function AgentDetailPage() {
                   <CardDescription>{t("agents.whatsapp.modeHint")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <WhatsAppCosts />
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">{t("agents.whatsapp.enable")}</p>
