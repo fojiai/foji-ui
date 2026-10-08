@@ -1301,5 +1301,23 @@
     "attachment": "Archivo",
     "openInbox": "Responder en Conversaciones",
     "refresh": "Actualizar"
+  },
+  "acceptInvitation": {
+    "loading": "Cargando invitación…",
+    "invalidTitle": "Invitación no válida",
+    "invalidDescription": "Este enlace no es válido, ya se usó o expiró. Pide una nueva invitación a quien te invitó.",
+    "title": "Aceptar invitación",
+    "companyDescription": "{inviter} te invitó al equipo {company} como {role}.",
+    "adminDescription": "{inviter} te invitó a ser administrador del sistema de Foji AI.",
+    "createAccountHint": "Crea tu cuenta para unirte al equipo.",
+    "createAndJoin": "Crear cuenta y unirme al equipo",
+    "loginHint": "Ya tienes una cuenta con este correo. Ingresa tu contraseña para aceptar la invitación.",
+    "accountExistsHint": "Ya tienes una cuenta con este correo. Inicia sesión para aceptar la invitación.",
+    "loginAndJoin": "Iniciar sesión y aceptar",
+    "join": "Unirme al equipo",
+    "signedInAsOther": "Iniciaste sesión como {current}. Esta invitación es para {invited}; al continuar, entrarás con esa cuenta.",
+    "joined": "Ahora formas parte de {company}.",
+    "createAdminAccount": "Crear cuenta de administrador",
+    "adminCreated": "Cuenta creada. Inicia sesión para continuar."
   }
 }

@@ -1301,5 +1301,23 @@
     "attachment": "Arquivo",
     "openInbox": "Responder em Conversas",
     "refresh": "Atualizar"
+  },
+  "acceptInvitation": {
+    "loading": "Carregando convite…",
+    "invalidTitle": "Convite inválido",
+    "invalidDescription": "Este link é inválido, já foi usado ou expirou. Peça um novo convite a quem convidou você.",
+    "title": "Aceitar convite",
+    "companyDescription": "{inviter} convidou você para a equipe {company} como {role}.",
+    "adminDescription": "{inviter} convidou você para ser administrador do sistema da Foji AI.",
+    "createAccountHint": "Crie sua conta para entrar na equipe.",
+    "createAndJoin": "Criar conta e entrar na equipe",
+    "loginHint": "Você já tem uma conta com este e-mail. Entre com sua senha para aceitar o convite.",
+    "accountExistsHint": "Você já tem uma conta com este e-mail. Entre para aceitar o convite.",
+    "loginAndJoin": "Entrar e aceitar convite",
+    "join": "Entrar na equipe",
+    "signedInAsOther": "Você está conectado como {current}. Este convite é para {invited} — ao continuar, você entra com essa conta.",
+    "joined": "Agora você faz parte da equipe {company}.",
+    "createAdminAccount": "Criar conta de administrador",
+    "adminCreated": "Conta criada. Entre para continuar."
   }
 }

@@ -1301,5 +1301,23 @@
     "attachment": "File",
     "openInbox": "Reply in Conversations",
     "refresh": "Refresh"
+  },
+  "acceptInvitation": {
+    "loading": "Loading invitation…",
+    "invalidTitle": "Invalid invitation",
+    "invalidDescription": "This link is invalid, was already used, or has expired. Ask whoever invited you for a new invitation.",
+    "title": "Accept invitation",
+    "companyDescription": "{inviter} invited you to join {company} as {role}.",
+    "adminDescription": "{inviter} invited you to be a Foji AI system admin.",
+    "createAccountHint": "Create your account to join the team.",
+    "createAndJoin": "Create account & join team",
+    "loginHint": "You already have an account with this email. Enter your password to accept the invitation.",
+    "accountExistsHint": "You already have an account with this email. Log in to accept the invitation.",
+    "loginAndJoin": "Log in & accept invitation",
+    "join": "Join team",
+    "signedInAsOther": "You're signed in as {current}. This invitation is for {invited} — continuing signs you in with that account.",
+    "joined": "You're now part of {company}.",
+    "createAdminAccount": "Create admin account",
+    "adminCreated": "Account created. Log in to continue."
   }
 }
