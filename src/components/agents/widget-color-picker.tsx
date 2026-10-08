@@ -6,7 +6,7 @@ import { Check, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { WIDGET_COLOR_PRESETS, isHexColor, whiteTextContrast } from "@/lib/widget-colors";
+import { WIDGET_COLOR_PRESETS, inkOn, isHexColor, needsOutline } from "@/lib/widget-colors";
 
 /**
  * Picking the chat colour without knowing what a hex code is: tap a suggested
@@ -18,7 +18,8 @@ export function WidgetColorPicker({ value, onChange }: { value: string; onChange
   const pickerId = useId();
   const valid = isHexColor(value);
   const current = valid ? value.toUpperCase() : "";
-  const tooLight = valid && whiteTextContrast(value) < 3;
+  const shown = valid ? value : "#E5262B";
+  const darkInk = valid && inkOn(value) !== "#ffffff";
 
   return (
     <div className="space-y-3">
@@ -43,7 +44,7 @@ export function WidgetColorPicker({ value, onChange }: { value: string; onChange
               )}
               style={{ backgroundColor: c.hex }}
             >
-              {selected && <Check className="h-5 w-5 text-white" />}
+              {selected && <Check className="h-5 w-5" style={{ color: inkOn(c.hex) }} />}
             </button>
           );
         })}
@@ -88,15 +89,18 @@ export function WidgetColorPicker({ value, onChange }: { value: string; onChange
       {/* What the visitor will actually see in the corner of the site. */}
       <div className="flex items-center gap-3 rounded-lg border bg-muted/40 p-3">
         <span
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full shadow"
-          style={{ backgroundColor: valid ? value : "#E5262B" }}
+          className={cn(
+            "flex h-12 w-12 shrink-0 items-center justify-center rounded-full shadow",
+            needsOutline(shown) && "border border-zinc-200"
+          )}
+          style={{ backgroundColor: shown }}
           aria-hidden="true"
         >
-          <MessageCircle className="h-6 w-6 text-white" />
+          <MessageCircle className="h-6 w-6" style={{ color: inkOn(shown) }} />
         </span>
         <p className="text-xs text-muted-foreground">{t("preview")}</p>
       </div>
-      {tooLight && <p className="text-xs font-medium text-spark-ink">{t("tooLight")}</p>}
+      {darkInk && <p className="text-xs text-muted-foreground">{t("tooLight")}</p>}
       {value && !valid && <p className="text-xs text-destructive-ink">{t("invalidHex")}</p>}
     </div>
   );

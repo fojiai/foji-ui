@@ -17,12 +17,22 @@ export const WIDGET_COLOR_PRESETS = [
 
 export const isHexColor = (v: string | undefined | null): v is string => !!v && /^#[0-9a-fA-F]{6}$/.test(v);
 
-/** WCAG contrast of white text on this colour — the widget's button and bubbles use white text. */
-export function whiteTextContrast(hex: string): number {
+function luminance(hex: string): number {
   const ch = (i: number) => {
     const c = parseInt(hex.slice(i, i + 2), 16) / 255;
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   };
-  const lum = 0.2126 * ch(1) + 0.7152 * ch(3) + 0.0722 * ch(5);
-  return 1.05 / (lum + 0.05);
+  return 0.2126 * ch(1) + 0.7152 * ch(3) + 0.0722 * ch(5);
 }
+
+/**
+ * The text/icon colour the widget puts on this colour: white, unless dark
+ * text reads better. Same rule as onPrimary() in foji-widget/public/widget.js.
+ */
+export function inkOn(hex: string): "#ffffff" | "#1f2937" {
+  const l = luminance(hex);
+  return 1.05 / (l + 0.05) >= (l + 0.05) / 0.0656 ? "#ffffff" : "#1f2937";
+}
+
+/** Very light colours get a thin outline in the widget so they don't vanish on a white site. */
+export const needsOutline = (hex: string) => luminance(hex) > 0.8;

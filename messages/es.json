@@ -292,7 +292,7 @@
       "pickAnyColor": "Elegir otro color",
       "hexCode": "Código del color",
       "preview": "Así se verá el botón del chat en la esquina de tu sitio web.",
-      "tooLight": "Este color es muy claro: el texto blanco del chat puede costar leerse. Elige un color más oscuro.",
+      "tooLight": "Este color es bastante claro, así que el chat usará letras oscuras encima. Así todos pueden leerlo.",
       "invalidHex": "Código inválido. Usa el formato #RRGGBB, por ejemplo #E5262B.",
       "colors": {
         "red": "Rojo",

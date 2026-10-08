@@ -292,7 +292,7 @@
       "pickAnyColor": "Pick another colour",
       "hexCode": "Colour code",
       "preview": "This is how the chat button will look in the corner of your website.",
-      "tooLight": "This colour is very light: the white text in the chat may be hard to read. Pick a darker colour.",
+      "tooLight": "This colour is quite light, so the chat will use dark letters on it. That way everyone can read it.",
       "invalidHex": "Invalid code. Use the #RRGGBB format, for example #E5262B.",
       "colors": {
         "red": "Red",
