@@ -163,6 +163,16 @@ export const companiesApi = {
     apiFetch<void>(`/api/companies/${companyId}`, { method: "DELETE" }),
 };
 
+// ─── Onboarding (guided tours + getting-started checklist) ───────────────────
+
+export const onboardingApi = {
+  /** Keys this person has finished, e.g. "tour:agent-new", "step:embed". */
+  get: () => apiFetch<{ completed: string[] }>("/api/users/me/onboarding"),
+  complete: (key: string) =>
+    apiFetch<{ completed: string[] }>(`/api/users/me/onboarding/${encodeURIComponent(key)}`, { method: "POST" }),
+  reset: () => apiFetch<{ completed: string[] }>("/api/users/me/onboarding", { method: "DELETE" }),
+};
+
 // ─── Agents ──────────────────────────────────────────────────────────────────
 
 export interface Agent {

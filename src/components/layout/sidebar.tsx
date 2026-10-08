@@ -133,6 +133,7 @@ function NavLink({
     <Link
       href={`/${locale}${item.href}`}
       onClick={onNavigate}
+      data-tour={`nav-${item.href.slice(1).replace(/\//g, "-")}`}
       className={cn(
         /* The sidebar is iron in BOTH themes, so it must be styled from the
            sidebar-* tokens — page tokens like `text-muted-foreground` would

@@ -1005,5 +1005,140 @@
     "errorDescription": "This link is invalid or has expired. Sign up again to get a new one.",
     "signIn": "Sign in",
     "backToSignIn": "Back to sign in"
+  },
+  "tour": {
+    "next": "Next",
+    "back": "Back",
+    "done": "Got it!",
+    "progress": "{current} of {total}",
+    "replay": "Show tour",
+    "dashboard": {
+      "welcome": {
+        "title": "Welcome to Foji! 👋",
+        "body": "Here you create an AI assistant that talks to your customers on your website and on WhatsApp, 24/7. Let us show you around. It takes a minute."
+      },
+      "checklist": {
+        "title": "Your step-by-step",
+        "body": "Go through this list from top to bottom. Each item takes you straight to the right place. Your assistant will be ready in minutes."
+      },
+      "agents": {
+        "title": "Agents",
+        "body": "An agent is your virtual assistant. This is where you create it, teach it and test it."
+      },
+      "inbox": {
+        "title": "Inbox",
+        "body": "Your WhatsApp conversations show up here. You can read them and reply yourself whenever you want."
+      },
+      "leads": {
+        "title": "Leads",
+        "body": "When a customer leaves a name, email or phone in a chat, it shows up here so you can get in touch."
+      },
+      "replay": {
+        "title": "Not sure about something?",
+        "body": "Click “Show tour” on any page to see these tips again."
+      }
+    },
+    "agents": {
+      "create": {
+        "title": "Create your assistant",
+        "body": "Click here to create an agent. You can have more than one, for example one for sales and one for support."
+      },
+      "card": {
+        "title": "Your agents",
+        "body": "Click an agent to change what it knows, upload documents and test it."
+      }
+    },
+    "agent-new": {
+      "name": {
+        "title": "Give it a name",
+        "body": "This is how the agent introduces itself to customers. It can be a person's name, like “Ana”, or your company's name."
+      },
+      "description": {
+        "title": "Say what your company does",
+        "body": "One simple sentence is enough. Example: “Bakery in Fortaleza that makes cakes to order.”"
+      },
+      "type": {
+        "title": "Type and language",
+        "body": "If unsure, keep “General Assistant”. The language is the one it will reply in."
+      },
+      "prompt": {
+        "title": "How it should help",
+        "body": "Write it the way you'd explain the job to a new employee. No ideas? Click one of the examples above and adjust it."
+      },
+      "files": {
+        "title": "Documents come next",
+        "body": "After creating it, you upload your menu, price list or FAQ. The agent learns from them."
+      },
+      "create": {
+        "title": "Done!",
+        "body": "Click “Create agent”. You can change everything later."
+      }
+    },
+    "agent": {
+      "settings": {
+        "title": "Settings",
+        "body": "Change the agent's name, tone and instructions here. When you're done, click Save at the bottom."
+      },
+      "files": {
+        "title": "Documents",
+        "body": "Upload files about your business: PDF, Word, PowerPoint or Excel. The more information, the better the answers."
+      },
+      "test": {
+        "title": "Test before your customers do",
+        "body": "Chat with the agent as if you were a customer. If it gets something wrong, adjust the instructions or upload more documents."
+      },
+      "embed": {
+        "title": "Go live",
+        "body": "Here you'll find the code to add the chat to your website and the button to connect your WhatsApp."
+      },
+      "active": {
+        "title": "On and off",
+        "body": "When off, the agent stops answering everywhere. Handy to pause it."
+      }
+    },
+    "inbox": {
+      "welcome": {
+        "title": "Inbox",
+        "body": "Your WhatsApp conversations arrive here. The AI answers on its own, and you can step in at any time."
+      },
+      "tabs": {
+        "title": "Open and resolved",
+        "body": "Ongoing conversations are under “Open”. When one is finished, click “Resolve” and it moves to “Resolved”."
+      },
+      "list": {
+        "title": "Your conversations",
+        "body": "Click a conversation to see everything that was said and reply. “Awaiting reply” means the customer is waiting for you."
+      }
+    }
+  },
+  "gettingStarted": {
+    "title": "Getting started",
+    "subtitle": "Get your assistant ready in 5 steps.",
+    "progress": "{done} of {total}",
+    "hide": "Hide",
+    "go": "Do it now",
+    "allDone": "All set! 🎉 Your assistant is ready to talk to customers.",
+    "items": {
+      "createAgent": {
+        "title": "Create your agent",
+        "hint": "Give it a name and tell it how to help."
+      },
+      "describe": {
+        "title": "Say what your company does",
+        "hint": "One sentence, so the agent can introduce itself."
+      },
+      "upload": {
+        "title": "Upload a document",
+        "hint": "Menu, prices, FAQ…"
+      },
+      "test": {
+        "title": "Test the agent",
+        "hint": "Chat with it as if you were a customer."
+      },
+      "goLive": {
+        "title": "Go live",
+        "hint": "On your website or on WhatsApp."
+      }
+    }
   }
 }

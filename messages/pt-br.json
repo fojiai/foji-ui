@@ -1005,5 +1005,140 @@
     "errorDescription": "Este link é inválido ou expirou. Cadastre-se novamente para receber um novo.",
     "signIn": "Entrar",
     "backToSignIn": "Voltar para o login"
+  },
+  "tour": {
+    "next": "Próximo",
+    "back": "Voltar",
+    "done": "Entendi!",
+    "progress": "{current} de {total}",
+    "replay": "Ver tour",
+    "dashboard": {
+      "welcome": {
+        "title": "Bem-vindo à Foji! 👋",
+        "body": "Aqui você cria um atendente de IA que conversa com seus clientes no seu site e no WhatsApp, 24 horas por dia. Vamos te mostrar onde fica cada coisa. Leva 1 minuto."
+      },
+      "checklist": {
+        "title": "Seu passo a passo",
+        "body": "Siga esta lista de cima pra baixo. Cada item te leva direto pro lugar certo. Em poucos minutos seu atendente estará pronto."
+      },
+      "agents": {
+        "title": "Agentes",
+        "body": "Agente é o seu atendente virtual. Aqui você cria, ensina e testa ele."
+      },
+      "inbox": {
+        "title": "Caixa de entrada",
+        "body": "As conversas do WhatsApp aparecem aqui. Você pode ler e responder pessoalmente quando quiser."
+      },
+      "leads": {
+        "title": "Leads",
+        "body": "Quando um cliente deixa nome, e-mail ou telefone na conversa, ele aparece aqui pra você entrar em contato."
+      },
+      "replay": {
+        "title": "Ficou com dúvida?",
+        "body": "Clique em “Ver tour” em qualquer página pra rever estas dicas."
+      }
+    },
+    "agents": {
+      "create": {
+        "title": "Crie seu atendente",
+        "body": "Clique aqui pra criar um agente. Você pode ter mais de um, por exemplo um pra vendas e outro pro suporte."
+      },
+      "card": {
+        "title": "Seus agentes",
+        "body": "Clique em um agente pra mudar o que ele sabe, enviar documentos e testar."
+      }
+    },
+    "agent-new": {
+      "name": {
+        "title": "Dê um nome",
+        "body": "É assim que o agente se apresenta pros clientes. Pode ser um nome de pessoa, como “Ana”, ou o nome da sua empresa."
+      },
+      "description": {
+        "title": "Conte o que sua empresa faz",
+        "body": "Uma frase simples basta. Exemplo: “Padaria em Fortaleza que faz bolos sob encomenda.”"
+      },
+      "type": {
+        "title": "Tipo e idioma",
+        "body": "Na dúvida, deixe “Assistente Geral”. O idioma é a língua em que ele vai responder."
+      },
+      "prompt": {
+        "title": "Como ele deve atender",
+        "body": "Escreva como você explicaria o trabalho pra um funcionário novo. Sem ideias? Clique num dos exemplos acima e ajuste do seu jeito."
+      },
+      "files": {
+        "title": "Documentos vêm depois",
+        "body": "Depois de criar, você envia cardápio, tabela de preços ou perguntas frequentes. O agente aprende com eles."
+      },
+      "create": {
+        "title": "Pronto!",
+        "body": "Clique em “Criar agente”. Você pode mudar tudo depois, sem medo de errar."
+      }
+    },
+    "agent": {
+      "settings": {
+        "title": "Configurações",
+        "body": "Aqui você muda o nome, o jeito de falar e as instruções do agente. Depois de mexer, clique em Salvar lá embaixo."
+      },
+      "files": {
+        "title": "Documentos",
+        "body": "Envie arquivos com informações do seu negócio: PDF, Word, PowerPoint ou Excel. Quanto mais informação, melhores as respostas."
+      },
+      "test": {
+        "title": "Teste antes dos clientes",
+        "body": "Converse com o agente como se fosse um cliente. Se ele errar, ajuste as instruções ou envie mais documentos."
+      },
+      "embed": {
+        "title": "Coloque no ar",
+        "body": "Aqui ficam o código pra colocar o chat no seu site e o botão pra conectar o seu WhatsApp."
+      },
+      "active": {
+        "title": "Liga e desliga",
+        "body": "Desligado, o agente para de responder em todo lugar. Útil pra pausar o atendimento."
+      }
+    },
+    "inbox": {
+      "welcome": {
+        "title": "Caixa de entrada",
+        "body": "Aqui chegam as conversas do seu WhatsApp. A IA responde sozinha, e você pode entrar na conversa a qualquer momento."
+      },
+      "tabs": {
+        "title": "Abertas e resolvidas",
+        "body": "Conversas em andamento ficam em “Abertas”. Quando acabar, clique em “Resolver” e ela vai pra “Resolvidas”."
+      },
+      "list": {
+        "title": "Suas conversas",
+        "body": "Clique numa conversa pra ver tudo o que foi dito e responder. “Aguardando resposta” quer dizer que o cliente está esperando você."
+      }
+    }
+  },
+  "gettingStarted": {
+    "title": "Primeiros passos",
+    "subtitle": "Deixe seu atendente pronto em 5 passos.",
+    "progress": "{done} de {total}",
+    "hide": "Ocultar",
+    "go": "Fazer agora",
+    "allDone": "Tudo pronto! 🎉 Seu atendente já pode conversar com clientes.",
+    "items": {
+      "createAgent": {
+        "title": "Crie seu agente",
+        "hint": "Dê um nome e diga como ele deve atender."
+      },
+      "describe": {
+        "title": "Conte o que sua empresa faz",
+        "hint": "Uma frase, pro agente saber se apresentar."
+      },
+      "upload": {
+        "title": "Envie um documento",
+        "hint": "Cardápio, preços, perguntas frequentes…"
+      },
+      "test": {
+        "title": "Teste o agente",
+        "hint": "Converse com ele como se fosse um cliente."
+      },
+      "goLive": {
+        "title": "Coloque no ar",
+        "hint": "No seu site ou no WhatsApp."
+      }
+    }
   }
 }

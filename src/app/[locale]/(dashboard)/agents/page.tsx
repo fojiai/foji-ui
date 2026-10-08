@@ -19,6 +19,8 @@ import { PageHeader } from "@/components/shared/page-header";
 import { HeatStatus } from "@/components/shared/heat";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { TourButton } from "@/components/onboarding/tour-button";
+import { useTour } from "@/components/onboarding/use-tour";
 
 // API returns PascalCase enums — normalize to snake_case/kebab-case for i18n keys
 const INDUSTRY_KEY_MAP: Record<string, string> = {
@@ -52,6 +54,7 @@ export default function AgentsPage() {
   const { user, activeCompanyId } = useAuth();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const tour = useTour("agents", { ready: !isLoading && !!activeCompanyId });
 
   useEffect(() => {
     if (!activeCompanyId) { setIsLoading(false); return; }
@@ -86,11 +89,14 @@ export default function AgentsPage() {
             : undefined
         }
         action={
-          <Button asChild>
-            <Link href="agents/new">
-              <Plus className="mr-1 h-4 w-4" /> {t("agents.create")}
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <TourButton onClick={tour.start} />
+            <Button asChild data-tour="agents-create">
+              <Link href="agents/new">
+                <Plus className="mr-1 h-4 w-4" /> {t("agents.create")}
+              </Link>
+            </Button>
+          </div>
         }
       />
 
@@ -109,13 +115,18 @@ export default function AgentsPage() {
         />
       ) : (
         <div className="foji-stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {agents.map((agent) => {
+          {agents.map((agent, index) => {
             const industryKey = normalizeIndustry(agent.industryType);
             const languageKey = normalizeLanguage(agent.agentLanguage);
             const IndustryIcon = INDUSTRY_ICON[industryKey] ?? Bot;
 
             return (
-              <Link key={agent.id} href={`agents/${agent.id}`} className="group block">
+              <Link
+                key={agent.id}
+                href={`agents/${agent.id}`}
+                className="group block"
+                data-tour={index === 0 ? "agent-card" : undefined}
+              >
                 {/* One signal, not four. This card used to encode "is it live?"
                     in the background wash, the border, the icon tint AND the
                     status dot — redundant encoding, which reads as noise and

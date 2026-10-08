@@ -19,6 +19,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
+import { TourButton } from "@/components/onboarding/tour-button";
+import { useTour } from "@/components/onboarding/use-tour";
 import { NoPlanState } from "@/components/shared/empty-state";
 import { toast } from "@/hooks/use-toast";
 
@@ -78,6 +80,7 @@ export default function NewAgentPage() {
   const { activeCompanyId } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const tour = useTour("agent-new", { ready: !!activeCompanyId });
   const [showNoPlan, setShowNoPlan] = useState(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
@@ -140,6 +143,7 @@ export default function NewAgentPage() {
         eyebrow={t("agents.eyebrow")}
         title={t("agents.create")}
         description={t("agents.createDescription")}
+        action={<TourButton onClick={tour.start} />}
       />
 
       {/* How it works. Iron: an explainer is not a state, so it gets no tint. */}
@@ -164,19 +168,19 @@ export default function NewAgentPage() {
         <Card className="plate">
           <StepHeader n={1} title={t("agents.basicInfo")} description={t("agents.basicInfoHint")} />
           <CardContent className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2" data-tour="agent-name">
               <Label>{t("agents.name")}</Label>
               <Input {...register("name")} placeholder={t("agents.namePlaceholder")} aria-invalid={!!errors.name} />
               {errors.name && <p className="text-xs text-destructive">{t("agents.nameRequired")}</p>}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2" data-tour="agent-description">
               <Label>
                 {t("common.description")}
                 <span className="text-muted-foreground ml-1 text-xs">({t("common.optional")})</span>
               </Label>
               <Input {...register("description")} placeholder={t("agents.descriptionPlaceholder")} />
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2" data-tour="agent-type">
               <div className="space-y-2">
                 <Label>{t("agents.industry")}</Label>
                 <Select value={watch("industryType")} onValueChange={(v) => setValue("industryType", v as any)}>
@@ -205,7 +209,7 @@ export default function NewAgentPage() {
         </Card>
 
         {/* System prompt with examples */}
-        <Card className="plate">
+        <Card className="plate" data-tour="agent-prompt">
           <StepHeader n={2} title={t("agents.systemPrompt")} description={t("agents.systemPromptHint")} />
           <CardContent className="space-y-4">
             {/* Example prompt buttons */}
@@ -256,7 +260,7 @@ export default function NewAgentPage() {
 
         {/* Files hint — deliberately prominent: people look for the upload here
             and get confused when it only exists after the agent is created. */}
-        <Card className="plate">
+        <Card className="plate" data-tour="agent-files-hint">
           <CardContent className="flex items-start gap-3 py-4">
             <FileText className="h-5 w-5 shrink-0 mt-0.5 text-muted-foreground" />
             <div>
@@ -276,7 +280,7 @@ export default function NewAgentPage() {
           <Button type="button" variant="outline" asChild>
             <Link href="../agents">{t("common.cancel")}</Link>
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} data-tour="agent-create-submit">
             {isLoading && <LoadingSpinner size="sm" className="mr-2" />}
             {t("agents.create")}
           </Button>

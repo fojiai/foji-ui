@@ -18,6 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { SkeletonRows } from "@/components/ui/skeleton";
 import { PageLoader, LoadingSpinner } from "@/components/shared/loading-spinner";
 import { PageHeader } from "@/components/shared/page-header";
+import { TourButton } from "@/components/onboarding/tour-button";
+import { useTour } from "@/components/onboarding/use-tour";
 import { AnvilMark } from "@/components/shared/marks";
 import { toast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -105,6 +107,7 @@ export default function InboxPage() {
   const locale = (useParams().locale as string) ?? "pt-br";
 
   const [conversations, setConversations] = useState<InboxConversation[] | null>(null);
+  const tour = useTour("inbox", { ready: conversations !== null });
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [thread, setThread] = useState<InboxThread | null>(null);
   const [threadLoading, setThreadLoading] = useState(false);
@@ -264,17 +267,20 @@ export default function InboxPage() {
         title={t("inbox.title")}
         description={t("inbox.description")}
         action={
-          <Button variant="outline" size="sm" onClick={loadConversations}>
-            <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("inbox.refresh")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <TourButton onClick={tour.start} />
+            <Button variant="outline" size="sm" onClick={loadConversations}>
+              <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("inbox.refresh")}
+            </Button>
+          </div>
         }
       />
 
       <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
         {/* Conversation list — hidden on mobile once a thread is open */}
-        <Card className={selectedId ? "hidden lg:block" : ""}>
+        <Card className={selectedId ? "hidden lg:block" : ""} data-tour="inbox-list">
           <CardContent className="p-0">
-            <div className="border-b p-2">
+            <div className="border-b p-2" data-tour="inbox-tabs">
               <Tabs value={statusFilter} onValueChange={(v) => changeFilter(v as InboxStatus)}>
                 <TabsList className="w-full">
                   <TabsTrigger value="Open" className="flex-1">{t("inbox.tabOpen")}</TabsTrigger>

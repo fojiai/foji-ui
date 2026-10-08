@@ -27,6 +27,10 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { HeatStatus } from "@/components/shared/heat";
 import { PhoneInput } from "@/components/shared/phone-input";
 import { toast } from "@/hooks/use-toast";
+import { TourButton } from "@/components/onboarding/tour-button";
+import { useTour } from "@/components/onboarding/use-tour";
+import { useOnboarding } from "@/components/onboarding/onboarding-provider";
+import { STEP_EMBED, STEP_TESTED } from "@/components/onboarding/getting-started";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -110,6 +114,17 @@ export default function AgentDetailPage() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  // The getting-started checklist links straight to a tab (?tab=files).
+  const [tab, setTab] = useState(() => {
+    const requested = searchParams.get("tab");
+    return requested && ["settings", "files", "embed", "test"].includes(requested) ? requested : "settings";
+  });
+  const { complete } = useOnboarding();
+  const tour = useTour("agent", { ready: !isLoading && !!agent });
+  // Opening the test chat is what "Teste o agente" asks for.
+  useEffect(() => {
+    if (tab === "test") complete(STEP_TESTED);
+  }, [tab, complete]);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -380,19 +395,22 @@ export default function AgentDetailPage() {
         title={agent.name}
         description={agent.description || undefined}
         action={
-          <HeatStatus
-            level={agent.isActive ? "live" : "idle"}
-            label={agent.isActive ? t("agents.status.active") : t("agents.status.inactive")}
-          />
+          <div className="flex items-center gap-2">
+            <TourButton onClick={tour.start} />
+            <HeatStatus
+              level={agent.isActive ? "live" : "idle"}
+              label={agent.isActive ? t("agents.status.active") : t("agents.status.inactive")}
+            />
+          </div>
         }
       />
 
-      <Tabs defaultValue="settings">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="w-full">
-          <TabsTrigger value="settings" className="flex-1">{t("agents.detail.settings")}</TabsTrigger>
-          <TabsTrigger value="files" className="flex-1">{t("agents.detail.files", { count: files.length })}</TabsTrigger>
-          <TabsTrigger value="embed" className="flex-1">{t("agents.detail.embed")}</TabsTrigger>
-          <TabsTrigger value="test" className="flex-1">{t("agents.detail.test")}</TabsTrigger>
+          <TabsTrigger value="settings" className="flex-1" data-tour="agent-tab-settings">{t("agents.detail.settings")}</TabsTrigger>
+          <TabsTrigger value="files" className="flex-1" data-tour="agent-tab-files">{t("agents.detail.files", { count: files.length })}</TabsTrigger>
+          <TabsTrigger value="embed" className="flex-1" data-tour="agent-tab-embed">{t("agents.detail.embed")}</TabsTrigger>
+          <TabsTrigger value="test" className="flex-1" data-tour="agent-tab-test">{t("agents.detail.test")}</TabsTrigger>
         </TabsList>
 
         {/* ── Settings ─────────────────────────────────────────────────── */}
@@ -408,7 +426,7 @@ export default function AgentDetailPage() {
                 <CardDescription>{t("agents.basicInfoHint")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between" data-tour="agent-active">
                   <Label>{t("common.active")}</Label>
                   <Switch
                     checked={watch("isActive")}
@@ -1171,7 +1189,7 @@ export default function AgentDetailPage() {
                   variant="ghost"
                   size="icon"
                   className="absolute right-2 top-2"
-                  onClick={() => { navigator.clipboard.writeText(embedCode); toast({ title: t("common.copied") }); }}
+                  onClick={() => { navigator.clipboard.writeText(embedCode); toast({ title: t("common.copied") }); complete(STEP_EMBED); }}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>

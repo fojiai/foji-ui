@@ -24,6 +24,9 @@ import {
   NoCompanySelectedState,
 } from "@/components/shared/empty-state";
 import { HeatDot } from "@/components/shared/heat";
+import { GettingStarted } from "@/components/onboarding/getting-started";
+import { TourButton } from "@/components/onboarding/tour-button";
+import { useTour } from "@/components/onboarding/use-tour";
 
 /** A compact readout — a label, a number, and a hairline. Deliberately not a
  *  card: the anvil band above is the summary, and a row of plates competing
@@ -54,6 +57,7 @@ export default function DashboardPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [stats, setStats] = useState<CompanyStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const tour = useTour("dashboard", { ready: !isLoading && !!activeCompanyId });
 
   useEffect(() => {
     if (!activeCompanyId) { setIsLoading(false); return; }
@@ -94,6 +98,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      <div className="!mb-2 flex justify-end" data-tour="tour-replay">
+        <TourButton onClick={tour.start} />
+      </div>
+
       {/* ── The anvil ──────────────────────────────────────────────────────
           One heavy slab that answers the only question an owner has on
           opening the app: is my agent working, and what did it do? */}
@@ -173,6 +181,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <GettingStarted agents={agents} stats={stats} />
 
       {/* ── Readout strip ──────────────────────────────────────────────────
           Detail after the summary. Three, not four: "total de conversas" is the
