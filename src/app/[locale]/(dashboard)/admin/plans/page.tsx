@@ -24,7 +24,8 @@ const schema = z.object({
   slug: z.string().min(1),
   monthlyPrice: z.coerce.number().min(0),
   currency: z.string().min(1),
-  stripePriceId: z.string().optional(),
+  /** 0 = no yearly option. */
+  yearlyPrice: z.coerce.number().min(0),
   maxAgents: z.coerce.number().int().min(1),
   hasWhatsApp: z.boolean(),
   hasEscalationContacts: z.boolean(),
@@ -50,7 +51,7 @@ export default function PlansPage() {
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true },
+    defaultValues: { isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, yearlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true },
   });
 
   async function load() {
@@ -63,7 +64,7 @@ export default function PlansPage() {
 
   function openCreate() {
     setEditing(null);
-    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true });
+    reset({ isActive: true, hasWhatsApp: false, hasEscalationContacts: false, hasGoogleCalendar: false, hasCrm: false, monthlyPrice: 0, yearlyPrice: 0, currency: "BRL", maxAgents: 2, maxConversationsPerMonth: 0, maxMessagesPerMonth: 0, whatsAppMessagesPerMonth: 0, whatsAppOverageCentavos: 0, whatsAppAllowMarketing: false, isPublic: true });
     setDialogOpen(true);
   }
 
@@ -73,6 +74,7 @@ export default function PlansPage() {
     // and zod's coerce would turn undefined into NaN.
     reset({
       ...plan,
+      yearlyPrice: plan.yearlyPrice ?? 0,
       whatsAppMessagesPerMonth: plan.whatsAppMessagesPerMonth ?? 0,
       whatsAppOverageCentavos: plan.whatsAppOverageCentavos ?? 0,
       whatsAppAllowMarketing: plan.whatsAppAllowMarketing ?? false,
@@ -80,8 +82,10 @@ export default function PlansPage() {
     setDialogOpen(true);
   }
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(form: FormData) {
     setSaving(true);
+    // Asaas charges in reais only; a 0 yearly price means "monthly only".
+    const data = { ...form, currency: "BRL", yearlyPrice: form.yearlyPrice > 0 ? form.yearlyPrice : null };
     try {
       if (editing) {
         await plansApi.update(editing.id, data);
@@ -139,8 +143,8 @@ export default function PlansPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="type-readout text-3xl font-semibold">
-                {plan.currency === "BRL" ? "R$" : plan.currency === "EUR" ? "\u20AC" : "$"}{plan.monthlyPrice}
-                <span className="text-sm font-normal text-muted-foreground">/{plan.currency}/mo</span>
+                R$ {plan.monthlyPrice}
+                <span className="text-sm font-normal text-muted-foreground">{t("admin.plans.perMonth")}</span>
               </p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
@@ -168,8 +172,8 @@ export default function PlansPage() {
                   <span className="type-readout font-medium">{plan.maxConversationsPerMonth === 0 ? "∞" : plan.maxConversationsPerMonth}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t("admin.plans.stripePriceId")}</span>
-                  <span className="max-w-[120px] truncate font-mono text-xs">{plan.stripePriceId}</span>
+                  <span className="text-muted-foreground">{t("admin.plans.yearlyPrice")}</span>
+                  <span className="type-readout font-medium">{plan.yearlyPrice ? `R$ ${plan.yearlyPrice}` : "·"}</span>
                 </div>
               </div>
               <div className="flex gap-2 pt-1">
@@ -225,27 +229,14 @@ export default function PlansPage() {
                 <Input type="number" step="0.01" {...register("monthlyPrice")} />
               </div>
               <div className="space-y-2">
-                <Label>{t("admin.plans.currency")}</Label>
-                <Select value={watch("currency")} onValueChange={(v) => setValue("currency", v)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="BRL">BRL (R$)</SelectItem>
-                    <SelectItem value="USD">USD ($)</SelectItem>
-                    <SelectItem value="EUR">EUR</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label>{t("admin.plans.yearlyPrice")}</Label>
+                <Input type="number" step="0.01" {...register("yearlyPrice")} />
+                <p className="text-xs text-muted-foreground">{t("admin.plans.yearlyPriceHint")}</p>
               </div>
               <div className="space-y-2">
                 <Label>{t("admin.plans.maxAgents")}</Label>
                 <Input type="number" {...register("maxAgents")} />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>
-                {t("admin.plans.stripePriceId")}
-                <span className="ml-1 text-xs text-muted-foreground">({t("common.optional")})</span>
-              </Label>
-              <Input {...register("stripePriceId")} placeholder="price_xxx" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

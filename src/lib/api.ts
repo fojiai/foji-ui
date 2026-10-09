@@ -950,8 +950,10 @@ export interface Plan {
   name: string;
   slug: string;
   monthlyPrice: number;
+  /** Whole-year price (card or Pix). null = no yearly option. */
+  yearlyPrice?: number | null;
+  /** Always "BRL" (Asaas). */
   currency: string;
-  stripePriceId: string;
   maxAgents: number;
   maxMembers: number;
   hasWhatsApp: boolean;
@@ -1028,36 +1030,111 @@ export interface SubscriptionPlan {
   whatsAppAllowMarketing?: boolean;
 }
 
+export type SubscriptionStatus = "trialing" | "active" | "past_due" | "canceled" | "unpaid" | "incomplete";
+export type BillingCycle = "monthly" | "yearly";
+export type BillingMethod = "credit_card" | "pix";
+
 export interface Subscription {
   id: number;
-  /** Lowercase status from the API: "active" | "trialing" | "past_due" | "canceled" | "unpaid" */
-  status: string;
+  status: SubscriptionStatus;
   plan: SubscriptionPlan;
-  currentPeriodStart?: string;
-  currentPeriodEnd?: string;
-  trialEndsAt?: string;
-  canceledAt?: string;
-  hasStripeSubscription: boolean;
+  currentPeriodStart?: string | null;
+  currentPeriodEnd?: string | null;
+  trialEndsAt?: string | null;
+  canceledAt?: string | null;
+  cycle: BillingCycle;
+  /** null while on a trial. */
+  paymentMethod: BillingMethod | "manual" | null;
+  price?: number | null;
+  cardBrand?: string | null;
+  cardLast4?: string | null;
+  /** Canceled: access continues until currentPeriodEnd, nothing more is charged. */
+  cancelAtPeriodEnd: boolean;
+  /** A downgrade scheduled for currentPeriodEnd. */
+  pendingPlan?: SubscriptionPlan | null;
+  /** Paid through Asaas (not a trial or an admin-assigned plan). */
+  isPaid: boolean;
+  isAdminAssigned: boolean;
+  /** Invoice to pay: overdue charge or an open Pix renewal. */
+  openInvoiceUrl?: string | null;
+  pastDueSince?: string | null;
+  /** When features lock if the overdue charge isn't paid. */
+  suspendsAt?: string | null;
+  /** A replacement subscription (new card, new cycle, resumed) starts on this date. */
+  replacementStartsAt?: string | null;
 }
 
 export const subscriptionsApi = {
-  checkout: (companyId: number, planId: number) =>
-    apiFetch<{ checkoutUrl: string }>("/api/subscriptions/checkout", {
-      method: "POST",
-      body: JSON.stringify({ companyId, planId }),
-    }),
-
-  portal: (companyId: number) =>
-    apiFetch<{ portalUrl: string }>("/api/subscriptions/portal", {
-      method: "POST",
-      body: JSON.stringify({ companyId }),
-    }),
-
   getSubscription: (companyId: number) =>
     apiFetch<Subscription | null>(`/api/subscriptions?companyId=${companyId}`),
+};
 
-  verifySession: (companyId: number, sessionId: string) =>
-    apiFetch<Subscription | null>(`/api/subscriptions/verify-session?companyId=${companyId}&sessionId=${encodeURIComponent(sessionId)}`),
+// ─── Billing (Asaas) ──────────────────────────────────────────────────────────
+
+export interface BillingProfile {
+  name: string;
+  accountType: "business" | "individual";
+  cpfCnpj?: string | null;
+  /** A valid CPF/CNPJ is on file: required by Asaas before any payment. */
+  complete: boolean;
+}
+
+export interface PlanChoice {
+  planId: number;
+  cycle: BillingCycle;
+  method: BillingMethod;
+}
+
+export interface PlanChangePreview {
+  kind: "new" | "upgrade" | "downgrade" | "switch" | "same";
+  /** Charged right away (new subscription, or the prorated upgrade difference). */
+  amountNow: number;
+  newPrice: number;
+  cycle: BillingCycle;
+  /** When the change takes effect (null = now / when paid). */
+  effectiveAt?: string | null;
+}
+
+export interface BillingActionResult {
+  action: "redirect" | "applied" | "scheduled";
+  url?: string | null;
+  effectiveAt?: string | null;
+  checkoutId?: number | null;
+}
+
+export interface BillingPayment {
+  id: number;
+  kind: "subscription" | "upgrade" | "overage";
+  status: "pending" | "confirmed" | "received" | "overdue" | "refunded" | "deleted" | "waived";
+  value: number;
+  billingType?: string | null;
+  dueDate: string;
+  paidAt?: string | null;
+  invoiceUrl?: string | null;
+  nfseUrl?: string | null;
+  description?: string | null;
+}
+
+const post = <T,>(path: string, body: unknown) =>
+  apiFetch<T>(path, { method: "POST", body: JSON.stringify(body) });
+
+export const billingApi = {
+  getProfile: (companyId: number) => apiFetch<BillingProfile>(`/api/billing/profile?companyId=${companyId}`),
+  updateProfile: (companyId: number, data: { name: string; cpfCnpj: string }) =>
+    apiFetch<BillingProfile>("/api/billing/profile", { method: "PUT", body: JSON.stringify({ companyId, ...data }) }),
+  preview: (companyId: number, choice: PlanChoice) =>
+    post<PlanChangePreview>("/api/billing/preview", { companyId, ...choice }),
+  choosePlan: (companyId: number, choice: PlanChoice) =>
+    post<BillingActionResult>("/api/billing/choose-plan", { companyId, ...choice }),
+  cancel: (companyId: number) => post<BillingActionResult>("/api/billing/cancel", { companyId }),
+  resume: (companyId: number) => post<BillingActionResult>("/api/billing/resume", { companyId }),
+  cancelPendingChange: (companyId: number) =>
+    post<BillingActionResult>("/api/billing/cancel-pending-change", { companyId }),
+  updateCard: (companyId: number) => post<BillingActionResult>("/api/billing/update-card", { companyId }),
+  payments: (companyId: number) => apiFetch<BillingPayment[]>(`/api/billing/payments?companyId=${companyId}`),
+  checkout: (companyId: number, checkoutId: number) =>
+    apiFetch<{ id: number; kind: string; status: "pending" | "completed" | "expired" | "canceled"; url?: string | null }>(
+      `/api/billing/checkouts/${checkoutId}?companyId=${companyId}`),
 };
 
 // ─── Admin Companies ─────────────────────────────────────────────────────────
@@ -1087,7 +1164,7 @@ export interface AdminCompanyDetail {
   accountType: AccountType;
   cpfCnpj?: string;
   adminNotes?: string;
-  stripeCustomerId?: string;
+  asaasCustomerId?: string;
   memberCount: number;
   agentCount: number;
   currentPlanId?: number;

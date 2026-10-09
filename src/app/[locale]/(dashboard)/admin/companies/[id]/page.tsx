@@ -182,10 +182,10 @@ export default function AdminCompanyDetailPage() {
               <span className="text-muted-foreground">Created</span>
               <span className="type-readout">{format.dateTime(new Date(company.createdAt), { dateStyle: "short" })}</span>
             </div>
-            {company.stripeCustomerId && (
+            {company.asaasCustomerId && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Stripe</span>
-                <span className="font-mono text-xs">{company.stripeCustomerId}</span>
+                <span className="text-muted-foreground">Asaas</span>
+                <span className="font-mono text-xs">{company.asaasCustomerId}</span>
               </div>
             )}
           </CardContent>

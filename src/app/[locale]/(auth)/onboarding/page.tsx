@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Image from "next/image";
 import { Check, X, Loader2 } from "lucide-react";
-import { authApi, plansApi, subscriptionsApi, type Plan, apiErrorMessage } from "@/lib/api";
+import { authApi, plansApi, type Plan } from "@/lib/api";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,7 @@ type SlugStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
 export default function OnboardingPage() {
   const t = useTranslations();
+  const format = useFormatter();
   const router = useRouter();
   const { switchCompany, adoptToken } = useAuth();
 
@@ -128,14 +129,9 @@ export default function OnboardingPage() {
       router.push("/dashboard");
       return;
     }
-    setIsLoading(true);
-    try {
-      const { checkoutUrl } = await subscriptionsApi.checkout(companyId, selectedPlanId);
-      window.location.href = checkoutUrl;
-    } catch (err) {
-      toast({ variant: "destructive", title: apiErrorMessage(err, t("errors.generic")) });
-      setIsLoading(false);
-    }
+    // The billing page asks who pays (CPF/CNPJ for the nota fiscal), explains the
+    // charge and sends them to Asaas. The free trial is already running meanwhile.
+    router.push(`/billing?plan=${selectedPlanId}`);
   }
 
   return (
@@ -270,8 +266,8 @@ export default function OnboardingPage() {
                 <CardHeader className="text-center">
                   <CardTitle className="text-base">{plan.name}</CardTitle>
                   <p className="text-2xl font-bold">
-                    ${plan.monthlyPrice}
-                    <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                    {format.number(plan.monthlyPrice, { style: "currency", currency: "BRL" })}
+                    <span className="text-sm font-normal text-muted-foreground">{t("billing.perMonth")}</span>
                   </p>
                 </CardHeader>
                 <CardContent className="text-center">
